@@ -7,22 +7,29 @@
             <Icon type="paper-airplane" :size="logoSize" v-show="logoIsDisplay"></Icon>
             <span class="layout-text"> Admin 管理系统</span>
           </div>
-          <template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">  
-            <Submenu :name="item.name" v-if="!item.leaf">
-              <template slot="title">
-                <Icon :type="item.iconCls" :size="iconSize"></Icon>
-                <span class="layout-text" >{{item.name}}</span>
+          <!-- 多级对象循环只能用多级循环解决，不能用.实现 -->
+          <template v-for="(item, index) in route_menu" v-if="!item.hidden">
+            {{ item }}
+            <template v-for="(meta, index) in item">
+              {{ permissions }}
+              <template v-if="permissions.indexOf(meta.permission) >= 0">
+                <Menu-item v-if="item.leaf" name="item.name">
+                    <Icon :type="item.iconCls" :size="iconSize"></Icon>
+                    <span>{{ $t(item.menu_name) | capitalize }}</span>
+                </Menu-item>
+                <template v-else>
+                  <template v-if="permissions.indexOf(meta.permission) >= 0">
+                    <Submenu :name="item.name">
+                      <i :class="item.iconic"></i>
+                      <span>{{ $t(item.menu_name) | capitalize }}</span>
+                    </Submenu>
+                    <Menu-item :id="item.name + index" name="item.name" v-for="(child_item, child_index) in item.children" :key="child_index">
+                      {{ child_item.name | capitalize }}
+                    </Menu-item>
+                  </template>
+                </template>
               </template>
-              <template v-for="(child,childIndex) in item.children" v-if="!child.hidden">
-                <Menu-item :name="child.path">{{child.name}}</Menu-item>
-              </template>
-            </Submenu>
-            <template  v-if="item.leaf&&item.children.length>0">
-              <Menu-item :name="item.children[0].path">
-                <Icon :type="item.iconCls" :size="iconSize"></Icon>
-                <span class="layout-text" >{{item.children[0].name}}</span>
-              </Menu-item>
-            </template>  
+            </template>
           </template>
         </Menu>
       </i-col>
@@ -73,8 +80,6 @@
     </Modal>
   </div>
   <!-- 修改密码 模态框 -->
-
-  <!-- 修改密码 模态框 -->
 </template>
 
 <script>
@@ -108,14 +113,27 @@
       }
     },
     computed: {
+      route_menu: function () {
+        let tmp = this.$router.options.routes.filter((currentValue, index, arr) => {
+          // console.log(currentValue)
+          return currentValue.path === '/home'
+        })
+        return tmp[0].children
+      },
+      user: function () {
+        return JSON.parse(window.sessionStorage.getItem('user'))
+      },
+      permissions () {
+        return JSON.parse(window.sessionStorage.getItem('permissions'))
+      },
       iconSize () {
         return this.spanLeft === 5 ? 14 : 24
       },
-      logoSize(){
+      logoSize () {
         if (this.spanLeft !== 5) {
           this.logoIsDisplay = true
           return 30
-        }else{
+        } else {
           this.logoIsDisplay = false
           return 0
         }
@@ -131,32 +149,31 @@
           this.spanRight = 19
         }
       },
-      modifyPassWord() {
-        this.modal1 = true;    
+      modifyPassWord () {
+        this.modal1 = true
       },
-      logout() {
+      logout () {
         this.$router.push('/login')
       },
-      comfirmModifyPS() {
-        return false
+      comfirmModifyPS () {
         this.$refs.formValidate.validate((valid) => {
           if (valid) {
             this.modal1 = false
-            //         this.loading = false
+            // this.loading = false
             this.$Message.success('提交成功!')
           } else {
             this.$Message.error('表单验证失败!')
             return false
           }
-        })    
+        })
         // this.$Message.info('点击了确定')
       },
-      cancel(){
-        this.modal1 = false;    
+      cancel () {
+        this.modal1 = false
         this.$Message.info('点击了取消')
       },
-      menuSelect(name) {
-        this.$router.push({ path: name })
+      menuSelect (name) {
+        this.$router.push({ name: name })
       }
 
     },

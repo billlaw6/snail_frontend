@@ -31,7 +31,10 @@
     </Form-item>
   </i-form>
 </template>
+
 <script>
+  import { authLogin, getUserInfo, getUserPermissions } from '../api/api'
+  import { mapState, mapActions } from 'vuex'
   export default {
     data () {
       return {
@@ -51,22 +54,98 @@
         }
       }
     },
+    computed: {
+      ...mapState({
+        loginStatus: state => state.login.loginStatus
+      })
+    },
     methods: {
+      ...mapActions({
+        setToken: 'setToken',
+        setLoginStatus: 'setLoginStatus',
+        setUser: 'setUser',
+        setPermissions: 'setPermissions'
+      }),
       handleSubmit (name) {
         this.$refs[name].validate((valid) => {
           sessionStorage.setItem('user', JSON.stringify(this.formLogin.username))
+          sessionStorage.setItem('permissions', JSON.stringify(['any']))
           if (valid) {
             this.$Message.success('提交成功!')
-            this.$router.push({ path: '/table' })
+            authLogin(this.loginModel).then((res) => {
+              console.log(res)
+              let {data, status, statusText} = res
+              if (status !== 200) {
+                this.loginMessage = statusText
+              } else {
+                window.sessionStorage.setItem('accessToken', data.token)
+                // 设置用户权限
+                getUserPermissions().then((res) => {
+                  // console.log('getUserPermissions: ' + res)
+                  let {data, status, statusText} = res
+                  if (status !== 200) {
+                    this.loginMessage = statusText
+                  } else {
+                    console.log(data)
+                    window.sessionStorage.setItem('permissions', data)
+                  }
+                }, (error) => {
+                  console.log('Error in getUserPermissions: ' + error)
+                }).catch((error) => {
+                  console.log('catched in getUserPermissions:' + error)
+                })
+                // 设置当前登录用户
+                getUserInfo().then((res) => {
+                  // console.log('getUserInfo: ' + res)
+                  let {data, status, statusText} = res
+                  if (status !== 200) {
+                    this.loginMessage = statusText
+                  } else {
+                    console.log(data)
+                    this.$store.dispatch('setLoginStatus', true)
+                    window.sessionStorage.setItem('user', JSON.stringify(data))
+                    // 设置当前登录用户权限
+                    getUserPermissions().then((res) => {
+                      let { data, status, statusText } = res
+                      if (status !== 200) {
+                        console.log('Error in getUserPermissions:' + statusText)
+                      } else {
+                        // console.log('Got permissions:')
+                        // console.log(data)
+                        window.sessionStorage.setItem('permissions', JSON.parse(data))
+                      }
+                    }, (error) => {
+                      console.log('Error in restAuthUser: ' + error)
+                    }).catch((error) => {
+                      console.log('catched in restAuthUser:' + error)
+                    })
+                    this.$router.push({ name: 'dash' })
+                  }
+                }, (error) => {
+                  console.log('Error in getUserInfo: ' + error)
+                  this.loginMessage = this.$t('login_error_message')
+                }).catch((error) => {
+                  console.log('catched in getUserInfo:' + error)
+                  this.loginMessage = this.$t('login_error_message')
+                })
+              }
+            }, (error) => {
+              console.log('Error in authLogin: ' + error)
+              this.loginMessage = this.$t('login_error_message')
+            }).catch((error) => {
+              console.log('catched in authLogin:' + error)
+              this.loginMessage = this.$t('login_error_message')
+            })
+            this.$router.push({ path: '/dash' })
           } else {
             this.$Message.error('表单验证失败!')
           }
           if (this.formLogin.remember[0] === '记住密码') {
-            sessionStorage.setItem('username', JSON.stringify(this.formLogin.username))
-            sessionStorage.setItem('password', JSON.stringify(this.formLogin.password))
+            window.sessionStorage.setItem('username', JSON.stringify(this.formLogin.username))
+            window.sessionStorage.setItem('password', JSON.stringify(this.formLogin.password))
           } else {
-            sessionStorage.removeItem('username')
-            sessionStorage.removeItem('password')
+            window.sessionStorage.removeItem('username')
+            window.sessionStorage.removeItem('password')
           }
         })
       },
@@ -85,8 +164,7 @@
   }
 </script>
 
-
-<style scoped>
+<style lang="stylus" scoped>
   .card-box {
     padding: 20px
     /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
@@ -116,5 +194,4 @@
   .login-no-bottom {
     margin-bottom: 10px
   }
-
 </style>

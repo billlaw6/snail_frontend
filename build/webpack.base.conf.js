@@ -62,6 +62,9 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       }
+      // iView 国际化添加
+      // { test: /iview.src.*?js$/, loader: 'babel' },
+      // { test: /\.js$/, loader: 'babel', exclude: /node_modules/ }
     ]
   }
 }
