@@ -83,7 +83,7 @@ export default new Router({
             iconCls: 'social-freebsd-devil',
             leaf: true,
             menu_name: '用户管理',
-            hidden: false,
+            hidden: true,
             meta: {
               requireAuth: true,
               permission: 'authtoken.add_token'
