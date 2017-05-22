@@ -2,30 +2,23 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 // import babelpolyfill from 'babel-polyfill'
 import Vue from 'vue'
-import App from './App'
 import router from './router'
-import VueI18n from 'vue-i18n'
 import iView from 'iview'
 // import zhLocale from 'iview/src/locale/lang/zh-CN'
 // import enLocale from 'iview/src/locale/lang/en-US'
-import * as messages from './i18n/messages.js'
 import 'iview/dist/styles/iview.css'
 import axios from 'axios'
 import store from './vuex-store/index'
 import { currency } from './common/filters'
 // import Mock from './mock'
 // Mock.bootstrap()
+import App from './App'
 
 Vue.filter('currency', currency)
-Vue.use(VueI18n)
 Vue.use(iView)
 
-// Vue.config.lang = 'zh-CN'
-const i18n = new VueI18n({
-  locale: 'en',
-  messages
-})
-
+Vue.config.lang = 'en-US'
+// Vue.locale('zh-CN', zhLocale)
 // Vue.locale('en-US', enLocale)
 // 注意：使用 vue-i18n 时，需要将本地的语言包和 iView 的语言包合并
 
@@ -83,7 +76,6 @@ Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  i18n,
   router,
   template: '<App/>',
   components: { App },

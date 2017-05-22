@@ -36,9 +36,10 @@ export default new Router({
     iconCls: 'ios-home', // 图标样式class
     leaf: false,
     menu_name: 'home',
+    hidden: false,
     meta: {
       requireAuth: true,
-      permission: 'any'
+      permission: 'authtoken.add_token'
     },
     children: [
       {
@@ -47,9 +48,10 @@ export default new Router({
         name: 'dashboard',
         leaf: true,
         menu_name: 'dashboard',
+        hidden: false,
         meta: {
           requireAuth: true,
-          permission: 'any'
+          permission: 'authtoken.add_token'
         }
       },
       {
@@ -58,9 +60,10 @@ export default new Router({
         name: 'user_manage',
         leaf: true,
         menu_name: 'user_manage',
+        hidden: false,
         meta: {
           requireAuth: true,
-          permission: 'any'
+          permission: 'authtoken.add_token'
         }
       }
     ]

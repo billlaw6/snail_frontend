@@ -7,21 +7,19 @@
             <Icon type="paper-airplane" :size="logoSize" v-show="logoIsDisplay"></Icon>
             <span class="layout-text"> Admin 管理系统</span>
           </div>
-          <!-- 多级对象循环只能用多级循环解决，不能用.实现 -->
+          <!-- 多级对象遍历只能用多级循环解决，不能用.实现 -->
           <template v-for="(item, index) in route_menu" v-if="!item.hidden">
-            {{ item }}
             <template v-for="(meta, index) in item">
-              {{ permissions }}
               <template v-if="permissions.indexOf(meta.permission) >= 0">
-                <Menu-item v-if="item.leaf" name="item.name">
+                <Menu-item v-if="item.leaf" :name="item.name">
                     <Icon :type="item.iconCls" :size="iconSize"></Icon>
-                    <span>{{ $t(item.menu_name) | capitalize }}</span>
+                    <span>{{ item.menu_name | capitalize }}</span>
                 </Menu-item>
                 <template v-else>
                   <template v-if="permissions.indexOf(meta.permission) >= 0">
                     <Submenu :name="item.name">
                       <i :class="item.iconic"></i>
-                      <span>{{ $t(item.menu_name) | capitalize }}</span>
+                      <span>{{ item.menu_name | capitalize }}</span>
                     </Submenu>
                     <Menu-item :id="item.name + index" name="item.name" v-for="(child_item, child_index) in item.children" :key="child_index">
                       {{ child_item.name | capitalize }}
@@ -41,12 +39,12 @@
           <div class="userinfo">
             <Dropdown placement="bottom-end">
               <span class="head-img">
-                {{curUserName}}
+                {{ curUserName }}
                 <img src="../assets/user.jpg">
               </span>
               <Dropdown-menu slot="list">
                 <Dropdown-item @click.native="modifyPassWord()">修改密码</Dropdown-item>
-                <Dropdown-item  @click.native="logout()" divided>退出</Dropdown-item>
+                <Dropdown-item @click.native="logout()" divided>退出</Dropdown-item>
               </Dropdown-menu>
             </Dropdown>
           </div>
@@ -87,7 +85,6 @@
     data () {
       return {
         openNames: [this.$route.matched[0].name],
-        curUserName: sessionStorage.getItem('user').replace(/"/g, ''),
         modeType: 'vertical',
         spanLeft: 5,
         spanRight: 19,
@@ -123,8 +120,12 @@
       user: function () {
         return JSON.parse(window.sessionStorage.getItem('user'))
       },
+      curUserName: function () {
+        return this.user.last_name + this.user.first_name
+      },
       permissions () {
-        return JSON.parse(window.sessionStorage.getItem('permissions'))
+        console.log(window.sessionStorage.getItem('permissions'))
+        return window.sessionStorage.getItem('permissions')
       },
       iconSize () {
         return this.spanLeft === 5 ? 14 : 24
@@ -153,7 +154,12 @@
         this.modal1 = true
       },
       logout () {
-        this.$router.push('/login')
+        window.sessionStorage.removeItem('accessToken')
+        window.sessionStorage.removeItem('permissions')
+        window.sessionStorage.removeItem('user')
+        console.log('logged out')
+        this.$store.dispatch('setUser', null)
+        this.$router.push({ name: 'login' })
       },
       comfirmModifyPS () {
         this.$refs.formValidate.validate((valid) => {
