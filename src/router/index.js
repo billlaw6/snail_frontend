@@ -35,19 +35,19 @@ export default new Router({
     name: 'home',
     iconCls: 'ios-home', // 图标样式class
     leaf: false,
-    menu_name: 'home',
+    menu_name: '应用中心',
     hidden: false,
     meta: {
-      requireAuth: true,
-      permission: 'authtoken.add_token'
+      requireAuth: true
     },
     children: [
       {
         path: 'dash',
         component: Dashboard,
         name: 'dashboard',
+        iconCls: 'ios-paw',
         leaf: true,
-        menu_name: 'dashboard',
+        menu_name: '控制面板',
         hidden: false,
         meta: {
           requireAuth: true,
@@ -58,9 +58,38 @@ export default new Router({
         path: 'users',
         component: UserManage,
         name: 'user_manage',
-        leaf: true,
-        menu_name: 'user_manage',
+        iconCls: 'social-freebsd-devil',
+        leaf: false,
+        menu_name: '用户管理',
         hidden: false,
+        children: [
+          {
+            path: 'dash',
+            component: Dashboard,
+            name: 'dashboard',
+            iconCls: 'ios-paw',
+            leaf: true,
+            menu_name: '控制面板',
+            hidden: false,
+            meta: {
+              requireAuth: true,
+              permission: 'authtoken.add_token'
+            }
+          },
+          {
+            path: 'users',
+            component: UserManage,
+            name: 'user_manage',
+            iconCls: 'social-freebsd-devil',
+            leaf: true,
+            menu_name: '用户管理',
+            hidden: false,
+            meta: {
+              requireAuth: true,
+              permission: 'authtoken.add_token'
+            }
+          }
+        ],
         meta: {
           requireAuth: true,
           permission: 'authtoken.add_token'

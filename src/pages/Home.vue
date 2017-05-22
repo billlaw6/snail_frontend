@@ -13,24 +13,27 @@
               <template v-if="permissions.indexOf(meta.permission) >= 0">
                 <Menu-item v-if="item.leaf" :name="item.name">
                     <Icon :type="item.iconCls" :size="iconSize"></Icon>
-                    <span>{{ item.menu_name | capitalize }}</span>
+                    <span class="layout-text">{{ item.menu_name | capitalize }}</span>
                 </Menu-item>
-                <template v-else>
-                  <template v-if="permissions.indexOf(meta.permission) >= 0">
-                    <Submenu :name="item.name">
-                      <i :class="item.iconic"></i>
-                      <span>{{ item.menu_name | capitalize }}</span>
-                    </Submenu>
-                    <Menu-item :id="item.name + index" name="item.name" v-for="(child_item, child_index) in item.children" :key="child_index">
-                      {{ child_item.name | capitalize }}
-                    </Menu-item>
+                <Submenu v-else :name="item.name">
+                  <template slot="title">
+                    <Icon :type="item.iconCls" :size="iconSize"></Icon>
+                    <span class="layout-text">{{ item.menu_name | capitalize }}</span>
                   </template>
-                </template>
+                  <template v-for="(child_item, child_index) in item.children">
+                    <template v-for="(meta, index) in child_item">
+                      <Menu-item v-if="permissions.indexOf(meta.permission) >= 0" :id="item.name + index" :name="child_item.name":key="child_index">
+                        <span class="layout-text">{{ child_item.menu_name | capitalize }}</span>
+                      </Menu-item>
+                    </template>
+                  </template>
+                </Submenu>
               </template>
             </template>
           </template>
         </Menu>
       </i-col>
+
       <i-col :span="spanRight">
         <div class="layout-header">
           <i-button type="text" @click="toggleClick">
@@ -50,7 +53,7 @@
           </div>
         </div>
         <div class="layout-breadcrumb">
-          <Breadcrumb>
+          <Breadcrumb separator=">">
             <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
             <Breadcrumb-item>{{$route.name}}</Breadcrumb-item>
           </Breadcrumb>
@@ -115,6 +118,14 @@
           // console.log(currentValue)
           return currentValue.path === '/home'
         })
+        return tmp[0].children
+      },
+      route_path: function () {
+        let obj = {}
+        let tmp = this.$router.options.routes.filter((currentValue, index, arr) => {
+          return currentValue.path === '/home'
+        })
+        console.log(obj)
         return tmp[0].children
       },
       user: function () {
