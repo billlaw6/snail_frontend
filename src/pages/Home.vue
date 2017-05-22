@@ -20,7 +20,7 @@
                     <Icon :type="item.iconCls" :size="iconSize"></Icon>
                     <span class="layout-text">{{ item.menu_name | capitalize }}</span>
                   </template>
-                  <template v-for="(child_item, child_index) in item.children">
+                  <template v-for="(child_item, child_index) in item.children" v-if="!child_item.hidden">
                     <template v-for="(meta, index) in child_item">
                       <Menu-item v-if="permissions.indexOf(meta.permission) >= 0" :id="item.name + index" :name="child_item.name":key="child_index">
                         <span class="layout-text">{{ child_item.menu_name | capitalize }}</span>
