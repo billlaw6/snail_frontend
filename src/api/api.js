@@ -13,6 +13,8 @@ export const getUserPermissions = params => { return axios.get(`${base}/user-per
 
 export const getUserList = params => { return axios.get(`${base}/users/`).then(res => res) }
 
+export const removeUser = params => { return axios.delete(`${base}/users/`).then(res => res) }
+
 // 业务数据
 export const getMerchandiseList = params => { return axios.get(`${base}/merchandises/`).then(res => res) }
 export const addMerchandise = params => { return axios.post(`${base}/merchandises/`, params).then(res => res) }

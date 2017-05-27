@@ -10,7 +10,7 @@
           <!-- 多级对象遍历只能用多级循环解决，不能用.实现 -->
           <template v-for="(item, index) in route_menu" v-if="!item.hidden">
             <template v-for="(meta, index) in item">
-              <template v-if="permissions.indexOf(meta.permission) >= 0">
+              <template v-if="permissions.some(record => record.codename === meta.permission)">
                 <Menu-item v-if="item.leaf" :name="item.name">
                     <Icon :type="item.iconCls" :size="iconSize"></Icon>
                     <span class="layout-text">{{ item.menu_name | capitalize }}</span>
@@ -22,7 +22,7 @@
                   </template>
                   <template v-for="(child_item, child_index) in item.children" v-if="!child_item.hidden">
                     <template v-for="(meta, index) in child_item">
-                      <Menu-item v-if="permissions.indexOf(meta.permission) >= 0" :id="item.name + index" :name="child_item.name":key="child_index">
+                      <Menu-item v-if="permissions.some(record => record.codename === meta.permission)" :id="item.name + index" :name="child_item.name":key="child_index">
                         <span class="layout-text">{{ child_item.menu_name | capitalize }}</span>
                       </Menu-item>
                     </template>
@@ -66,16 +66,16 @@
       </i-col>
     </Row>
 
-    <Modal v-model="modal1" title="修改密码" @on-ok.prevent="comfirmModifyPS"  @on-cancel="cancel" >
+    <Modal v-model="modal1" title="修改密码" @on-ok="comfirmModifyPS"  @on-cancel="cancel" >
       <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
         <Form-item label="原密码" prop="oldPassword">
-          <Input v-model="formValidate.oldPassword" placeholder="请输入原始密码"></Input>
+          <Input v-model="formValidate.oldPassword" placeholder="请输入原始密码" type="password"></Input>
         </Form-item>
         <Form-item label="新密码" prop="newPassword">
-          <Input v-model="formValidate.newPassword" placeholder="请输入新密码"></Input>
+          <Input v-model="formValidate.newPassword" placeholder="请输入新密码" type="password"></Input>
         </Form-item>
         <Form-item label="确认新密码" prop="resetPassword">
-          <Input v-model="formValidate.resetPassword" placeholder="请再次输入新密码"></Input>
+          <Input v-model="formValidate.resetPassword" placeholder="请再次输入新密码" type="password"></Input>
         </Form-item>
       </Form>
     </Modal>
@@ -107,7 +107,13 @@
             { required: true, message: '密码不能为空', trigger: 'blur' }
           ],
           resetPassword: [
-            { required: true, message: '密码不能为空', trigger: 'blur' }
+            { required: true, message: '密码不能为空', trigger: 'blur' },
+            {
+              validator (rule, value, callback, source, options) {
+                let errors = []
+                callback(errors)
+              }
+            }
           ]
         }
       }
@@ -135,8 +141,8 @@
         return this.user.last_name + this.user.first_name
       },
       permissions () {
-        console.log(window.sessionStorage.getItem('permissions'))
-        return window.sessionStorage.getItem('permissions')
+        // console.log(JSON.parse(window.sessionStorage.getItem('permissions')))
+        return JSON.parse(window.sessionStorage.getItem('permissions'))
       },
       iconSize () {
         return this.spanLeft === 5 ? 14 : 24
@@ -183,7 +189,7 @@
             return false
           }
         })
-        // this.$Message.info('点击了确定')
+        this.$Message.info('点击了确定')
       },
       cancel () {
         this.modal1 = false

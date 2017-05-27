@@ -39,37 +39,42 @@ axios.interceptors.request.use(
   }
 )
 
-// router.beforeEach((to, from, next) => {
-  // // 判断该路由是否需要登录权限
-  // // to.matched 包含admin和dash两个路径
-  // if (to.matched.some(record => record.meta.requireAuth)) {
-    // let accessToken = window.sessionStorage.getItem('accessToken')
-    // let user = JSON.parse(window.sessionStorage.getItem('user'))
-    // let perms = JSON.parse(window.sessionStorage.getItem('permissions'))
-    // // console.log('checking logging status in main.js: ' + accessToken)
-    // // console.log('checking logging status in main.js: ' + user)
-    // // console.log('checking logging status in main.js: ' + perms)
-    // if (accessToken && user) {
-      // if (typeof (to.meta.permission) === 'undefined') {
-        // // console.log(perms.indexOf(to.meta.permission))
-        // next()
-      // } else if (perms.indexOf(to.meta.permission) > 0) {
-        // // console.log('Has permission')
-        // next()
-      // } else {
-        // // console.log('Lack of permission')
-        // next({ name: 'noPerm' })
-      // }
-    // } else {
-      // next({
-        // name: 'login',
-        // query: { redirect: to.fullPath }
-      // })
-    // }
-  // } else {
-    // next()
-  // }
-// })
+router.beforeEach((to, from, next) => {
+  // 判断该路由是否需要登录权限
+  let accessToken = window.sessionStorage.getItem('accessToken')
+  let user = JSON.parse(window.sessionStorage.getItem('user'))
+  let permissions = JSON.parse(window.sessionStorage.getItem('permissions'))
+  // console.log('checking accessToken in main.js: ' + accessToken)
+  // console.log('checking user in main.js: ' + user)
+  // console.log('checking permission in main.js: ' + permissions)
+    // to.matched 包含admin和dash两个路径
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    if (accessToken && user) {
+      console.log(to.meta.permission)
+      console.log(permissions.some(record => {
+        // console.log(record.codename + '=?' + to.meta.permission)
+        record.codename === to.meta.permission
+      }))
+      if (to.meta.permission === 'undefined') {
+        // console.log(permissions.some(to.meta.permission))
+        next()
+      } else if (permissions.some(record => record.codename === to.meta.permission)) {
+        // console.log('Has permission')
+        next()
+      } else {
+        console.log('Lack of permission')
+        // next({ path: from.path })
+      }
+    } else {
+      next({
+        name: 'login',
+        query: { redirect: to.fullPath }
+      })
+    }
+  } else {
+    next()
+  }
+})
 
 Vue.config.productionTip = false
 

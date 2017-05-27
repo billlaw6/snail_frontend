@@ -39,8 +39,8 @@
     data () {
       return {
         formLogin: {
-          username: '',
-          password: '',
+          username: 'admin',
+          password: 'admin123456',
           remember: []
         },
         formLoginRules: {
@@ -100,7 +100,7 @@
                       } else {
                         // console.log('Got permissions:')
                         console.log(data)
-                        window.sessionStorage.setItem('permissions', data)
+                        window.sessionStorage.setItem('permissions', JSON.stringify(data.results))
                         this.$router.push({ name: 'dashboard' })
                       }
                     }, (error) => {

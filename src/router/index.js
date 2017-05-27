@@ -5,14 +5,9 @@ const NotFound = resolve => require(['@/pages/404.vue'], resolve)
 // Home和AppDashboard合成一组作异步加载
 const Home = r => require.ensure([], () => r(require('@/pages/Home.vue')), 'group-app')
 const Dashboard = r => require.ensure([], () => r(require('@/pages/dashboard/Dashboard.vue')), 'group-app')
+const OrderManage = resolve => require(['@/pages/order_manage/OrderManage.vue'], resolve)
 const UserManage = resolve => require(['@/pages/user_manage/UserManage.vue'], resolve)
-// import Table from '../pages/nav1/Table.vue'
-// import Form from '../pages/nav1/Form.vue'
-// import user from '../pages/nav1/user.vue'
-// import Page4 from '../pages/nav2/Page4.vue'
-// import Page5 from '../pages/nav2/Page5.vue'
-// import Page6 from '../pages/nav3/Page6.vue'
-// import echarts from '../pages/charts/echarts.vue'
+const Echarts = resolve => require(['@/pages/statistics/Echarts.vue'], resolve)
 
 Vue.use(Router)
 
@@ -51,7 +46,20 @@ export default new Router({
         hidden: false,
         meta: {
           requireAuth: true,
-          permission: 'authtoken.add_token'
+          permission: 'add_group'
+        }
+      },
+      {
+        path: 'orders',
+        component: OrderManage,
+        name: 'order_manage',
+        iconCls: 'social-freebsd-devil',
+        leaf: true,
+        menu_name: '订单管理',
+        hidden: false,
+        meta: {
+          requireAuth: true,
+          permission: 'add_group'
         }
       },
       {
@@ -59,40 +67,25 @@ export default new Router({
         component: UserManage,
         name: 'user_manage',
         iconCls: 'social-freebsd-devil',
-        leaf: false,
+        leaf: true,
         menu_name: '用户管理',
         hidden: false,
-        children: [
-          {
-            path: 'dash',
-            component: Dashboard,
-            name: 'dashboard',
-            iconCls: 'ios-paw',
-            leaf: true,
-            menu_name: '控制面板',
-            hidden: false,
-            meta: {
-              requireAuth: true,
-              permission: 'authtoken.add_token'
-            }
-          },
-          {
-            path: 'users',
-            component: UserManage,
-            name: 'user_manage',
-            iconCls: 'social-freebsd-devil',
-            leaf: true,
-            menu_name: '用户管理',
-            hidden: true,
-            meta: {
-              requireAuth: true,
-              permission: 'authtoken.add_token'
-            }
-          }
-        ],
         meta: {
           requireAuth: true,
-          permission: 'authtoken.add_token'
+          permission: 'add_group'
+        }
+      },
+      {
+        path: 'stats',
+        component: Echarts,
+        name: 'statistics',
+        iconCls: 'social-freebsd-devil',
+        leaf: true,
+        menu_name: '统计分析',
+        hidden: false,
+        meta: {
+          requireAuth: true,
+          permission: 'add_group'
         }
       }
     ]
