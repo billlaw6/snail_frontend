@@ -13,6 +13,10 @@ export const getUserPermissions = params => { return axios.get(`${base}/user-per
 
 export const getUserList = params => { return axios.get(`${base}/users/`).then(res => res) }
 
+export const getExpressList = params => { return axios.get(`${base}/expresses/`).then(res => res) }
+
+export const getPaymentList = params => { return axios.get(`${base}/payments/`).then(res => res) }
+
 export const removeUser = params => { return axios.delete(`${base}/users/`).then(res => res) }
 
 // 业务数据
@@ -31,8 +35,7 @@ export const patchMerchandise = params => {
 export const getOrderList = params => { return axios.get(`${base}/orders/`).then(res => res) }
 export const addOrder = params => { return axios.post(`${base}/orders/`, params).then(res => res) }
 export const putOrder = params => {
-  // let pk = params.id
-  let pk = 1
+  let pk = params.id
   return axios.put(`${base}/orders/${pk}/`, params).then(res => res)
 }
 export const patchOrder = params => {

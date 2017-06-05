@@ -74,8 +74,8 @@
         <Form-item label="新密码" prop="newPassword">
           <Input v-model="formValidate.newPassword" placeholder="请输入新密码" type="password"></Input>
         </Form-item>
-        <Form-item label="确认新密码" prop="resetPassword">
-          <Input v-model="formValidate.resetPassword" placeholder="请再次输入新密码" type="password"></Input>
+        <Form-item label="确认新密码" prop="newPasswordCheck">
+          <Input v-model="formValidate.newPasswordCheck" placeholder="请再次输入新密码" type="password"></Input>
         </Form-item>
       </Form>
     </Modal>
@@ -97,8 +97,9 @@
         formValidate: {
           oldPassword: '',
           newPassword: '',
-          resetPassword: ''
+          newPasswordCheck: ''
         },
+
         ruleValidate: {
           oldPassword: [
             { required: true, message: '密码不能为空', trigger: 'blur' }
@@ -106,14 +107,9 @@
           newPassword: [
             { required: true, message: '密码不能为空', trigger: 'blur' }
           ],
-          resetPassword: [
-            { required: true, message: '密码不能为空', trigger: 'blur' },
-            {
-              validator (rule, value, callback, source, options) {
-                let errors = []
-                callback(errors)
-              }
-            }
+          newPasswordCheck: [
+            { required: true, message: '请再次输入密码', trigger: 'blur' },
+            { validator: this.validateNewPassCheck, trigger: 'blur' }
           ]
         }
       }
@@ -127,11 +123,9 @@
         return tmp[0].children
       },
       route_path: function () {
-        let obj = {}
         let tmp = this.$router.options.routes.filter((currentValue, index, arr) => {
           return currentValue.path === '/home'
         })
-        console.log(obj)
         return tmp[0].children
       },
       user: function () {
@@ -158,6 +152,15 @@
       }
     },
     methods: {
+      validateNewPassCheck (rule, value, callback) {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.formValidate.newPassword) {
+          callback(new Error('两次输入不一致！'))
+        } else {
+          callback()
+        }
+      },
       toggleClick () {
         if (this.spanLeft === 5) {
           this.spanLeft = 1
@@ -189,7 +192,7 @@
             return false
           }
         })
-        this.$Message.info('点击了确定')
+        // this.$Message.info('点击了确定')
       },
       cancel () {
         this.modal1 = false

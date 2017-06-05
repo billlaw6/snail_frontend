@@ -50,11 +50,6 @@ router.beforeEach((to, from, next) => {
     // to.matched 包含admin和dash两个路径
   if (to.matched.some(record => record.meta.requireAuth)) {
     if (accessToken && user) {
-      console.log(to.meta.permission)
-      console.log(permissions.some(record => {
-        // console.log(record.codename + '=?' + to.meta.permission)
-        record.codename === to.meta.permission
-      }))
       if (to.meta.permission === 'undefined') {
         // console.log(permissions.some(to.meta.permission))
         next()

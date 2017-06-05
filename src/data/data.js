@@ -13830,5 +13830,3 @@ export const chinaCities = [
     ]
   }
 ]
-
-export * as data

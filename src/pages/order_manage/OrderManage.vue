@@ -9,7 +9,7 @@
       </Col>
       <Col span="4">
         <i-button type="primary" @click="showAddModel=true">添加</i-button>
-      </Col>
+       </Col>
     </Row>
 
     <Table :context="self" :data="tableData" :columns="tableColumns" stripe border></Table>
@@ -19,13 +19,15 @@
       </div>
     </div>
 
-    <Modal v-model="showAddModel" title="添加订单" @on-ok="confirmAdd" @on-cancel="cancelAdd" >
-      <Form :model="addModel" :rules="ruleValidate" :label-width="100">
+    <Modal v-model="showAddModel" title="添加订单" @on-ok="confirmAdd('addModelForm')" @on-cancel="cancelAdd('addModelForm')" >
+      <Form ref="addModelForm" :model="addModel" :rules="ruleValidate" :label-width="100">
         <Form-item label="标题" prop="title">
           <Input v-model="addModel.title" placeholder="标题"></Input>
         </Form-item>
         <Form-item label="商品" prop="merchandise">
-          <Input v-model="addModel.merchandise" placeholder="商品"></Input>
+          <Select v-model="addModel.merchandise">
+            <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
+          </Select>
         </Form-item>
         <Form-item label="数量" prop="amount">
           <Input-number :max="1000" :min="1" :step="1" v-model="addModel.amount"></Input-number>
@@ -33,13 +35,35 @@
         <Form-item label="单价" prop="price">
           <Input-number :max="10000" :min="1" :step="0.1" v-model="addModel.price"></Input-number>
         </Form-item>
-        <Form-item label="单价" prop="price">
-          <Cascader :data="chinaCities"></Cascader>
+        <Form-item label="付款方式" prop="payment">
+          <Select v-model="addModel.payment">
+            <Option v-for="item in paymentList" :value="item.code" :key="item">{{ item.name }}</Option>
+          </Select>
+        </Form-item>
+        <Form-item label="购买人" prop="buyer">
+          <Input v-model="addModel.buyer" placeholder="购买人"></Input>
+        </Form-item>
+        <Form-item label="手机号" prop="cell_phone">
+          <Input v-model="addModel.cell_phone" placeholder="手机号"></Input>
+        </Form-item>
+        <Form-item label="城市" prop="city">
+          <Cascader :data="chinaCities" v-model="addModel.city" :filterable=true trigger="hover" placeholder="请选择所在城市"></Cascader>
+        </Form-item>
+        <Form-item label="详细地址" prop="address">
+          <Input v-model="addModel.address" placeholder="详细地址"></Input>
+        </Form-item>
+        <Form-item label="快递公司" prop="express">
+          <Select v-model="addModel.express">
+            <Option v-for="item in expresseList" :value="item.code" :key="item">{{ item.name }}</Option>
+          </Select>
+        </Form-item>
+        <Form-item label="快递单号" prop="express_no">
+          <Input v-model="addModel.express_no" placeholder="快递单号"></Input>
         </Form-item>
 
         <Form-item>
-            <Button type="primary" @click="confirmAdd('formValidate')">提交</Button>
-            <Button type="ghost" @click="handleReset('formValidate')" style="margin-left: 8px">重置</Button>
+            <Button type="primary" @click="confirmAdd('addModelForm')">提交</Button>
+            <Button type="ghost" @click="handleReset('addModelForm')" style="margin-left: 8px">重置</Button>
         </Form-item>
       </Form>
     </Modal>
@@ -47,12 +71,16 @@
 </template>
 
 <script>
-  import { getOrderList, addOrder, putOrder, getMerchandiseList } from '../../api/api'
+  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList } from '../../api/api'
+  import { chinaCities } from '../../data/data'
   export default {
     data: function () {
       return {
         filter: '',
+        chinaCities,
         merchandiseList: [],
+        expresseList: [],
+        paymentList: [],
         dateOptions: {
           shortcuts: [
             {
@@ -87,30 +115,66 @@
         showAddModel: false,
         showEditModel: false,
         addModel: {
-          title: '',
-          merchandise: '',
+          title: 'lasdkjf',
+          merchandise: 1,
           amount: 1,
-          price: 0
+          price: 1,
+          payment: 'hdfk',
+          buyer: 'asldk',
+          cell_phone: '18001163901',
+          city: [],
+          address: 'lasd',
+          comment: '',
+          status: 0,
+          express: 'shunfeng',
+          express_no: '123322',
+          express_info: ''
         },
         editModel: {},
         ruleValidate: {
           title: [
-            { required: true, message: '订单标题不能为空', trigger: 'blur' },
-            { type: 'string', min: 4, message: '标题不得少于4个字符' }
+            { required: true, message: '做个标记才好找哦', trigger: 'blur' },
+            { type: 'string', min: 4, message: '多赐几个字嘛', trigger: 'blur' }
           ],
           merchandise: [
-            { required: true, message: '订单商品不能为空', trigger: 'blur' },
-            { type: 'string', min: 4, message: '标题不得少于4个字符' }
+            { required: true, type: 'number', message: '侬需要啥？', trigger: 'blur' }
           ],
           amount: [
-            { required: true, message: '商品数量不能为空', trigger: 'blur' },
-            { type: 'number', min: 1, max: 1000, message: '数量必须为1至1000之间' },
+            { required: true, type: 'number', min: 1, max: 1000, message: '小滴数不清了，改个数？', trigger: 'blur' }
+          ],
+          price: [
+            { required: true, type: 'number', min: 0, max: 10000, message: '介是几个钱？', trigger: 'blur' }
+          ],
+          payment: [
+            { required: true, type: 'string', message: '咱们咋算？', trigger: 'blur' }
+          ],
+          buyer: [
+            { required: true, message: '怎么称呼昵？', trigger: 'blur' }
+          ],
+          cell_phone: [
+            { required: true, message: '留个电话才好约哦', trigger: 'blur' },
+            { type: 'string', len: 11, message: '介个号码打不通啊', trigger: 'blur' },
             {
               validator (rule, value, callback, source, options) {
                 let errors = []
+                if (!/^1[3|4|5|8][0-9]\d{4,8}$/.test(value)) {
+                  errors.push(new Error('介个手机号打不通哦'))
+                }
                 callback(errors)
               }
             }
+          ],
+          city: [
+            { type: 'array', required: true, message: '请选择有效的城市', len: 2, trigger: 'change' }
+          ],
+          address: [
+            { required: true, message: '方便具体点么？', trigger: 'blur' }
+          ],
+          express: [
+            { required: true, type: 'string', message: '亲要自己送吗？', trigger: 'blur' }
+          ],
+          express_no: [
+            { required: true, message: '单号拿来验证一下？', trigger: 'blur' }
           ]
         },
         self: this,
@@ -180,31 +244,71 @@
       },
       changePage (row) {
         // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-        console.log(row)
+        // console.log(row)
         this.page = row
         this.mockTableData()
       },
       // 获取商品列表
-      getMerchandise: function () {
+      getMerchandiseList: function () {
         getMerchandiseList().then((res) => {
           let { data, status, statusText } = res
           if (status !== 200) {
             console.log(statusText)
             this.$Message.error('获取商品列表失败!')
           } else {
-            console.log(JSON.stringify(data.results))
+            // console.log(JSON.stringify(data.results))
             this.merchandiseList = data.results
           }
         }, (error) => {
-          console.log('Error in getOrderList: ' + error)
+          console.log('Error in getMerchandiseList: ' + error)
           this.$Message.error('获取商品列表失败!')
         }).catch((error) => {
-          console.log('catched in getOrderList:' + error)
+          console.log('catched in getMerchandiseList:' + error)
           this.$Message.error('获取商品列表失败!')
         })
       },
+      // 获取支付方式列表
+      getPaymentList: function () {
+        getPaymentList().then((res) => {
+          let { data, status, statusText } = res
+          if (status !== 200) {
+            console.log(statusText)
+            this.$Message.error('获取支付方式列表失败!')
+          } else {
+            // console.log(JSON.stringify(data.results))
+            this.paymentList = data.results
+          }
+        }, (error) => {
+          // console.log('Error in getPaymentList: ' + error)
+          this.$Message.error('获取支付方式列表失败!' + error)
+        }).catch((error) => {
+          // console.log('catched in getPaymentList:' + error)
+          this.$Message.error('获取支付方式列表失败!' + error)
+        })
+      },
+      // 获取快递公司列表
+      getExpressList: function () {
+        let para = {
+          page: this.page
+        }
+        getExpressList(para).then((res) => {
+          let { data, status, statusText } = res
+          if (status !== 200) {
+            this.loginMessage = statusText
+          } else {
+            // console.log(JSON.stringify(data.results))
+            this.expresseList = data.results
+          }
+        }, (error) => {
+          // console.log('Error in getExpressList: ' + error)
+          this.$Message.error('获取快递公司列表失败!' + error)
+        }).catch((error) => {
+          // console.log('catched in getExpressList:' + error)
+          this.$Message.error('获取快递公司列表失败!' + error)
+        })
+      },
       // 获取订单列表
-      getOrder: function () {
+      getOrderList: function () {
         let para = {
           page: this.page
         }
@@ -214,16 +318,17 @@
           if (status !== 200) {
             this.loginMessage = statusText
           } else {
-            console.log(JSON.stringify(data.results))
+            // console.log(JSON.stringify(data.results))
             this.$Loading.finish()
             this.total = res.data.total
             this.tableData = data.results
           }
         }, (error) => {
           console.log('Error in getOrderList: ' + error)
-          this.$Message.error('表单验证失败!')
+          this.$Message.error('获取订单列表失败!')
         }).catch((error) => {
           console.log('catched in getOrderList:' + error)
+          this.$Message.error('获取订单列表失败!')
         })
       },
 
@@ -235,23 +340,32 @@
 
       // 增加订单
       confirmAdd: function (name) {
+        // console.log(this.addModel.city)
+        // console.log(this.addModel.city.join('-'))
         this.$refs[name].validate((valid) => {
           if (valid) {
+            // this.addModel.city = this.addModel.city.join('-')
             addOrder(this.addModel).then((res) => {
               let { data, status, statusText } = res
               if (status !== 200) {
                 this.loginMessage = statusText
+                console.log('Error in addOrder')
+                this.$Message.error('添加订单失败!')
               } else {
                 console.log(data)
-                getOrderList()
                 this.$Message.success('添加订单成功!')
+                // 更新订单列表
+                getOrderList()
               }
             }, (error) => {
               console.log('Error in addOrder: ' + error)
+              this.$Message.error('添加订单失败!')
             }).catch((error) => {
-              console.log('catched in addOrder:' + error)
+              console.log('Error in addOrder: ' + error)
+              this.$Message.error('添加订单失败!')
             })
           } else {
+            console.log(this.addModel)
             this.$Message.error('表单验证失败!')
           }
         })
@@ -270,14 +384,17 @@
           if (status !== 200) {
             this.loginMessage = statusText
           } else {
-            console.log(data)
+            // console.log(data)
+            this.editModel = data
             getOrderList()
             this.$Message.success('添加订单成功!')
           }
         }, (error) => {
           console.log('Error in editOrder: ' + error)
+          this.$Message.error('修改订单失败!')
         }).catch((error) => {
           console.log('catched in editOrder:' + error)
+          this.$Message.error('修改订单失败!')
         })
       },
 
@@ -287,6 +404,9 @@
     },
     mounted () {
       this.getOrderList()
+      this.getMerchandiseList()
+      this.getExpressList()
+      this.getPaymentList()
     }
   }
 </script>
