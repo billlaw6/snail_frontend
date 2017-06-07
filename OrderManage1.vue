@@ -8,7 +8,7 @@
         <Input v-model="filter" icon="icon-search" placeholder="本地检索"></Input>
       </Col>
       <Col span="4">
-        <i-button type="primary" @click="showAddModal=true">添加</i-button>
+        <i-button type="primary" @click="showAddModel=true">添加</i-button>
        </Col>
     </Row>
 
@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <Modal v-model="showAddModal" title="添加订单" @on-ok="confirmAdd('addModelForm')" @on-cancel="cancelAdd('addModelForm')" >
+    <Modal v-model="showAddModel" title="添加订单" @on-ok="confirmAdd('addModelForm')" @on-cancel="cancelAdd('addModelForm')" >
       <Form ref="addModelForm" :model="addModel" :rules="ruleValidate" :label-width="100">
         <Form-item label="标题" prop="title">
           <Input v-model="addModel.title" placeholder="标题"></Input>
@@ -60,68 +60,10 @@
         <Form-item label="快递单号" prop="express_no">
           <Input v-model="addModel.express_no" placeholder="快递单号"></Input>
         </Form-item>
-      </Form>
-    </Modal>
 
-    <Modal v-model="showEditModal" title="修改订单" @on-ok="confirmEdit('editModelForm')" @on-cancel="cancelEdit('editModelForm')" >
-      <Form ref="editModelForm" :model="editModel" :rules="ruleValidate" :label-width="100">
-        <Form-item label="标题" prop="title">
-          <Input v-model="editModel.title" placeholder="标题"></Input>
-        </Form-item>
-        <Form-item label="商品" prop="merchandise">
-          <Select v-model="editModel.merchandise">
-            <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
-          </Select>
-        </Form-item>
-        <Form-item label="数量" prop="amount">
-          <Input-number :max="1000" :min="1" :step="1" v-model="editModel.amount"></Input-number>
-        </Form-item>
-        <Form-item label="单价" prop="price">
-          <Input-number :max="10000" :min="1" :step="0.1" v-model="editModel.price"></Input-number>
-        </Form-item>
-        <Form-item label="付款方式" prop="payment">
-          <Select v-model="editModel.payment">
-            <Option v-for="item in paymentList" :value="item.code" :key="item">{{ item.name }}</Option>
-          </Select>
-        </Form-item>
-        <Form-item label="购买人" prop="buyer">
-          <Input v-model="editModel.buyer" placeholder="购买人"></Input>
-        </Form-item>
-        <Form-item label="手机号" prop="cell_phone">
-          <Input v-model="editModel.cell_phone" placeholder="手机号"></Input>
-        </Form-item>
-        <Form-item label="城市" prop="city">
-          <Cascader :data="chinaCities" v-model="editModel.city" :filterable=true trigger="hover" placeholder="请选择所在城市"></Cascader>
-        </Form-item>
-        <Form-item label="详细地址" prop="address">
-          <Input v-model="editModel.address" placeholder="详细地址"></Input>
-        </Form-item>
-        <Form-item label="快递公司" prop="express">
-          <Select v-model="editModel.express">
-            <Option v-for="item in expresseList" :value="item.code" :key="item">{{ item.name }}</Option>
-          </Select>
-        </Form-item>
-        <Form-item label="快递单号" prop="express_no">
-          <Input v-model="editModel.express_no" placeholder="快递单号"></Input>
-        </Form-item>
-      </Form>
-    </Modal>
-
-    <Modal v-model="showDeleteModal" title="删除订单" @on-ok="confirmDelete('deleteModelForm')" @on-cancel="cancelDelete('deleteModelForm')" >
-      <Form ref="deleteModelForm" :model="deleteModel" :label-width="100">
-        <Form-item label="标题" prop="title">
-          <Input v-model="deleteModel.title" placeholder="标题" :readonly=true></Input>
-        </Form-item>
-        <Form-item label="商品" prop="merchandise">
-          <Select v-model="deleteModel.merchandise" :disabled=true>
-            <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
-          </Select>
-        </Form-item>
-        <Form-item label="购买人" prop="buyer">
-          <Input v-model="deleteModel.buyer" placeholder="购买人" :readonly=true></Input>
-        </Form-item>
-        <Form-item label="手机号" prop="cell_phone">
-          <Input v-model="deleteModel.cell_phone" placeholder="手机号" :readonly=true></Input>
+        <Form-item>
+            <Button type="primary" @click="confirmAdd('addModelForm')">提交</Button>
+            <Button type="ghost" @click="handleReset('addModelForm')" style="margin-left: 8px">重置</Button>
         </Form-item>
       </Form>
     </Modal>
@@ -170,9 +112,8 @@
             }
           ]
         },
-        showAddModal: false,
-        showEditModal: false,
-        showDeleteModal: false,
+        showAddModel: false,
+        showEditModel: false,
         addModel: {
           title: 'lasdkjf',
           merchandise: 1,
@@ -188,28 +129,7 @@
           express_no: '123322',
           express_info: ''
         },
-        editModel: {
-          title: '',
-          merchandise: null,
-          amount: null,
-          price: null,
-          payment: '',
-          buyer: '',
-          cell_phone: '',
-          city: [],
-          address: '',
-          comment: '',
-          express: '',
-          express_no: '',
-          express_info: ''
-        },
-        deleteModel: {
-          title: '',
-          merchandise: null,
-          amount: null,
-          buyer: '',
-          cell_phone: ''
-        },
+        editModel: {},
         ruleValidate: {
           title: [
             { required: true, message: '做个标记才好找哦', trigger: 'blur' },
@@ -279,14 +199,20 @@
             sortable: true
           },
           {
-            title: '顾客',
-            key: 'buyer',
+            title: '数量',
+            key: 'amount',
+            align: 'center',
+            sortable: true
+          },
+          {
+            title: '价格',
+            key: 'price',
             align: 'left',
             sortable: true
           },
           {
-            title: '电话',
-            key: 'cell_phone',
+            title: '顾客',
+            key: 'buyer',
             align: 'left',
             sortable: true
           },
@@ -297,39 +223,23 @@
             sortable: true
           },
           {
-            title: '状态',
-            key: 'status',
-            align: 'center',
-            sortable: true
-          },
-          {
             title: '操作',
             key: 'action',
             width: 150,
             align: 'center',
             render (row, column, index) {
-              return `<i-button type="primary" size="small" @click="showEdit (${index})">查看</i-button> <i-button type="error" size="small" @click="showDelete (${index})">删除</i-button>`
+              return `<i-button type="primary" size="small" @click="show(${index})">查看</i-button> <i-button type="error" size="small" @click="">删除</i-button>`
             }
           }
         ]
       }
     },
     methods: {
-      showEdit (index) {
-        this.showEditModal = true
-        this.editModel = this.tableData[index]
-        /* this.$Modal.info({ */
-        /*   title: '订单信息', */
-        /*   content: `标题：${this.tableData[index].title}<br>商品：${this.tableData[index].merchandise}<br>地址：${this.tableData[index].addr}` */
-        /* }) */
-      },
-      showDelete (index) {
-        this.showDeleteModal = true
-        this.deleteModel = this.tableData[index]
-      },
-      cancelDelete (index) {
-        this.showDeleteModal = false
-        this.$Message.info('点击了取消')
+      show (index) {
+        this.$Model.info({
+          title: '订单信息',
+          content: `姓名：${this.tableData[index].name}<br>年龄：${this.tableData[index].age}<br>地址：${this.tableData[index].addr}`
+        })
       },
       changePage (row) {
         // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
@@ -397,7 +307,7 @@
         })
       },
       // 获取订单列表
-      getOrder: function () {
+      getOrderList: function () {
         let para = {
           page: this.page
         }
@@ -431,7 +341,7 @@
       confirmAdd: function (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            /* this.addModel.city = this.addModel.city.join('-') */
+            // this.addModel.city = this.addModel.city.join('-')
             console.log(this.addModel)
             addOrder(this.addModel).then((res) => {
               let { data, status, statusText } = res
@@ -442,9 +352,8 @@
               } else {
                 console.log(data)
                 this.$Message.success('添加订单成功!')
-                this.showAddModel = false
                 // 更新订单列表
-                this.getOrder()
+                getOrderList()
               }
             }, (error) => {
               console.log('Error in addOrder: ' + error)
@@ -475,8 +384,8 @@
           } else {
             // console.log(data)
             this.editModel = data
+            getOrderList()
             this.$Message.success('添加订单成功!')
-            this.getOrder()
           }
         }, (error) => {
           console.log('Error in editOrder: ' + error)
@@ -492,7 +401,7 @@
       }
     },
     mounted () {
-      this.getOrder()
+      this.getOrderList()
       this.getMerchandiseList()
       this.getExpressList()
       this.getPaymentList()

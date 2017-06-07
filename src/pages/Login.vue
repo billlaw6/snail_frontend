@@ -5,7 +5,7 @@
     </Form-item>
 
     <Form-item prop="username">
-      <i-input size="large" type="text" v-model="formLogin.username" placeholder="用户名">
+      <i-input size="large" type="text" v-model="formLogin.username" placeholder="用户名" :autofocus=true>
         <Icon type="ios-person-outline" slot="prepend"></Icon>
       </i-input>
     </Form-item>
