@@ -103,6 +103,10 @@
         </Form-item>
         <Form-item label="快递单号" prop="express_no">
           <Input v-model="editModel.express_no" placeholder="快递单号"></Input>
+          <Button @click="updateExpressInfo(editModel.express, editModel.express_no)" type="primary" shape="circle">更新快递信息</Button>
+        </Form-item>
+        <Form-item label="快递单号" prop="express_info">
+          <Input v-model="editModel.express_info" type="textarea" placeholder="快递信息"></Input>
         </Form-item>
       </Form>
     </Modal>
@@ -129,7 +133,7 @@
 </template>
 
 <script>
-  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList } from '../../api/api'
+  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList, getExpressInfo } from '../../api/api'
   import { chinaCities } from '../../data/data'
   export default {
     data: function () {
@@ -232,7 +236,6 @@
           ],
           cell_phone: [
             { required: true, message: '留个电话才好约哦', trigger: 'blur' },
-            { type: 'string', len: 11, message: '介个号码打不通啊', trigger: 'blur' },
             {
               validator (rule, value, callback, source, options) {
                 let errors = []
@@ -244,7 +247,16 @@
             }
           ],
           city: [
-            { type: 'array', required: true, message: '请选择有效的城市', len: 2, trigger: 'change' }
+            { required: true, message: '请选择有效的城市', trigger: 'change' },
+            {
+              validator (rule, value, callback, source, options) {
+                let errors = []
+                if (!/^1[3|4|5|8][0-9]\d{4,8}$/.test(value)) {
+                  errors.push(new Error('介个手机号打不通哦'))
+                }
+                callback(errors)
+              }
+            }
           ],
           address: [
             { required: true, message: '方便具体点么？', trigger: 'blur' }
@@ -318,6 +330,11 @@
       showEdit (index) {
         this.showEditModal = true
         this.editModel = this.tableData[index]
+        /* console.log('before:' + this.editModel.city) */
+        this.editModel.city = this.editModel.city.split(',')
+        /* console.log('after:' + this.editModel.city) */
+        this.editModel.amount = Number(this.editModel.amount)
+        this.editModel.price = Number(this.editModel.price)
         /* this.$Modal.info({ */
         /*   title: '订单信息', */
         /*   content: `标题：${this.tableData[index].title}<br>商品：${this.tableData[index].merchandise}<br>地址：${this.tableData[index].addr}` */
@@ -431,7 +448,7 @@
       confirmAdd: function (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            /* this.addModel.city = this.addModel.city.join('-') */
+            this.addModel.city = this.addModel.city.join(',')
             console.log(this.addModel)
             addOrder(this.addModel).then((res) => {
               let { data, status, statusText } = res
@@ -466,24 +483,52 @@
         this.$Message.info('点击了取消')
       },
 
-      // 修改订单
-      confirmEdit: function () {
-        putOrder(this.editModel).then((res) => {
+      // 更新快递公司信息
+      updateExpressInfo (express, expressNo) {
+        /* window.alert('updating' + express + ':' + expressNo) */
+        let paras = { company: express, postId: expressNo }
+        console.log(paras)
+        getExpressInfo(paras).then((res) => {
           let { data, status, statusText } = res
-          if (status !== 200) {
-            this.loginMessage = statusText
+          if (status !== 201) {
+            this.$Message.error(statusText)
           } else {
-            // console.log(data)
-            this.editModel = data
-            this.$Message.success('添加订单成功!')
-            this.getOrder()
+            console.log(data)
+            this.editModel.express_info = JSON.stringify(data)
+            this.$Message.success('获取快递信息成功!')
           }
         }, (error) => {
           console.log('Error in editOrder: ' + error)
-          this.$Message.error('修改订单失败!')
+          this.$Message.error('获取快递信息失败!')
         }).catch((error) => {
           console.log('catched in editOrder:' + error)
-          this.$Message.error('修改订单失败!')
+          this.$Message.error('获取快递信息失败!')
+        })
+      },
+      // 修改订单
+      confirmEdit: function () {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            putOrder(this.editModel).then((res) => {
+              let { data, status, statusText } = res
+              if (status !== 203) {
+                this.$Message.error(statusText)
+              } else {
+                // console.log(data)
+                this.editModel = data
+                this.$Message.success('修改订单成功!')
+                this.getOrder()
+              }
+            }, (error) => {
+              console.log('Error in editOrder: ' + error)
+              this.$Message.error('修改订单失败!')
+            }).catch((error) => {
+              console.log('catched in editOrder:' + error)
+              this.$Message.error('修改订单失败!')
+            })
+          } else {
+            this.$Message.error('订单信息校验失败!')
+          }
         })
       },
 

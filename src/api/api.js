@@ -33,8 +33,8 @@ export const patchMerchandise = params => {
 }
 
 export const getOrderList = params => { return axios.get(`${base}/orders/`).then(res => res) }
-// export const addOrder = params => { return axios.post(`${base}/orders/`, params).then(res => res) }
-export const addOrder = params => { return axios.post(`${base}/add_order/`, params).then(res => res) }
+export const addOrder = params => { return axios.post(`${base}/orders/`, params).then(res => res) }
+// export const addOrder = params => { return axios.post(`${base}/add_order/`, params).then(res => res) }
 export const putOrder = params => {
   let pk = params.id
   return axios.put(`${base}/orders/${pk}/`, params).then(res => res)
@@ -44,3 +44,4 @@ export const patchOrder = params => {
   return axios.patch(`${base}/orders/${pk}/`, params).then(res => res)
 }
 
+export const getExpressInfo = params => { return axios.post(`${base}/get-express-info/`, params).then(res => res) }
