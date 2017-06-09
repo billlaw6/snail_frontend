@@ -17,6 +17,8 @@ export const getExpressList = params => { return axios.get(`${base}/expresses/`)
 
 export const getPaymentList = params => { return axios.get(`${base}/payments/`).then(res => res) }
 
+export const getOrderStatusList = params => { return axios.get(`${base}/order-status/`).then(res => res) }
+
 export const removeUser = params => { return axios.delete(`${base}/users/`).then(res => res) }
 
 // 业务数据

@@ -49,8 +49,15 @@
         <Form-item label="城市" prop="city">
           <Cascader :data="chinaCities" v-model="addModel.city" :filterable=true trigger="hover" placeholder="请选择所在城市"></Cascader>
         </Form-item>
+        {{ addModel.city }}
+        {{ typeof(addModel.city) }}
         <Form-item label="详细地址" prop="address">
           <Input v-model="addModel.address" placeholder="详细地址"></Input>
+        </Form-item>
+        <Form-item label="订单状态" prop="status">
+          <Select v-model="addModel.status">
+            <Option v-for="item in orderStatusList" :value="item.id" :key="item">{{ item.name }}</Option>
+          </Select>
         </Form-item>
         <Form-item label="快递公司" prop="express">
           <Select v-model="addModel.express">
@@ -96,6 +103,11 @@
         <Form-item label="详细地址" prop="address">
           <Input v-model="editModel.address" placeholder="详细地址"></Input>
         </Form-item>
+        <Form-item label="订单状态" prop="status">
+          <Select v-model="editModel.status">
+            <Option v-for="item in orderStatusList" :value="item.code" :key="item">{{ item.name }}</Option>
+          </Select>
+        </Form-item>
         <Form-item label="快递公司" prop="express">
           <Select v-model="editModel.express">
             <Option v-for="item in expresseList" :value="item.code" :key="item">{{ item.name }}</Option>
@@ -133,16 +145,19 @@
 </template>
 
 <script>
-  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList, getExpressInfo } from '../../api/api'
+  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList, getExpressInfo, getOrderStatusList } from '../../api/api'
   import { chinaCities } from '../../data/data'
   export default {
     data: function () {
       return {
         filter: '',
+        city_array_add: [],
+        city_array_edit: [],
         chinaCities,
         merchandiseList: [],
         expresseList: [],
         paymentList: [],
+        orderStatusList: [],
         dateOptions: {
           shortcuts: [
             {
@@ -185,9 +200,10 @@
           payment: 'hdfk',
           buyer: 'asldk',
           cell_phone: '18001163901',
-          city: ['13', '11'],
+          city: ['11', '12'],
           address: 'lasd',
           comment: '',
+          status: 1,
           express: 'shunfeng',
           express_no: '123322',
           express_info: ''
@@ -203,6 +219,7 @@
           city: [],
           address: '',
           comment: '',
+          status: null,
           express: '',
           express_no: '',
           express_info: ''
@@ -247,16 +264,7 @@
             }
           ],
           city: [
-            { required: true, message: '请选择有效的城市', trigger: 'change' },
-            {
-              validator (rule, value, callback, source, options) {
-                let errors = []
-                if (!/^1[3|4|5|8][0-9]\d{4,8}$/.test(value)) {
-                  errors.push(new Error('介个手机号打不通哦'))
-                }
-                callback(errors)
-              }
-            }
+            { required: true, type: 'array', message: '请选择所在城市', len: 2, trigger: 'blur' }
           ],
           address: [
             { required: true, message: '方便具体点么？', trigger: 'blur' }
@@ -326,6 +334,29 @@
         ]
       }
     },
+    /* computed: { */
+    /*   city_array_add: { */
+    /*     get: function () { */
+    /*       console.log('get add:' + this.addModel.city) */
+    /*       console.log(this.addModel.city.split(',')) */
+    /*       return this.addModel.city.split(',') */
+    /*     }, */
+    /*     set: function (newValue) { */
+    /*       this.addModel.city = newValue.join(',') */
+    /*       console.log('add setted to:' + this.addModel.city.split(',')) */
+    /*     } */
+    /*   }, */
+    /*   city_array_edit: { */
+    /*     get: function () { */
+    /*       console.log('get edit:' + this.editModel.city) */
+    /*       return this.editModel.city.split(',') */
+    /*     }, */
+    /*     set: function (newValue) { */
+    /*       this.editModel.city = newValue.join(',') */
+    /*       console.log('edit setted to:' + this.editModel.city.split(',')) */
+    /*     } */
+    /*   } */
+    /* }, */
     methods: {
       showEdit (index) {
         this.showEditModal = true
@@ -392,6 +423,27 @@
           this.$Message.error('获取支付方式列表失败!' + error)
         })
       },
+      // 获取订单状态列表
+      getOrderStatusList: function () {
+        let para = {
+          page: this.page
+        }
+        getOrderStatusList(para).then((res) => {
+          let { data, status, statusText } = res
+          if (status !== 200) {
+            this.loginMessage = statusText
+          } else {
+            // console.log(JSON.stringify(data.results))
+            this.orderStatusList = data.results
+          }
+        }, (error) => {
+          // console.log('Error in getOrderStatusList: ' + error)
+          this.$Message.error('获取订单状态列表失败!' + error)
+        }).catch((error) => {
+          // console.log('Error in getOrderStatusList: ' + error)
+          this.$Message.error('获取订单状态列表失败!' + error)
+        })
+      },
       // 获取快递公司列表
       getExpressList: function () {
         let para = {
@@ -448,9 +500,13 @@
       confirmAdd: function (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            this.addModel.city = this.addModel.city.join(',')
-            console.log(this.addModel)
-            addOrder(this.addModel).then((res) => {
+            console.log(this.addModel.city)
+            // 坑，注意javascript的浅复制，使用JSON实现深复制
+            let addModelSubmit = JSON.stringify(this.addModel)
+            addModelSubmit = JSON.parse(addModelSubmit)
+            addModelSubmit.city = addModelSubmit.city.join(',')
+            console.log(addModelSubmit)
+            addOrder(addModelSubmit).then((res) => {
               let { data, status, statusText } = res
               if (status !== 201) {
                 this.loginMessage = statusText
@@ -458,6 +514,7 @@
                 this.$Message.error('添加订单失败!')
               } else {
                 console.log(data)
+                // data.city = data.city.split(',')
                 this.$Message.success('添加订单成功!')
                 this.showAddModel = false
                 // 更新订单列表
@@ -471,6 +528,7 @@
               this.$Message.error('添加订单失败!')
             })
           } else {
+            console.log(this.$refs[name].errors)
             console.log(this.addModel)
             this.$Message.error('表单验证失败!')
           }
@@ -506,15 +564,20 @@
         })
       },
       // 修改订单
-      confirmEdit: function () {
+      confirmEdit: function (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            putOrder(this.editModel).then((res) => {
+            let editModelSubmit = JSON.stringify(this.editModel)
+            editModelSubmit = JSON.parse(editModelSubmit)
+            editModelSubmit.city = editModelSubmit.city.join(',')
+            console.log(editModelSubmit)
+            putOrder(this.editModelSubmit).then((res) => {
               let { data, status, statusText } = res
               if (status !== 203) {
                 this.$Message.error(statusText)
               } else {
                 // console.log(data)
+                data.city = data.city.split(',')
                 this.editModel = data
                 this.$Message.success('修改订单成功!')
                 this.getOrder()
@@ -540,6 +603,7 @@
       this.getOrder()
       this.getMerchandiseList()
       this.getExpressList()
+      this.getOrderStatusList()
       this.getPaymentList()
     }
   }
