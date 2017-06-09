@@ -49,8 +49,6 @@
         <Form-item label="城市" prop="city">
           <Cascader :data="chinaCities" v-model="addModel.city" :filterable=true trigger="hover" placeholder="请选择所在城市"></Cascader>
         </Form-item>
-        {{ addModel.city }}
-        {{ typeof(addModel.city) }}
         <Form-item label="详细地址" prop="address">
           <Input v-model="addModel.address" placeholder="详细地址"></Input>
         </Form-item>
@@ -105,7 +103,7 @@
         </Form-item>
         <Form-item label="订单状态" prop="status">
           <Select v-model="editModel.status">
-            <Option v-for="item in orderStatusList" :value="item.code" :key="item">{{ item.name }}</Option>
+            <Option v-for="item in orderStatusList" :value="item.id" :key="item">{{ item.name }}</Option>
           </Select>
         </Form-item>
         <Form-item label="快递公司" prop="express">
@@ -151,8 +149,6 @@
     data: function () {
       return {
         filter: '',
-        city_array_add: [],
-        city_array_edit: [],
         chinaCities,
         merchandiseList: [],
         expresseList: [],
@@ -210,16 +206,16 @@
         },
         editModel: {
           title: '',
-          merchandise: null,
-          amount: null,
-          price: null,
+          merchandise: 0,
+          amount: 0,
+          price: 0,
           payment: '',
           buyer: '',
           cell_phone: '',
           city: [],
           address: '',
           comment: '',
-          status: null,
+          status: 1,
           express: '',
           express_no: '',
           express_info: ''
@@ -334,36 +330,13 @@
         ]
       }
     },
-    /* computed: { */
-    /*   city_array_add: { */
-    /*     get: function () { */
-    /*       console.log('get add:' + this.addModel.city) */
-    /*       console.log(this.addModel.city.split(',')) */
-    /*       return this.addModel.city.split(',') */
-    /*     }, */
-    /*     set: function (newValue) { */
-    /*       this.addModel.city = newValue.join(',') */
-    /*       console.log('add setted to:' + this.addModel.city.split(',')) */
-    /*     } */
-    /*   }, */
-    /*   city_array_edit: { */
-    /*     get: function () { */
-    /*       console.log('get edit:' + this.editModel.city) */
-    /*       return this.editModel.city.split(',') */
-    /*     }, */
-    /*     set: function (newValue) { */
-    /*       this.editModel.city = newValue.join(',') */
-    /*       console.log('edit setted to:' + this.editModel.city.split(',')) */
-    /*     } */
-    /*   } */
-    /* }, */
     methods: {
       showEdit (index) {
         this.showEditModal = true
         this.editModel = this.tableData[index]
-        /* console.log('before:' + this.editModel.city) */
-        this.editModel.city = this.editModel.city.split(',')
-        /* console.log('after:' + this.editModel.city) */
+        console.log('before:' + this.editModel.city)
+        this.editModel.city = Array.isArray(this.editModel.city) ? this.editModel.city : this.editModel.city.split(',')
+        console.log('after:' + this.editModel.city)
         this.editModel.amount = Number(this.editModel.amount)
         this.editModel.price = Number(this.editModel.price)
         /* this.$Modal.info({ */
@@ -571,14 +544,18 @@
             editModelSubmit = JSON.parse(editModelSubmit)
             editModelSubmit.city = editModelSubmit.city.join(',')
             console.log(editModelSubmit)
-            putOrder(this.editModelSubmit).then((res) => {
+            putOrder(editModelSubmit).then((res) => {
               let { data, status, statusText } = res
-              if (status !== 203) {
-                this.$Message.error(statusText)
+              if (status !== 200) {
+                console.log(statusText)
+                this.$Message.error(status)
               } else {
-                // console.log(data)
-                data.city = data.city.split(',')
+                console.log(data.city)
+                data.city = Array.isArray(data.city) ? data.city : data.city.split(',')
+                data.amount = Number(data.amount)
+                data.price = Number(data.price)
                 this.editModel = data
+                console.log(this.editModel)
                 this.$Message.success('修改订单成功!')
                 this.getOrder()
               }
