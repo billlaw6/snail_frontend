@@ -334,9 +334,9 @@
       showEdit (index) {
         this.showEditModal = true
         this.editModel = this.tableData[index]
-        console.log('before:' + this.editModel.city)
+        // console.log('before:' + this.editModel.city)
         this.editModel.city = Array.isArray(this.editModel.city) ? this.editModel.city : this.editModel.city.split(',')
-        console.log('after:' + this.editModel.city)
+        // console.log('after:' + this.editModel.city)
         this.editModel.amount = Number(this.editModel.amount)
         this.editModel.price = Number(this.editModel.price)
         /* this.$Modal.info({ */
