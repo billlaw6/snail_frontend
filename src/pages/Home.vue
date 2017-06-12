@@ -2,28 +2,28 @@
   <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
     <Row type="flex">
       <i-col :span="spanLeft" class="layout-menu-left">
-        <Menu :mode="modeType" theme="dark" width="auto" :active-name="this.$route.path" :open-names="openNames" @on-select="menuSelect" accordion>
+        <Menu :mode="modeType" theme="light" width="auto" :active-name="this.$route.path" :open-names="openNames" @on-select="menuSelect" accordion>
           <div class="layout-logo-left">
             <Icon type="paper-airplane" :size="logoSize" v-show="logoIsDisplay"></Icon>
             <span class="layout-text"> Admin 管理系统</span>
           </div>
           <!-- 多级对象遍历只能用多级循环解决，不能用.实现 -->
-          <template v-for="(item, index) in route_menu" v-if="!item.hidden">
-            <template v-for="(meta, index) in item">
+          <template v-for="(item, index) in route_menu">
+            <template v-for="(meta, index) in item" v-if="!meta.hidden">
               <template v-if="permissions.some(record => record.codename === meta.permission)">
-                <Menu-item v-if="item.leaf" :name="item.name">
-                    <Icon :type="item.iconCls" :size="iconSize"></Icon>
-                    <span class="layout-text">{{ item.menu_name | capitalize }}</span>
+                <Menu-item v-if="meta.leaf" :name="item.name">
+                    <Icon :type="meta.iconCls" :size="iconSize"></Icon>
+                    <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
                 </Menu-item>
                 <Submenu v-else :name="item.name">
                   <template slot="title">
                     <Icon :type="item.iconCls" :size="iconSize"></Icon>
-                    <span class="layout-text">{{ item.menu_name | capitalize }}</span>
+                    <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
                   </template>
-                  <template v-for="(child_item, child_index) in item.children" v-if="!child_item.hidden">
-                    <template v-for="(meta, index) in child_item">
+                  <template v-for="(child_item, child_index) in item.children">
+                    <template v-for="(meta, index) in child_item" v-if="!meta.hidden">
                       <Menu-item v-if="permissions.some(record => record.codename === meta.permission)" :id="item.name + index" :name="child_item.name":key="child_index">
-                        <span class="layout-text">{{ child_item.menu_name | capitalize }}</span>
+                        <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
                       </Menu-item>
                     </template>
                   </template>
@@ -54,8 +54,12 @@
         </div>
         <div class="layout-breadcrumb">
           <Breadcrumb separator=">">
-            <Breadcrumb-item href="/home">应用中心</Breadcrumb-item>
-            <Breadcrumb-item :href="$route.path">{{ $route.meta.permission }}</Breadcrumb-item>
+            <Breadcrumb-item href="/home">
+              <Icon type="ios-home-outline"></Icon>应用中心
+            </Breadcrumb-item>
+            <Breadcrumb-item :href="$route.path">
+              <Icon :type="$route.meta.iconCls"></Icon>{{ $route.meta.menu_name }}
+            </Breadcrumb-item>
           </Breadcrumb>
         </div>
         <div class="layout-content">
@@ -204,95 +208,62 @@
 
     },
     mounted () {
-      console.log(this.$route)
+      // console.log(this.$route)
     }
   }
 </script>
 
-<style lang='stylus' scoped>
-  .layout{
-    background: #f5f7f9
+<style lang="stylus" scoped>
+  @import '../styles/vars'
+  .layout
+    background: background-color
     position: relative
     overflow: hidden
     height: 100%
-  }
-  .layout-breadcrumb{
+    .layout-menu-left
+      background: yellow
+      .layout-logo-left
+        width: 90%
+        height: 60px
+        line-height: 60px
+        font-size: 24px
+        text-align: center
+        background: background-color
+        border-radius: 8px
+        margin: 15px auto
+
+  .layout-hide-text
+    display: none
+    
+  .layout-header
+    height: 50px
+    background: #fff
+    .userinfo
+      display: inline-block
+      float: right
+      .head-img
+        width: 100%
+        line-height: 50px
+        float: right
+        margin-top: -5px
+        img
+          border-radius: 20px
+          margin: 10px 0px 10px 10px
+          width: 40px
+          height: 40px
+          float: right
+
+  .layout-breadcrumb
     padding: 10px 15px 0
-  }
-  .layout-content{
+
+  .layout-content
     min-height: 200px
     margin: 15px
     overflow: auto
-    background: #fff
-    border-radius: 4px
+    background: background-color
+    border-radius: border-radius
     height: 80%
-  }
-  .layout-content-main{
-    padding: 10px
-  }
-  .layout-copy{
-    text-align: center
-    padding: 10px 0 20px
-    color: #9ea7b4
-  }
-  .layout-menu-left{
-    background: #464c5b
-  }
-  .layout-header{
-    height: 60px
-    background: #fff
-
-  }
-  .layout-logo-left{
-    width: 90%
-    height: 60px
-    line-height: 60px
-    font-size: 28px
-    text-align: center
-    /*  background: #5b6270
-    border-radius: 3px
-    margin: 15px auto;*/
-    }
-    .layout-ceiling-main a{
-      color: #9ba7b5
-    }
-    .layout-hide-text .layout-text{
-      display: none
-    }
-    .ivu-col{
-      transition: width .2s ease-in-out
-    }
-    .ivu-row-flex{
-      height: 100%
-    }
-    .userinfo{
-      display: inline-block
-      float: right
-    }
-    .userinfo .ivu-dropdown{
-      margin-top: 50px
-    }
-    .ivu-dropdown {
-      margin-right: 25px
-      margin-top: 22px
-    }
-    .ivu-menu-submenu-title{
-      padding: 14px
-    }
-
-    .head-img {
-      width: 100%
-      height: 60px
-      line-height: 60px
-      float: right
-      margin-top: -50px
-    }
-    .head-img img{
-      border-radius: 20px
-      margin: 10px 0px 10px 10px
-      width: 40px
-      height: 40px
-      float: right
-    }
+    .layout-content-main
+      padding: 6px
 </style>
 

@@ -10,13 +10,16 @@ export default {
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="stylus">
+  @import './styles/vars'
+  body
+    background-color: red
+  #app
+    font-family: font-family 
+    color: color
+    background-color: background-color
+    title-color: title-color
+    border-color: border-color
+    shadow-color: shadow-color
+    border-radius: border-radius
 </style>

@@ -16,61 +16,65 @@ export default new Router({
     path: '/login',
     component: Login,
     name: 'login',
-    hidden: true
+    meta: {
+      hidden: true
+    }
   },
   {
     path: '/404',
     component: NotFound,
     name: 'notFound',
-    hidden: true
+    meta: {
+      hidden: true
+    }
   },
   {
     path: '/home',
     component: Home,
     name: 'home',
-    iconCls: 'ios-home', // 图标样式class
-    leaf: false,
-    menu_name: '应用中心',
-    hidden: false,
     meta: {
-      requireAuth: true
+      requireAuth: true,
+      iconCls: 'ios-home', // 图标样式class
+      leaf: false,
+      menu_name: '应用中心',
+      hidden: false
     },
     children: [
       {
         path: 'dash',
         component: Dashboard,
         name: 'dashboard',
-        iconCls: 'ios-paw',
-        leaf: true,
-        menu_name: '控制面板',
-        hidden: false,
         meta: {
           requireAuth: true,
-          permission: 'add_group'
+          permission: 'add_group',
+          iconCls: 'ios-home',
+          leaf: true,
+          menu_name: '控制面板',
+          hidden: false
         }
       },
       {
         path: 'orders',
         component: OrderManage,
         name: 'order_manage',
-        iconCls: 'social-freebsd-devil',
-        leaf: true,
-        menu_name: '订单管理',
-        hidden: false,
         meta: {
           requireAuth: true,
-          permission: 'add_group'
+          permission: 'add_group',
+          iconCls: 'heart',
+          leaf: true,
+          menu_name: '订单管理',
+          hidden: false
         }
       },
       {
         path: 'users',
         component: UserManage,
         name: 'user_manage',
-        iconCls: 'social-freebsd-devil',
-        leaf: true,
-        menu_name: '用户管理',
-        hidden: false,
         meta: {
+          iconCls: 'ios-people',
+          leaf: true,
+          menu_name: '用户管理',
+          hidden: false,
           requireAuth: true,
           permission: 'add_group'
         }
@@ -79,11 +83,11 @@ export default new Router({
         path: 'stats',
         component: Echarts,
         name: 'statistics',
-        iconCls: 'social-freebsd-devil',
-        leaf: true,
-        menu_name: '统计分析',
-        hidden: false,
         meta: {
+          iconCls: 'stats-bars',
+          leaf: true,
+          menu_name: '统计分析',
+          hidden: false,
           requireAuth: true,
           permission: 'add_group'
         }
@@ -92,8 +96,10 @@ export default new Router({
   },
   {
     path: '*',
-    hidden: true,
-    redirect: { path: '/404' }
+    redirect: { path: '/404' },
+    meta: {
+      hidden: true
+    }
   }],
   scrollBehavior (to, from, savedPosition) {
     console.log('ScrollBehavior in router')

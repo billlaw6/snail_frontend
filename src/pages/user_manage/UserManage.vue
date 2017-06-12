@@ -1,15 +1,18 @@
 <template>
   <div>
-    <Row type="flex" justify="end">
-      <Col span="6" offset="2">
-        <Date-picker type="daterange" :options="dateOptions" placement="bottom-end" placeholder="选择日期范围"></Date-picker>
-      </Col>
+    <Row>
       <Col span="6">
+        <Date-picker v-model="dateRange" type="daterange" format="yyyy-MM-dd" :options="dateOptions" placement="bottom-end" placeholder="订单创建时间"></Date-picker>
+      </Col>
+      <Col span="8">
         <Input v-model="filter" icon="icon-search" placeholder="本地检索"></Input>
       </Col>
-      <Col span="2">
-        <i-button type="primary">添加</i-button>
+      <Col span="3">
+        <i-button type="primary" @click="getUser()">查询</i-button>
       </Col>
+      <Col span="4" push="3">
+        <i-button type="primary" @click="showAddModal=true">添加用户</i-button>
+       </Col>
     </Row>
     <Table :context="self" :data="tableData" :columns="tableColumns" stripe border></Table>
     <div style="margin: 10px;overflow: hidden">
@@ -25,6 +28,7 @@
   export default {
     data: function () {
       return {
+        dateRange: [new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate() - 3), new Date()],
         filter: '',
         dateOptions: {
           shortcuts: [
@@ -140,8 +144,11 @@
         this.mockTableData()
       },
       // 获取用户列表
-      getUserList: function () {
+      getUser: function () {
         let para = {
+          start: this.dateRange[0].getFullYear() + '-' + (this.dateRange[0].getMonth() + 1) + '-' + (this.dateRange[0].getDate() + 1),
+          end: this.dateRange[1].getFullYear() + '-' + (this.dateRange[1].getMonth() + 1) + '-' + (this.dateRange[1].getDate() + 1),
+          filter: this.filter,
           page: this.page
         }
         this.$Loading.start()
@@ -167,7 +174,7 @@
       }
     },
     mounted () {
-      this.getUserList()
+      this.getUser()
     }
   }
 </script>
