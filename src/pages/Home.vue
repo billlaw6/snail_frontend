@@ -54,8 +54,8 @@
         </div>
         <div class="layout-breadcrumb">
           <Breadcrumb separator=">">
-            <Breadcrumb-item href="#">应用中心</Breadcrumb-item>
-            <Breadcrumb-item>{{$route.name}}</Breadcrumb-item>
+            <Breadcrumb-item href="/home">应用中心</Breadcrumb-item>
+            <Breadcrumb-item :href="$route.path">{{ $route.meta.permission }}</Breadcrumb-item>
           </Breadcrumb>
         </div>
         <div class="layout-content">
@@ -204,6 +204,7 @@
 
     },
     mounted () {
+      console.log(this.$route)
     }
   }
 </script>

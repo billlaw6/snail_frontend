@@ -2,13 +2,16 @@
   <div>
     <Row>
       <Col span="6">
-        <Date-picker type="daterange" :options="dateOptions" placement="bottom-end" placeholder="选择日期范围"></Date-picker>
+        <Date-picker v-model="dateRange" type="daterange" format="yyyy-MM-dd" :options="dateOptions" placement="bottom-end" placeholder="订单创建时间"></Date-picker>
       </Col>
       <Col span="8">
         <Input v-model="filter" icon="icon-search" placeholder="本地检索"></Input>
       </Col>
-      <Col span="4">
-        <i-button type="primary" @click="showAddModal=true">添加</i-button>
+      <Col span="3">
+        <i-button type="primary" @click="getOrder()">查询</i-button>
+      </Col>
+      <Col span="4" push="3">
+        <i-button type="primary" @click="showAddModal=true">添加订单</i-button>
        </Col>
     </Row>
 
@@ -148,12 +151,12 @@
   export default {
     data: function () {
       return {
-        filter: '',
         chinaCities,
         merchandiseList: [],
         expresseList: [],
         paymentList: [],
         orderStatusList: [],
+        dateRange: [new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate() - 3), new Date()],
         dateOptions: {
           shortcuts: [
             {
@@ -185,6 +188,7 @@
             }
           ]
         },
+        filter: '',
         showAddModal: false,
         showEditModal: false,
         showDeleteModal: false,
@@ -289,12 +293,6 @@
             sortable: true
           },
           {
-            title: '商品名称',
-            key: 'merchandise',
-            align: 'center',
-            sortable: true
-          },
-          {
             title: '顾客',
             key: 'buyer',
             align: 'left',
@@ -316,7 +314,11 @@
             title: '状态',
             key: 'status',
             align: 'center',
-            sortable: true
+            sortable: true,
+            render (row, column, index) {
+              let statusArray = ['已下单', '已处理', '已发货', '已到货', '已结算', '已完成', '已废弃']
+              return `${statusArray[row.status - 1]}`
+            }
           },
           {
             title: '操作',
@@ -329,6 +331,8 @@
           }
         ]
       }
+    },
+    computed: {
     },
     methods: {
       showEdit (index) {
@@ -352,14 +356,8 @@
         this.showDeleteModal = false
         this.$Message.info('点击了取消')
       },
-      changePage (row) {
-        // 这里直接更改了模拟的数据，真实使用场景应该从服务端获取数据
-        // console.log(row)
-        this.page = row
-        this.mockTableData()
-      },
       // 获取商品列表
-      getMerchandiseList: function () {
+      getMerchandise: function () {
         getMerchandiseList().then((res) => {
           let { data, status, statusText } = res
           if (status !== 200) {
@@ -378,7 +376,7 @@
         })
       },
       // 获取支付方式列表
-      getPaymentList: function () {
+      getPayment: function () {
         getPaymentList().then((res) => {
           let { data, status, statusText } = res
           if (status !== 200) {
@@ -397,7 +395,7 @@
         })
       },
       // 获取订单状态列表
-      getOrderStatusList: function () {
+      getOrderStatus: function () {
         let para = {
           page: this.page
         }
@@ -418,7 +416,7 @@
         })
       },
       // 获取快递公司列表
-      getExpressList: function () {
+      getExpress: function () {
         let para = {
           page: this.page
         }
@@ -441,6 +439,9 @@
       // 获取订单列表
       getOrder: function () {
         let para = {
+          start: this.dateRange[0].getFullYear() + '-' + (this.dateRange[0].getMonth() + 1) + '-' + (this.dateRange[0].getDate() + 1),
+          end: this.dateRange[1].getFullYear() + '-' + (this.dateRange[1].getMonth() + 1) + '-' + (this.dateRange[1].getDate() + 1),
+          filter: this.filter,
           page: this.page
         }
         this.$Loading.start()
@@ -449,9 +450,8 @@
           if (status !== 200) {
             this.loginMessage = statusText
           } else {
-            // console.log(JSON.stringify(data.results))
             this.$Loading.finish()
-            this.total = res.data.total
+            this.total = res.data.count
             this.tableData = data.results
           }
         }, (error) => {
@@ -461,6 +461,11 @@
           console.log('catched in getOrderList:' + error)
           this.$Message.error('获取订单列表失败!')
         })
+      },
+      changePage (row) {
+        console.log(row)
+        this.page = row
+        this.getOrder()
       },
 
       // 撤销添加
@@ -473,17 +478,17 @@
       confirmAdd: function (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
-            console.log(this.addModel.city)
+            // console.log(this.addModel.city)
             // 坑，注意javascript的浅复制，使用JSON实现深复制
             let addModelSubmit = JSON.stringify(this.addModel)
             addModelSubmit = JSON.parse(addModelSubmit)
             addModelSubmit.city = addModelSubmit.city.join(',')
-            console.log(addModelSubmit)
+            // console.log(addModelSubmit)
             addOrder(addModelSubmit).then((res) => {
               let { data, status, statusText } = res
               if (status !== 201) {
                 this.loginMessage = statusText
-                console.log(data.detail)
+                // console.log(data.detail)
                 this.$Message.error('添加订单失败!')
               } else {
                 console.log(data)
@@ -578,10 +583,10 @@
     },
     mounted () {
       this.getOrder()
-      this.getMerchandiseList()
-      this.getExpressList()
-      this.getOrderStatusList()
-      this.getPaymentList()
+      this.getMerchandise()
+      this.getExpress()
+      this.getOrderStatus()
+      this.getPayment()
     }
   }
 </script>
