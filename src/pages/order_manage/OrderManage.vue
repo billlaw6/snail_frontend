@@ -56,7 +56,7 @@
           <Input v-model="addModel.address" placeholder="详细地址"></Input>
         </Form-item>
         <Form-item label="备注" prop="comment">
-          <Input v-model="editModel.comment" type="textarea" placeholder="有什么特别想说的"></Input>
+          <Input v-model="addModel.comment" type="textarea" placeholder="有什么特别想说的"></Input>
         </Form-item>
         <Form-item label="订单状态" prop="status">
           <Select v-model="addModel.status">
@@ -125,13 +125,16 @@
           <Button @click="updateExpressInfo(editModel.express, editModel.express_no)" type="primary" shape="circle">更新快递信息</Button>
         </Form-item>
         <Form-item label="快递详情" prop="express_info">
-          <Input v-model="editModel.express_info" textarea=true></Input>
-          <Collpase v-model="editModel.express_info">
-            <Panel name="express_info">
-              {{ express_info.ischeck }} 确认接收
-              <p slot="content" v-for="item in express_info.data">{{ item }}</p>
+          <!-- <Input v-model="editModel.express_info" textarea=true></Input> -->
+          <Collapse v-model="json_express_info.data">
+            <Panel name="json_express_info">
+              <span v-if="json_express_info.ischeck === '1'">已签收: {{ json_express_info.message }}</span>
+              <span v-else>未签收: {{ json_express_info.message }}</span>
+              <p slot="content" v-for="item, key in json_express_info.data">
+                {{ JSON.stringify(item) }}
+              </p>
             </Panel>
-          </Collpase>
+          </Collapse>
         </Form-item>
       </Form>
     </Modal>
@@ -326,7 +329,7 @@
             align: 'center',
             sortable: true,
             render (row, column, index) {
-              let statusArray = ['已下单', '已处理', '已发货', '已到货', '已结算', '已完成', '已废弃']
+              let statusArray = ['已下单', '已处理', '已发货', '已签收', '已结算', '已完成', '已废弃']
               return `${statusArray[row.status - 1]}`
             }
           },
@@ -343,9 +346,11 @@
       }
     },
     computed: {
-      express_info: function () {
-        // return JSON.parse(this.editModel.express_info)
-        return this.editModel.express_info
+      json_express_info: function () {
+        if (this.editModel.express_info) {
+          return JSON.parse(this.editModel.express_info)
+        }
+        return {}
       }
     },
     methods: {
@@ -435,7 +440,7 @@
           if (status !== 200) {
             this.loginMessage = statusText
           } else {
-            // console.log(JSON.stringify(data.results))
+            console.log(JSON.stringify(data.results))
             this.expresseList = data.results
           }
         }, (error) => {
@@ -533,15 +538,23 @@
       updateExpressInfo (express, expressNo) {
         /* window.alert('updating' + express + ':' + expressNo) */
         let paras = { company: express, postId: expressNo }
-        console.log(paras)
+        // console.log(paras)
         getExpressInfo(paras).then((res) => {
           let { data, status, statusText } = res
           if (status !== 201) {
             this.$Message.error(statusText)
           } else {
             console.log(data)
+            console.log(data.ischeck === '1')
+            console.log(this.editModel.status < 4)
             this.editModel.express_info = JSON.stringify(data)
             this.$Message.success('获取快递信息成功!')
+            if ((data.ischeck === '1') && (this.editModel.status < 4)) {
+              this.editModel.status = 4
+            } else {
+              this.editModel.comment = 'no'
+              // console.log((data.ischeck === 'l') && (this.editModel.status < 4))
+            }
           }
         }, (error) => {
           console.log('Error in editOrder: ' + error)
