@@ -2,7 +2,7 @@
   <div>
     <Row>
       <Col span="6">
-        <Date-picker v-model="dateRange" type="daterange" format="yyyy-MM-dd" :options="dateOptions" placement="bottom-end" placeholder="订单创建时间"></Date-picker>
+        <Date-picker v-model="dateRange" type="daterange" format="yyyy-MM-dd" :options="dateOptions" placement="bottom-start" placeholder="订单创建时间"></Date-picker>
       </Col>
       <Col span="8">
         <Input v-model="filter" icon="icon-search" placeholder="本地检索"></Input>
@@ -28,7 +28,7 @@
   export default {
     data: function () {
       return {
-        dateRange: [new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate() - 3), new Date()],
+        dateRange: [new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate() - 2), new Date()],
         filter: '',
         dateOptions: {
           shortcuts: [

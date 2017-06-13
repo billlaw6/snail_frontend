@@ -215,13 +215,19 @@
 
 <style lang="stylus" scoped>
   @import '../styles/vars'
+  /* Icon图标 */
+  .ivu-icon
+    margin-right: 8px
+
   .layout
-    background: background-color
+    background: body-background-color
     position: relative
     overflow: hidden
     height: 100%
     .layout-menu-left
-      background: yellow
+      background: #FFFFFF
+      .layout-text
+        font-size: 16px
       .layout-logo-left
         width: 90%
         height: 60px
@@ -231,9 +237,11 @@
         background: background-color
         border-radius: 8px
         margin: 15px auto
+        .layout-text
+          font-size: 24px
 
-  .layout-hide-text
-    display: none
+  /* .layout-hide-text, .layout-text */
+  /*   display: none */
     
   .layout-header
     height: 50px
@@ -245,13 +253,15 @@
         width: 100%
         line-height: 50px
         float: right
-        margin-top: -5px
+        margin-top: -55px
         img
           border-radius: 20px
           margin: 10px 0px 10px 10px
           width: 40px
           height: 40px
           float: right
+      .ivu-dropdown
+        margin-top: 50px
 
   .layout-breadcrumb
     padding: 10px 15px 0

@@ -2,7 +2,7 @@
   <div>
     <Row>
       <Col span="6">
-        <Date-picker v-model="dateRange" type="daterange" format="yyyy-MM-dd" :options="dateOptions" placement="bottom-end" placeholder="订单创建时间"></Date-picker>
+        <Date-picker v-model="dateRange" type="daterange" format="yyyy-MM-dd" :options="dateOptions" placement="bottom-start" placeholder="订单创建时间"></Date-picker>
       </Col>
       <Col span="8">
         <Input v-model="filter" icon="icon-search" placeholder="本地检索"></Input>
@@ -43,8 +43,8 @@
             <Option v-for="item in paymentList" :value="item.code" :key="item">{{ item.name }}</Option>
           </Select>
         </Form-item>
-        <Form-item label="购买人" prop="buyer">
-          <Input v-model="addModel.buyer" placeholder="购买人"></Input>
+        <Form-item label="接收人" prop="buyer">
+          <Input v-model="addModel.buyer" placeholder="接收人"></Input>
         </Form-item>
         <Form-item label="手机号" prop="cell_phone">
           <Input v-model="addModel.cell_phone" placeholder="手机号"></Input>
@@ -54,6 +54,9 @@
         </Form-item>
         <Form-item label="详细地址" prop="address">
           <Input v-model="addModel.address" placeholder="详细地址"></Input>
+        </Form-item>
+        <Form-item label="备注" prop="comment">
+          <Input v-model="editModel.comment" type="textarea" placeholder="有什么特别想说的"></Input>
         </Form-item>
         <Form-item label="订单状态" prop="status">
           <Select v-model="addModel.status">
@@ -92,8 +95,8 @@
             <Option v-for="item in paymentList" :value="item.code" :key="item">{{ item.name }}</Option>
           </Select>
         </Form-item>
-        <Form-item label="购买人" prop="buyer">
-          <Input v-model="editModel.buyer" placeholder="购买人"></Input>
+        <Form-item label="接收人" prop="buyer">
+          <Input v-model="editModel.buyer" placeholder="接收人"></Input>
         </Form-item>
         <Form-item label="手机号" prop="cell_phone">
           <Input v-model="editModel.cell_phone" placeholder="手机号"></Input>
@@ -103,6 +106,9 @@
         </Form-item>
         <Form-item label="详细地址" prop="address">
           <Input v-model="editModel.address" placeholder="详细地址"></Input>
+        </Form-item>
+        <Form-item label="备注" prop="comment">
+          <Input v-model="editModel.comment" type="textarea" placeholder="有什么特别想说的"></Input>
         </Form-item>
         <Form-item label="订单状态" prop="status">
           <Select v-model="editModel.status">
@@ -118,8 +124,14 @@
           <Input v-model="editModel.express_no" placeholder="快递单号"></Input>
           <Button @click="updateExpressInfo(editModel.express, editModel.express_no)" type="primary" shape="circle">更新快递信息</Button>
         </Form-item>
-        <Form-item label="快递单号" prop="express_info">
-          <Input v-model="editModel.express_info" type="textarea" placeholder="快递信息"></Input>
+        <Form-item label="快递详情" prop="express_info">
+          <Input v-model="editModel.express_info" textarea=true></Input>
+          <Collpase v-model="editModel.express_info">
+            <Panel name="express_info">
+              {{ express_info.ischeck }} 确认接收
+              <p slot="content" v-for="item in express_info.data">{{ item }}</p>
+            </Panel>
+          </Collpase>
         </Form-item>
       </Form>
     </Modal>
@@ -134,8 +146,8 @@
             <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
           </Select>
         </Form-item>
-        <Form-item label="购买人" prop="buyer">
-          <Input v-model="deleteModel.buyer" placeholder="购买人" :readonly=true></Input>
+        <Form-item label="接收人" prop="buyer">
+          <Input v-model="deleteModel.buyer" placeholder="接收人" :readonly=true></Input>
         </Form-item>
         <Form-item label="手机号" prop="cell_phone">
           <Input v-model="deleteModel.cell_phone" placeholder="手机号" :readonly=true></Input>
@@ -156,7 +168,7 @@
         expresseList: [],
         paymentList: [],
         orderStatusList: [],
-        dateRange: [new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate() - 3), new Date()],
+        dateRange: [new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate() - 2), new Date()],
         dateOptions: {
           shortcuts: [
             {
@@ -193,20 +205,19 @@
         showEditModal: false,
         showDeleteModal: false,
         addModel: {
-          title: 'lasdkjf',
+          title: '',
           merchandise: 1,
           amount: 1,
           price: 1,
           payment: 'hdfk',
-          buyer: 'asldk',
-          cell_phone: '18001163901',
-          city: ['11', '12'],
-          address: 'lasd',
+          buyer: '',
+          cell_phone: '',
+          city: [],
+          address: '',
           comment: '',
           status: 1,
           express: 'shunfeng',
-          express_no: '123322',
-          express_info: ''
+          express_no: ''
         },
         editModel: {
           title: '',
@@ -221,8 +232,7 @@
           comment: '',
           status: 1,
           express: '',
-          express_no: '',
-          express_info: ''
+          express_no: ''
         },
         deleteModel: {
           title: '',
@@ -333,6 +343,10 @@
       }
     },
     computed: {
+      express_info: function () {
+        // return JSON.parse(this.editModel.express_info)
+        return this.editModel.express_info
+      }
     },
     methods: {
       showEdit (index) {
@@ -343,10 +357,6 @@
         // console.log('after:' + this.editModel.city)
         this.editModel.amount = Number(this.editModel.amount)
         this.editModel.price = Number(this.editModel.price)
-        /* this.$Modal.info({ */
-        /*   title: '订单信息', */
-        /*   content: `标题：${this.tableData[index].title}<br>商品：${this.tableData[index].merchandise}<br>地址：${this.tableData[index].addr}` */
-        /* }) */
       },
       showDelete (index) {
         this.showDeleteModal = true
@@ -545,6 +555,7 @@
       confirmEdit: function (name) {
         this.$refs[name].validate((valid) => {
           if (valid) {
+            // 用这个办法实现深复制
             let editModelSubmit = JSON.stringify(this.editModel)
             editModelSubmit = JSON.parse(editModelSubmit)
             editModelSubmit.city = editModelSubmit.city.join(',')
