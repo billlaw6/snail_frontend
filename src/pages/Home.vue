@@ -1,96 +1,102 @@
 <template>
-  <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
-    <Row type="flex">
-      <i-col :span="spanLeft" class="layout-menu-left">
-        <Menu :mode="modeType" theme="light" width="auto" :active-name="this.$route.path" :open-names="openNames" @on-select="menuSelect" accordion>
-          <div class="layout-logo-left">
-            <Icon type="paper-airplane" :size="logoSize" v-show="logoIsDisplay"></Icon>
-            <span class="layout-text"> Admin 管理系统</span>
-          </div>
-          <!-- 多级对象遍历只能用多级循环解决，不能用.实现 -->
-          <template v-for="(item, index) in route_menu">
-            <template v-for="(meta, index) in item" v-if="!meta.hidden">
-              <template v-if="permissions.some(record => record.codename === meta.permission)">
-                <Menu-item v-if="meta.leaf" :name="item.name">
-                    <Icon :type="meta.iconCls" :size="iconSize"></Icon>
-                    <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
-                </Menu-item>
-                <Submenu v-else :name="item.name">
-                  <template slot="title">
-                    <Icon :type="item.iconCls" :size="iconSize"></Icon>
-                    <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
-                  </template>
-                  <template v-for="(child_item, child_index) in item.children">
-                    <template v-for="(meta, index) in child_item" v-if="!meta.hidden">
-                      <Menu-item v-if="permissions.some(record => record.codename === meta.permission)" :id="item.name + index" :name="child_item.name":key="child_index">
-                        <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
-                      </Menu-item>
+  <div>
+    <head>
+      <title>{{ system_name | capitalize }} | {{ $route.meta.menu_name }}</title>
+    </head>
+    <div class="layout" :class="{'layout-hide-text': spanLeft < 5}">
+      <Row type="flex">
+        <i-col :span="spanLeft" class="layout-menu-left">
+          <Menu :mode="modeType" theme="light" width="auto" :active-name="this.$route.path" :open-names="openNames" @on-select="menuSelect" accordion>
+            <div class="layout-logo-left">
+              <Icon type="paper-airplane" :size="logoSize" v-show="logoIsDisplay"></Icon>
+              <span class="layout-text">{{ system_name | capitalize }}</span>
+            </div>
+            <!-- 多级对象遍历只能用多级循环解决，不能用.实现 -->
+            <template v-for="(item, index) in route_menu">
+              <template v-for="(meta, index) in item" v-if="!meta.hidden">
+                <template v-if="permissions.some(record => record.codename === meta.permission)">
+                  <Menu-item v-if="meta.leaf" :name="item.name">
+                      <Icon :type="meta.iconCls" :size="iconSize"></Icon>
+                      <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
+                  </Menu-item>
+                  <Submenu v-else :name="item.name">
+                    <template slot="title">
+                      <Icon :type="item.iconCls" :size="iconSize"></Icon>
+                      <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
                     </template>
-                  </template>
-                </Submenu>
+                    <template v-for="(child_item, child_index) in item.children">
+                      <template v-for="(meta, index) in child_item" v-if="!meta.hidden">
+                        <Menu-item v-if="permissions.some(record => record.codename === meta.permission)" :id="item.name + index" :name="child_item.name":key="child_index">
+                          <span class="layout-text">{{ meta.menu_name | capitalize }}</span>
+                        </Menu-item>
+                      </template>
+                    </template>
+                  </Submenu>
+                </template>
               </template>
             </template>
-          </template>
-        </Menu>
-      </i-col>
+          </Menu>
+        </i-col>
 
-      <i-col :span="spanRight">
-        <div class="layout-header">
-          <i-button type="text" @click="toggleClick">
-            <Icon type="navicon" size="32"></Icon>
-          </i-button>
-          <div class="userinfo">
-            <Dropdown placement="bottom-end">
-              <span class="head-img">
-                {{ curUserName }}
-                <img src="../assets/user.jpg">
-              </span>
-              <Dropdown-menu slot="list">
-                <Dropdown-item @click.native="modifyPassWord()">修改密码</Dropdown-item>
-                <Dropdown-item @click.native="logout()" divided>退出</Dropdown-item>
-              </Dropdown-menu>
-            </Dropdown>
+        <i-col :span="spanRight">
+          <div class="layout-header">
+            <i-button type="text" @click="toggleClick">
+              <Icon type="navicon" size="32"></Icon>
+            </i-button>
+            <div class="userinfo">
+              <Dropdown placement="bottom-end">
+                <span class="head-img">
+                  {{ curUserName }}
+                  <img src="../assets/user.jpg">
+                </span>
+                <Dropdown-menu slot="list">
+                  <Dropdown-item @click.native="modifyPassWord()">修改密码</Dropdown-item>
+                  <Dropdown-item @click.native="logout()" divided>退出</Dropdown-item>
+                </Dropdown-menu>
+              </Dropdown>
+            </div>
           </div>
-        </div>
-        <div class="layout-breadcrumb">
-          <Breadcrumb separator=">">
-            <Breadcrumb-item href="/home">
-              <Icon type="ios-home-outline"></Icon>应用中心
-            </Breadcrumb-item>
-            <Breadcrumb-item :href="$route.path">
-              <Icon :type="$route.meta.iconCls"></Icon>{{ $route.meta.menu_name }}
-            </Breadcrumb-item>
-          </Breadcrumb>
-        </div>
-        <div class="layout-content">
-          <div class="layout-content-main">
-            <router-view></router-view>
+          <div class="layout-breadcrumb">
+            <Breadcrumb separator=">">
+              <Breadcrumb-item href="/home">
+                <Icon type="ios-home-outline"></Icon>应用中心
+              </Breadcrumb-item>
+              <Breadcrumb-item :href="$route.path">
+                <Icon :type="$route.meta.iconCls"></Icon>{{ $route.meta.menu_name }}
+              </Breadcrumb-item>
+            </Breadcrumb>
           </div>
-        </div>
-      </i-col>
-    </Row>
+          <div class="layout-content">
+            <div class="layout-content-main">
+              <router-view></router-view>
+            </div>
+          </div>
+        </i-col>
+      </Row>
 
-    <Modal v-model="modal1" title="修改密码" @on-ok="comfirmModifyPS"  @on-cancel="cancel" >
-      <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
-        <Form-item label="原密码" prop="oldPassword">
-          <Input v-model="formValidate.oldPassword" placeholder="请输入原始密码" type="password"></Input>
-        </Form-item>
-        <Form-item label="新密码" prop="newPassword">
-          <Input v-model="formValidate.newPassword" placeholder="请输入新密码" type="password"></Input>
-        </Form-item>
-        <Form-item label="确认新密码" prop="newPasswordCheck">
-          <Input v-model="formValidate.newPasswordCheck" placeholder="请再次输入新密码" type="password"></Input>
-        </Form-item>
-      </Form>
-    </Modal>
+      <Modal v-model="modal1" title="修改密码" @on-ok="comfirmModifyPS"  @on-cancel="cancel" >
+        <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100">
+          <Form-item label="原密码" prop="oldPassword">
+            <Input v-model="formValidate.oldPassword" placeholder="请输入原始密码" type="password"></Input>
+          </Form-item>
+          <Form-item label="新密码" prop="newPassword">
+            <Input v-model="formValidate.newPassword" placeholder="请输入新密码" type="password"></Input>
+          </Form-item>
+          <Form-item label="确认新密码" prop="newPasswordCheck">
+            <Input v-model="formValidate.newPasswordCheck" placeholder="请再次输入新密码" type="password"></Input>
+          </Form-item>
+        </Form>
+      </Modal>
+    </div>
+    <!-- 修改密码 模态框 -->
   </div>
-  <!-- 修改密码 模态框 -->
 </template>
 
 <script>
   export default {
     data () {
       return {
+        system_name: 'Bodhi 管理平台',
         openNames: [this.$route.matched[0].name],
         modeType: 'vertical',
         spanLeft: 5,

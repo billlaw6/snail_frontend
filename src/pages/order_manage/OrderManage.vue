@@ -140,6 +140,7 @@
     </Modal>
 
     <Modal v-model="showDeleteModal" title="删除订单" @on-ok="confirmDelete('deleteModelForm')" @on-cancel="cancelDelete('deleteModelForm')" >
+      <h3 class="warning-title">确认删除下面订单？</h3>
       <Form ref="deleteModelForm" :model="deleteModel" :label-width="100">
         <Form-item label="标题" prop="title">
           <Input v-model="deleteModel.title" placeholder="标题" :readonly=true></Input>
@@ -440,7 +441,7 @@
           if (status !== 200) {
             this.loginMessage = statusText
           } else {
-            console.log(JSON.stringify(data.results))
+           /* console.log(JSON.stringify(data.results)) */
             this.expresseList = data.results
           }
         }, (error) => {
@@ -536,7 +537,10 @@
 
       // 更新快递公司信息
       updateExpressInfo (express, expressNo) {
-        /* window.alert('updating' + express + ':' + expressNo) */
+        if (express || expressNo) {
+          this.$Message.error('请选择快递公司并填写正确的快递单号')
+          return null
+        }
         let paras = { company: express, postId: expressNo }
         // console.log(paras)
         getExpressInfo(paras).then((res) => {
@@ -547,13 +551,14 @@
             console.log(data)
             console.log(data.ischeck === '1')
             console.log(this.editModel.status < 4)
+            /* this.json_express_info = data */
             this.editModel.express_info = JSON.stringify(data)
             this.$Message.success('获取快递信息成功!')
             if ((data.ischeck === '1') && (this.editModel.status < 4)) {
               this.editModel.status = 4
             } else {
-              this.editModel.comment = 'no'
-              // console.log((data.ischeck === 'l') && (this.editModel.status < 4))
+              /* this.editModel.comment = 'no' */
+              console.log((data.ischeck === 'l') && (this.editModel.status < 4))
             }
           }
         }, (error) => {
@@ -600,6 +605,36 @@
           }
         })
       },
+      // 修改订单
+      confirmDelete: function (name) {
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            console.log('deleting')
+            let deleteModelSubmit = JSON.stringify(this.deleteModel)
+            deleteModelSubmit = JSON.parse(deleteModelSubmit)
+            deleteModelSubmit.status = 7
+            putOrder(deleteModelSubmit).then((res) => {
+              let { data, status, statusText } = res
+              if (status !== 200) {
+                console.log(statusText)
+                this.$Message.error(status)
+              } else {
+                console.log(data)
+                this.$Message.success('删除订单成功!')
+                this.getOrder()
+              }
+            }, (error) => {
+              console.log('Error in deleteOrder: ' + error)
+              this.$Message.error('删除订单失败!')
+            }).catch((error) => {
+              console.log('catched in deleteOrder:' + error)
+              this.$Message.error('删除订单失败!')
+            })
+          } else {
+            this.$Message.error('订单信息校验失败!')
+          }
+        })
+      },
 
       handleReset (name) {
         this.$refs[name].resetFields()
@@ -618,4 +653,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="stylus" scoped>
   @import '../../styles/vars'
+  .warning-title
+    color: warning-color
+    text-align: center
 </style>

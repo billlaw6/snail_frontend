@@ -157,7 +157,7 @@
           if (status !== 200) {
             this.loginMessage = statusText
           } else {
-            console.log(JSON.stringify(data.results))
+            // console.log(JSON.stringify(data.results))
             this.$Loading.finish()
             this.total = res.data.total
             this.tableData = data.results

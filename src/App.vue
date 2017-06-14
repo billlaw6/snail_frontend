@@ -13,11 +13,11 @@ export default {
 <style lang="stylus">
   @import './styles/vars'
   body
-    background-color: body-background-color
+    background-color: background-color
   #app
     font-family: font-family 
     color: color
-    background-color: #FFFFFF
+    background-color: background-color
     title-color: title-color
     border-color: border-color
     shadow-color: shadow-color

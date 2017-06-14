@@ -34,8 +34,8 @@ export const patchMerchandise = params => {
   return axios.patch(`${base}/merchandises/${pk}/`, params).then(res => res)
 }
 
-export const getOrderList = params => { return axios.get(`${base}/orders/`, {params: params}).then(res => res) }
-// export const getOrderList = params => { return axios.get(`${base}/orders/filtered_orders/`, {params: params}).then(res => res) }
+// export const getOrderList = params => { return axios.get(`${base}/orders/`, {params: params}).then(res => res) }
+export const getOrderList = params => { return axios.get(`${base}/orders/filtered_orders/`, {params: params}).then(res => res) }
 export const addOrder = params => { return axios.post(`${base}/orders/`, params).then(res => res) }
 export const putOrder = params => {
   let pk = params.id
