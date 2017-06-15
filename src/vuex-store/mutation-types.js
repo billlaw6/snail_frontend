@@ -8,3 +8,5 @@ export const SET_LOGIN_STATUS = 'login/SET_LOGIN_STATUS'
 export const SET_CURRENT_USER = 'login/SET_CURRENT_USER'
 export const SET_USER_PERMISSIONS = 'login/SET_USER_PERMISSIONS'
 
+export const SET_MERCHANDISE_LIST = 'order_manage/SET_MERCHANDISE_LIST'
+

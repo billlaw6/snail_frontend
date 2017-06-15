@@ -23,6 +23,9 @@ export const removeUser = params => { return axios.delete(`${base}/users/`).then
 
 // 业务数据
 export const getMerchandiseList = params => { return axios.get(`${base}/merchandises/`, {params: params}).then(res => res) }
+export const getMerchandiseDetail = params => {
+  return axios.get(`${base}/merchandises/${params}/`).then(res => res)
+}
 export const addMerchandise = params => { return axios.post(`${base}/merchandises/`, params).then(res => res) }
 export const putMerchandise = params => {
   // let pk = params.id
