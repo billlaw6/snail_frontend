@@ -537,7 +537,7 @@
 
       // 更新快递公司信息
       updateExpressInfo (express, expressNo) {
-        if (express || expressNo) {
+        if ((express.trim() === '') || (expressNo.trim() === '')) {
           this.$Message.error('请选择快递公司并填写正确的快递单号')
           return null
         }

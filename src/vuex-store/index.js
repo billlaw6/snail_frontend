@@ -6,6 +6,7 @@ import * as actions from './actions'
 import * as getters from './getters'
 import mutations from './mutations'
 import login from './modules/login'
+import orderManage from './modules/orderManage'
 
 Vue.use(Vuex)
 
@@ -24,7 +25,8 @@ export default new Vuex.Store({
   getters,
   actions,
   modules: {
-    login: login
+    login: login,
+    orderManage: orderManage
   },
   strict: debug,
   plugins: debug ? [createLogger()] : []

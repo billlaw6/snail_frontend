@@ -19,7 +19,7 @@
     <body>
       <div id="page">
         <div class="banner">
-          <img alt=" 1.jpg" src="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/TB2lOWBsbplpuFjSspiXXcdfFXa_767173256.jpg">
+          <img alt=" 1.jpg" src="../../assets/1.jpg">
         </div>
         <section class="buy">
           <div class="row1">
@@ -51,7 +51,7 @@
           </div>
 
           <h2>购买流程</h2>
-          <p><img alt=" 20.jpg" src="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/TB2h0XZsl0lpuFjSszdXXcdxFXa_767173256.gif"></p>
+          <p><img alt=" 20.jpg" src="../../assets/2.gif"></p>
           <h2>产品简介</h2>
           <template v-for="value, index in merchandiseDetail.pictures">
             <p>
@@ -345,7 +345,7 @@
   export default {
     data () {
       return {
-        merchandiseDetail: null
+        merchandiseDetail: {}
       }
     },
     computed: {
@@ -384,9 +384,29 @@
 
 <style lang="stylus" scoped>
   body
-    background: #856D35
+    background: #856D35 none
+    margin: 0
+    
   #page
+    background-color: #f9f9f9 none repeat scroll 0 0
+    height: auto
+    /* 此两项可设置居中 
+    * margin: 0 auto
+    * max-width:750px */
+    margin: 0 auto
     max-width:750px
+    min-height: 100%
+    padding: 0 0 50px
+    width: 100%
   header
     background: 0
+  ul 
+    margin 0
+    padding 0
+    li 
+      list-style-type none
+  a 
+    text-decoration none
+  img 
+    border 0
 </style>
