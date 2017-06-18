@@ -162,12 +162,11 @@
 </template>
 
 <script>
-  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList, getExpressInfo, getOrderStatusList } from '../../api/api'
-  import { chinaCities } from '../../data/data'
+  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList, getExpressInfo, getOrderStatusList, getChinaCities } from '../../api/api'
   export default {
     data: function () {
       return {
-        chinaCities,
+        chinaCities: [],
         merchandiseList: [],
         expresseList: [],
         paymentList: [],
@@ -270,7 +269,7 @@
             {
               validator (rule, value, callback, source, options) {
                 let errors = []
-                if (!/^1[3|4|5|8][0-9]\d{4,8}$/.test(value)) {
+                if (!/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(value)) {
                   errors.push(new Error('介个手机号打不通哦'))
                 }
                 callback(errors)
@@ -542,7 +541,7 @@
           return null
         }
         let paras = { company: express, postId: expressNo }
-        // console.log(paras)
+        console.log(paras)
         getExpressInfo(paras).then((res) => {
           let { data, status, statusText } = res
           if (status !== 201) {
@@ -635,7 +634,23 @@
           }
         })
       },
-
+      // 修改订单
+      getChinaCities: function () {
+        getChinaCities().then((res) => {
+          let { data, status, statusText } = res
+          if (status !== 200) {
+            this.loginMessage = statusText
+          } else {
+            // console.log(data)
+            this.chinaCities = JSON.parse(data)
+            // console.log(this.chinaCities[2].children)
+          }
+        }, (error) => {
+          this.$Message.error('获取城市列表失败!' + error)
+        }).catch((error) => {
+          this.$Message.error('获取城市列表失败!' + error)
+        })
+      },
       handleReset (name) {
         this.$refs[name].resetFields()
       }
@@ -646,6 +661,7 @@
       this.getExpress()
       this.getOrderStatus()
       this.getPayment()
+      this.getChinaCities()
     }
   }
 </script>

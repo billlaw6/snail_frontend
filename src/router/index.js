@@ -8,6 +8,7 @@ const NotFound = resolve => require(['@/pages/404.vue'], resolve)
 const Home = r => require.ensure([], () => r(require('@/pages/Home.vue')), 'group-app')
 const Dashboard = r => require.ensure([], () => r(require('@/pages/dashboard/Dashboard.vue')), 'group-app')
 const OrderManage = resolve => require(['@/pages/order_manage/OrderManage.vue'], resolve)
+const MerchandiseManage = resolve => require(['@/pages/order_manage/MerchandiseManage.vue'], resolve)
 const UserManage = resolve => require(['@/pages/user_manage/UserManage.vue'], resolve)
 const Echarts = resolve => require(['@/pages/statistics/Echarts.vue'], resolve)
 
@@ -68,6 +69,19 @@ export default new Router({
           iconCls: 'ios-home',
           leaf: true,
           menu_name: '控制面板',
+          hidden: false
+        }
+      },
+      {
+        path: 'merchandises',
+        component: MerchandiseManage,
+        name: 'merchandiseimanage',
+        meta: {
+          requireAuth: true,
+          permission: 'add_group',
+          iconCls: 'ios-star',
+          leaf: true,
+          menu_name: '商品管理',
           hidden: false
         }
       },

@@ -8,6 +8,7 @@ import iView from 'iview'
 // import enLocale from 'iview/src/locale/lang/en-US'
 import 'iview/dist/styles/iview.css'
 import axios from 'axios'
+import BaiduMap from 'vue-baidu-map'
 import store from './vuex-store/index'
 import { currency } from './common/filters'
 // import Mock from './mock'
@@ -27,7 +28,7 @@ axios.interceptors.request.use(
   config => {
     let accessToken = window.sessionStorage.accessToken
     if (accessToken) {
-      // console.log('setting accessToken to: ' + accessToken)
+      console.log('setting accessToken to: ' + accessToken)
       config.headers.Authorization = `Token ${accessToken}`
     } else {
       console.log('No accessToken')
@@ -72,6 +73,10 @@ router.beforeEach((to, from, next) => {
 })
 
 Vue.config.productionTip = false
+
+Vue.use(BaiduMap, {
+  ak: 'uMrZwlmGzs5vqFRlsECDsnRiZGcZgnKj'
+})
 
 /* eslint-disable no-new */
 new Vue({

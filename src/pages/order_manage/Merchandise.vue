@@ -8,16 +8,16 @@
       <meta name="apple-mobile-web-app-status-bar-style" content="black">
       <meta name="MobileOptimized" content="320">
       <meta name="format-detection" content="telephone=no">
-      <link href="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/qdwap.css" rel="stylesheet">
-      <link href="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/style.css" rel="stylesheet">
       <link rel="icon" type="image/x-icon" href="http://wap.shick.cn/favicon.ico">
       <title>蜜蜡手串特卖活动</title>
       <meta content="蜜蜡手串特卖活动" name="keywords">
       <meta content="蜜蜡手串特卖活动" name="description">
-      <meta content="小清新单品订单系统，作者QQ：276559736，www.1688la.com" name="author">
     </head>
     <body>
       <div id="page">
+        <baidu-map class="baidu-map" :center="baiduMap.center"
+          :zoom="baiduMap.zoom"
+          :map-type="baiduMap.mapType"></baidu-map>
         <div class="banner">
           <img alt=" 1.jpg" src="../../assets/1.jpg">
         </div>
@@ -345,7 +345,13 @@
   export default {
     data () {
       return {
-        merchandiseDetail: {}
+        merchandiseDetail: {},
+        baiduMap: {
+          center: {lng: 116.404, lat: 39.915},
+          zoom: 15,
+          theme: {},
+          mapType: 'BMAP_NORMAL_MAP'
+        }
       }
     },
     computed: {
@@ -377,7 +383,15 @@
           console.log('catched in getMerchandiseDetail:' + error)
           this.$Message.error('获取商品信息失败!')
         })
+      },
+      handler ({BMap, map}) {
+        console.log(BMap, map)
+        this.lng = 116.404
+        this.lat = 39.915
       }
+    },
+    mounted () {
+      console.log('mounted')
     }
   }
 </script>
@@ -386,6 +400,10 @@
   body
     background: #856D35 none
     margin: 0
+
+  .baidu-map
+    width: 100%
+    height: 300px
     
   #page
     background-color: #f9f9f9 none repeat scroll 0 0
@@ -409,4 +427,46 @@
     text-decoration none
   img 
     border 0
+  section.buy
+    width: 100%
+    height: auto
+    background: #44361C
+    padding: 5px 0 15px
+    text-shadow: none
+    text-align: center
+    overflow: hidden
+    .row1, row2
+      width: 96%
+      height: auto
+      margin: 0 auto
+      padding: 0
+      clear: both 
+    .row2
+      border-top: 1px dotted #524524
+      padding: 10px 0
+      line-height: 30px
+      height: 50px
+      overflow: hidden
+    .row1 strong
+      display: block
+      width: 35%
+      float: left
+      font-size: 48px
+      color: #ff0
+      text-shadow: 1px 1px 0px #000
+      line-height: 60px
+    .row1 ol
+      width: 65%
+      height: inherit
+      margin: 0
+      padding: 0
+      overflow: hidden
+    .row1 ol li
+      width: 33%
+      float: left
+      color: #886536
+      line-height: 30px
+      p
+        color: #9a9874
+
 </style>

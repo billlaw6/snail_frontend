@@ -59,7 +59,7 @@
           <div class="layout-breadcrumb">
             <Breadcrumb separator=">">
               <Breadcrumb-item href="/home">
-                <Icon type="ios-home-outline"></Icon>应用中心
+                <Icon type="ios-home"></Icon>应用中心
               </Breadcrumb-item>
               <Breadcrumb-item :href="$route.path">
                 <Icon :type="$route.meta.iconCls"></Icon>{{ $route.meta.menu_name }}

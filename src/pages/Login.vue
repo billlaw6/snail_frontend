@@ -39,8 +39,8 @@
     data () {
       return {
         formLogin: {
-          username: 'admin',
-          password: 'admin123456',
+          username: 'liubin',
+          password: 'woaini2006',
           remember: []
         },
         formLoginRules: {
@@ -68,10 +68,9 @@
       }),
       handleSubmit (name) {
         this.$refs[name].validate((valid) => {
-          // sessionStorage.setItem('user', JSON.stringify(this.formLogin.username))
-          // sessionStorage.setItem('permissions', JSON.stringify(['any']))
           if (valid) {
-            // this.$Message.success('提交成功!')
+            // 清除过期的accessToken，错误的accessToken会报401未授权错误，更新数据库时测出来的
+            window.sessionStorage.removeItem('accessToken')
             authLogin(this.formLogin).then((res) => {
               console.log(res)
               let {data, status, statusText} = res

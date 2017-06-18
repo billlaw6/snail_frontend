@@ -3,7 +3,7 @@ import axios from 'axios'
 // let base = ''
 let base = 'http://localhost:8000'
 
-export const authLogin = params => { return axios.post(`${base}/get-token/`, params).then(res => res) }
+export const authLogin = params => { return axios.post(`${base}/get-token/login/`, params).then(res => res) }
 
 export const authLogout = params => { return axios.post(`${base}/logout`, params).then(res => res) }
 
@@ -28,8 +28,7 @@ export const getMerchandiseDetail = params => {
 }
 export const addMerchandise = params => { return axios.post(`${base}/merchandises/`, params).then(res => res) }
 export const putMerchandise = params => {
-  // let pk = params.id
-  let pk = 1
+  let pk = params.id
   return axios.put(`${base}/merchandises/${pk}/`, params).then(res => res)
 }
 export const patchMerchandise = params => {
@@ -50,3 +49,4 @@ export const patchOrder = params => {
 }
 
 export const getExpressInfo = params => { return axios.post(`${base}/get-express-info/`, params).then(res => res) }
+export const getChinaCities = params => { return axios.get(`${base}/china/`, params).then(res => res) }
