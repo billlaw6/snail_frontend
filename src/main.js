@@ -31,7 +31,7 @@ axios.interceptors.request.use(
       // console.log('setting accessToken to: ' + accessToken)
       config.headers.Authorization = `Token ${accessToken}`
     } else {
-      console.log('No accessToken')
+      // console.log('No accessToken')
     }
     return config
   },

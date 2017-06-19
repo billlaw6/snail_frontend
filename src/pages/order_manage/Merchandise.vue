@@ -393,12 +393,11 @@
         geolocation.getCurrentPosition(function (r) {
           if (this.getStatus() === 0) {
             // that.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
-            geoCoder.getLocation(new BMap.Point(r.point), function (result) {
+            geoCoder.getLocation(new BMap.Point(r.point.lng, r.point.lat), function (result) {
               if (result) {
                 console.log(result)
                 that.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
                 that.$Message.success('您所在的位置为:' + result.address)
-                that.$Message.success('您所在的位置为:' + BMap.LocalCity())
               } else {
                 that.$Message.warning('获取地理位置失败！')
               }
