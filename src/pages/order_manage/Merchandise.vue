@@ -17,7 +17,8 @@
       <div id="page">
         <baidu-map class="baidu-map" :center="baiduMap.center"
           :zoom="baiduMap.zoom"
-          :map-type="baiduMap.mapType"></baidu-map>
+          :map-type="baiduMap.mapType"
+          @ready="mapReady"></baidu-map>
         <div class="banner">
           <img alt=" 1.jpg" src="../../assets/1.jpg">
         </div>
@@ -367,7 +368,7 @@
     },
     methods: {
       getMerchandise () {
-        console.log(this.$route.params.id)
+        // console.log(this.$route.params.id)
         getMerchandiseDetail(this.$route.params.id).then((res) => {
           let { data, status, statusText } = res
           if (status !== 200) {
@@ -384,14 +385,32 @@
           this.$Message.error('获取商品信息失败!')
         })
       },
-      handler ({BMap, map}) {
+      mapReady ({BMap, map}) {
+        let that = this
         console.log(BMap, map)
-        this.lng = 116.404
-        this.lat = 39.915
+        let geolocation = new BMap.Geolocation()
+        let geoCoder = new BMap.Geocoder()
+        geolocation.getCurrentPosition(function (r) {
+          if (this.getStatus() === 0) {
+            // that.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
+            geoCoder.getLocation(new BMap.Point(r.point), function (result) {
+              if (result) {
+                console.log(result)
+                that.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
+                that.$Message.success('您所在的位置为:' + result.address)
+                that.$Message.success('您所在的位置为:' + BMap.LocalCity())
+              } else {
+                that.$Message.warning('获取地理位置失败！')
+              }
+            })
+          } else {
+            that.$Message.warning('获取地理位置信息失败')
+          }
+        })
       }
     },
     mounted () {
-      console.log('mounted')
+      // console.log('mounted')
     }
   }
 </script>
