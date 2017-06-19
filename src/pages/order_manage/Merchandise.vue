@@ -2,8 +2,8 @@
   <html>
     <head>
       <meta content="text/html; charset=gbk" http-equiv="Content-Type">
-      <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0"> 
-      <meta name="apple-mobile-web-app-capable" content="yes"> 
+      <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+      <meta name="apple-mobile-web-app-capable" content="yes">
       <meta name="apple-touch-fullscreen" content="yes">
       <meta name="apple-mobile-web-app-status-bar-style" content="black">
       <meta name="MobileOptimized" content="320">
@@ -17,7 +17,8 @@
       <div id="page">
         <baidu-map class="baidu-map" :center="baiduMap.center"
           :zoom="baiduMap.zoom"
-          :map-type="baiduMap.mapType"></baidu-map>
+          :map-type="baiduMap.mapType"
+          @ready="mapReady"></baidu-map>
         <div class="banner">
           <img alt=" 1.jpg" src="../../assets/1.jpg">
         </div>
@@ -37,14 +38,14 @@
               <div class="time-count">
                 <div class="jltimer" id="remainTime_1"><span>01</span>天<span>12</span>小时<span>28</span>分<span>23</span>秒</div>
               </div>
-            </div>             
+            </div>
           </div>
 
           <article class="des"></article>
           <a href="#buy" class="btn">立即购买</a>
-        </section>  
+        </section>
 
-        <article class="showcontent">    
+        <article class="showcontent">
           <h2>抢购描述</h2>
           <div class="btn">
             <p></p><p>珍藏级天然蜜蜡，全国顺丰包邮，货到付款，支持七天无理由退换货！</p><p><br></p><p><strong><span style="color:rgb(250,0,0)">特别提醒：由于抢购太过火爆，电话爆线，接通较慢，请您选择在线下单。下单后我们客服人员会在24小时内给您致电核实订单，请您一定要高抬贵手接听下电话 谢谢！</span></strong></p><p></p>
@@ -62,11 +63,11 @@
           <div class="btn">
             <p><span style="font: 16px/24px Helvetica, Arial, san-serif; color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; letter-spacing: normal; word-spacing: 0px; float: none; display: inline !important; white-space: normal; font-size-adjust: none; font-stretch: normal; background-color: rgb(249, 249, 249); -webkit-text-stroke-width: 0px;"></span></p><p style="white-space: normal;">1.活动期间，咨询人数众多，请尽可能自助下单！</p><p style="white-space: normal;">2.下单之后24小时内安排发货，大概3-5天到货！快递默认顺丰，顺丰到不了发圆通或EMS！</p><p style="white-space: normal;">3.珍藏级纯天然蜜蜡【促销价 仅需298元】全国包邮，货到付款，先验货后签收！发现非正品，商家承担来回运费！</p><p><br></p><p style="white-space: normal;"><span style="color:#f00;">特别提醒：因部分客户所提交订单信息不全 所以我们会在24小时内给尊贵你的致电核实订单 请亲一定要高抬贵手接听下电话，谢谢！！！</span></p><p></p>
             <a href="tel:13202029800" class="btn">热线咨询：13202029800</a>
-            <a href="sms:13202029800" class="btn">短信订购 ：13202029800</a> 
-            <a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1941907304&amp;site=qq&amp;menu=yes" class="btn qq">QQ咨询：1941907304</a><a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" class="btn wei">微信咨询：13202029800</a> 
+            <a href="sms:13202029800" class="btn">短信订购 ：13202029800</a>
+            <a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1941907304&amp;site=qq&amp;menu=yes" class="btn qq">QQ咨询：1941907304</a><a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" class="btn wei">微信咨询：13202029800</a>
           </div>
-        </article>  
-        <article>  
+        </article>
+        <article>
           <h2>客户评价</h2>
 
           <div class="pingjia" id="pingjia">
@@ -322,7 +323,7 @@
           </div>
 
           <!--订单-->
-        </article>  
+        </article>
         <footer>
           <p></p><center></center><p></p>
         </footer>
@@ -330,8 +331,8 @@
 
       <nav>
         <ul class="Transverse">
-          <li><a href="#buy"><strong>在线下单</strong></a></li> 
-          <li><a href="tel:13202029800"><strong>电话咨询</strong></a></li>  
+          <li><a href="#buy"><strong>在线下单</strong></a></li>
+          <li><a href="tel:13202029800"><strong>电话咨询</strong></a></li>
           <li><a href="sms:13202029800"><strong>短信订购</strong></a></li>
         </ul>
       </nav>
@@ -340,12 +341,14 @@
 </template>
 
 <script>
-  import { getMerchandiseDetail } from '../../api/api'
   import { mapState } from 'vuex'
+  import { getMerchandiseDetail } from '../../api/api'
+  import MAP from '../../common/map'
   export default {
     data () {
       return {
         merchandiseDetail: {},
+        map: null,
         baiduMap: {
           center: {lng: 116.404, lat: 39.915},
           zoom: 15,
@@ -384,14 +387,69 @@
           this.$Message.error('获取商品信息失败!')
         })
       },
-      handler ({BMap, map}) {
-        console.log(BMap, map)
-        this.lng = 116.404
-        this.lat = 39.915
+      mapReady ({BMap, map}) {
+        // console.log(BMap, map)
+        // this.lng = 116.404
+        // this.lat = 39.915
+        let geolocation = new BMap.Geolocation()
+        let gc = new BMap.Geocoder()
+        // 定位结果对象会传递给r变量
+        geolocation.getCurrentPosition(function (r) {
+          if (this.getStatus() === 0) {
+            // 通过Geolocation类的getStatus()可以判断是否成功定位。
+            let pt = r.point
+            let mk = new BMap.Marker(r.point)
+            map.addOverlay(mk)
+            map.panTo(pt)
+            gc.getLocation(pt, function (rs) {
+              let addComp = rs.addressComponents
+              alert(addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber)
+            })
+          } else {
+            // 关于状态码
+            // BMAP_STATUS_SUCCESS   检索成功。对应数值“0”。
+            // BMAP_STATUS_CITY_LIST 城市列表。对应数值“1”。
+            // BMAP_STATUS_UNKNOWN_LOCATION  位置结果未知。对应数值“2”。
+            // BMAP_STATUS_UNKNOWN_ROUTE 导航结果未知。对应数值“3”。
+            // BMAP_STATUS_INVALID_KEY   非法密钥。对应数值“4”。
+            // BMAP_STATUS_INVALID_REQUEST   非法请求。对应数值“5”。
+            // BMAP_STATUS_PERMISSION_DENIED 没有权限。对应数值“6”。(自 1.1 新增)
+            // BMAP_STATUS_SERVICE_UNAVAILABLE   服务不可用。对应数值“7”。(自 1.1 新增)
+            // BMAP_STATUS_TIMEOUT   超时。对应数值“8”。(自 1.1 新增)
+            switch (this.getStatus()) {
+              case 2:
+                alert('位置结果未知 获取位置失败.')
+                break
+              case 3:
+                alert('导航结果未知 获取位置失败..')
+                break
+              case 4:
+                alert('非法密钥 获取位置失败.')
+                break
+              case 5:
+                alert('对不起,非法请求位置  获取位置失败.')
+                break
+              case 6:
+                alert('对不起,当前 没有权限 获取位置失败.')
+                break
+              case 7:
+                alert('对不起,服务不可用 获取位置失败.')
+                break
+              case 8:
+                alert('对不起,请求超时 获取位置失败.')
+                break
+            }
+          }
+        }, {enableHighAccuracy: true})
+
+        // 用BMap对象根据IP查对应城市
+        let myCity = new BMap.LocalCity()
+        myCity.get()
       }
     },
     mounted () {
       console.log('mounted')
+      this.map = MAP('uMrZwlmGzs5vqFRlsECDsnRiZGcZgnKj')
     }
   }
 </script>
@@ -404,11 +462,11 @@
   .baidu-map
     width: 100%
     height: 300px
-    
+
   #page
     background-color: #f9f9f9 none repeat scroll 0 0
     height: auto
-    /* 此两项可设置居中 
+    /* 此两项可设置居中
     * margin: 0 auto
     * max-width:750px */
     margin: 0 auto
@@ -418,14 +476,14 @@
     width: 100%
   header
     background: 0
-  ul 
+  ul
     margin 0
     padding 0
-    li 
+    li
       list-style-type none
-  a 
+  a
     text-decoration none
-  img 
+  img
     border 0
   section.buy
     width: 100%
@@ -440,7 +498,7 @@
       height: auto
       margin: 0 auto
       padding: 0
-      clear: both 
+      clear: both
     .row2
       border-top: 1px dotted #524524
       padding: 10px 0
@@ -468,5 +526,4 @@
       line-height: 30px
       p
         color: #9a9874
-
 </style>
