@@ -28,10 +28,10 @@ axios.interceptors.request.use(
   config => {
     let accessToken = window.sessionStorage.accessToken
     if (accessToken) {
-      console.log('setting accessToken to: ' + accessToken)
+      // console.log('setting accessToken to: ' + accessToken)
       config.headers.Authorization = `Token ${accessToken}`
     } else {
-      console.log('No accessToken')
+      // console.log('No accessToken')
     }
     return config
   },

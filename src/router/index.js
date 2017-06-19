@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 const MerchandiseList = resolve => require(['@/pages/order_manage/MerchandiseList.vue'], resolve)
 const Merchandise = resolve => require(['@/pages/order_manage/Merchandise.vue'], resolve)
+const BaiduMap = resolve => require(['@/components/BaiduMap.vue'], resolve)
 const Login = resolve => require(['@/pages/Login.vue'], resolve)
 const NotFound = resolve => require(['@/pages/404.vue'], resolve)
 // Home和AppDashboard合成一组作异步加载
@@ -37,6 +38,14 @@ export default new Router({
     name: 'login',
     meta: {
       hidden: true
+    }
+  },
+  {
+    path: '/map',
+    component: BaiduMap,
+    name: 'map',
+    meta: {
+      hidden: false
     }
   },
   {

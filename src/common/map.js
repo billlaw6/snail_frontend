@@ -1,8 +1,8 @@
-export function MAP (ak) {
+export default function MP (ak) {
   return new Promise(function (resolve, reject) {
     window.init = function () {
       alert('initing')
-      resolve(BMap)
+			resolve(BMap)
     }
     var script = document.createElement('script')
     script.type = 'text/javascript'
