@@ -15,10 +15,6 @@
     </head>
     <body>
       <div id="page">
-        <baidu-map id="baidu-map" class="baidu-map" :center="baiduMap.center"
-          :zoom="baiduMap.zoom"
-          :map-type="baiduMap.mapType"
-          @ready="mapReady"></baidu-map>
         <div class="banner">
           <img alt=" 1.jpg" src="../../assets/1.jpg">
         </div>
@@ -26,9 +22,9 @@
           <div class="row1">
             <strong>￥298</strong>
             <ol>
-              <li><p>原价</p>￥2980</li>
-              <li><p>折扣</p>1.0</li>
-              <li><p>节省</p>￥2682</li>
+              <li><p>原价</p>{{ merchandiseDetail.old_price | currency }}</li>
+              <li><p>折扣</p>{{ merchandiseDetail.price / merchandiseDetail.old_price }}</li>
+              <li><p>节省</p>{{ merchandiseDetail.old_price - merchandiseDetail.price }}</li>
             </ol>
           </div>
 
@@ -61,10 +57,10 @@
           </template>
           <h2>【重要提醒】</h2>
           <div class="btn">
-            <p><span style="font: 16px/24px Helvetica, Arial, san-serif; color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; letter-spacing: normal; word-spacing: 0px; float: none; display: inline !important; white-space: normal; font-size-adjust: none; font-stretch: normal; background-color: rgb(249, 249, 249); -webkit-text-stroke-width: 0px;"></span></p><p style="white-space: normal;">1.活动期间，咨询人数众多，请尽可能自助下单！</p><p style="white-space: normal;">2.下单之后24小时内安排发货，大概3-5天到货！快递默认顺丰，顺丰到不了发圆通或EMS！</p><p style="white-space: normal;">3.珍藏级纯天然蜜蜡【促销价 仅需298元】全国包邮，货到付款，先验货后签收！发现非正品，商家承担来回运费！</p><p><br></p><p style="white-space: normal;"><span style="color:#f00;">特别提醒：因部分客户所提交订单信息不全 所以我们会在24小时内给尊贵你的致电核实订单 请亲一定要高抬贵手接听下电话，谢谢！！！</span></p><p></p>
+            <p><span></span></p><p>1.活动期间，咨询人数众多，请尽可能自助下单！</p><p style="white-space: normal;">2.下单之后24小时内安排发货，大概3-5天到货！快递默认顺丰，顺丰到不了发圆通或EMS！</p><p style="white-space: normal;">3.珍藏级纯天然蜜蜡【促销价 仅需298元】全国包邮，货到付款，先验货后签收！发现非正品，商家承担来回运费！</p><p><br></p><p style="white-space: normal;"><span style="color:#f00;">特别提醒：因部分客户所提交订单信息不全 所以我们会在24小时内给尊贵你的致电核实订单 请亲一定要高抬贵手接听下电话，谢谢！！！</span></p><p></p>
             <a href="tel:13202029800" class="btn">热线咨询：13202029800</a>
             <a href="sms:13202029800" class="btn">短信订购 ：13202029800</a> 
-            <a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1941907304&amp;site=qq&amp;menu=yes" class="btn qq">QQ咨询：1941907304</a><a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" class="btn wei">微信咨询：13202029800</a> 
+            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1941907304&amp;site=qq&amp;menu=yes" class="btn qq">QQ咨询：1941907304</a><a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" class="btn wei">微信咨询：13202029800</a> 
           </div>
         </article>  
         <article>  
@@ -259,9 +255,12 @@
           <div class="bdbox">
             <label class="bdxx"><em>*</em>地区</label>
             <div class="xlbox">
-              <select class="dqxl" name="province"><option value="" selected="selected">选省份</option><option value="北京市">北京市</option><option value="天津市">天津市</option><option value="河北省">河北省</option><option value="山西省">山西省</option><option value="内蒙古自治区">内蒙古自治区</option><option value="辽宁省">辽宁省</option><option value="吉林省">吉林省</option><option value="黑龙江省">黑龙江省</option><option value="上海市">上海市</option><option value="江苏省">江苏省</option><option value="浙江省">浙江省</option><option value="安徽省">安徽省</option><option value="福建省">福建省</option><option value="江西省">江西省</option><option value="山东省">山东省</option><option value="河南省">河南省</option><option value="湖北省">湖北省</option><option value="湖南省">湖南省</option><option value="广东省">广东省</option><option value="广西壮族自治区">广西壮族自治区</option><option value="海南省">海南省</option><option value="重庆市">重庆市</option><option value="四川省">四川省</option><option value="贵州省">贵州省</option><option value="云南省">云南省</option><option value="西藏自治区">西藏自治区</option><option value="陕西省">陕西省</option><option value="甘肃省">甘肃省</option><option value="青海省">青海省</option><option value="宁夏回族自治区">宁夏回族自治区</option><option value="新疆维吾尔自治区">新疆维吾尔自治区</option><option value="香港特别行政区">香港特别行政区</option><option value="澳门特别行政区">澳门特别行政区</option><option value="台湾省">台湾省</option><option value="">选省份</option><option value="北京市">北京市</option><option value="天津市">天津市</option><option value="河北省">河北省</option><option value="山西省">山西省</option><option value="内蒙古自治区">内蒙古自治区</option><option value="辽宁省">辽宁省</option><option value="吉林省">吉林省</option><option value="黑龙江省">黑龙江省</option><option value="上海市">上海市</option><option value="江苏省">江苏省</option><option value="浙江省">浙江省</option><option value="安徽省">安徽省</option><option value="福建省">福建省</option><option value="江西省">江西省</option><option value="山东省">山东省</option><option value="河南省">河南省</option><option value="湖北省">湖北省</option><option value="湖南省">湖南省</option><option value="广东省">广东省</option><option value="广西壮族自治区">广西壮族自治区</option><option value="海南省">海南省</option><option value="重庆市">重庆市</option><option value="四川省">四川省</option><option value="贵州省">贵州省</option><option value="云南省">云南省</option><option value="西藏自治区">西藏自治区</option><option value="陕西省">陕西省</option><option value="甘肃省">甘肃省</option><option value="青海省">青海省</option><option value="宁夏回族自治区">宁夏回族自治区</option><option value="新疆维吾尔自治区">新疆维吾尔自治区</option><option value="香港特别行政区">香港特别行政区</option><option value="澳门特别行政区">澳门特别行政区</option><option value="台湾省">台湾省</option></select><select class="dqxl" name="city"><option value="">选城市</option></select><select class="dqxl" name="area"><option value="">选地区</option></select>
             </div>
           </div>
+          <baidu-map id="baidu-map" v-if="showMap" class="baidu-map" :center="baiduMap.center"
+            :zoom="baiduMap.zoom"
+            :map-type="baiduMap.mapType"
+            @ready="mapReady"></baidu-map>
           <div class="bdbox">
             <label class="bdxx"><em>*</em>地址</label>
             <div class="textbox">
@@ -308,16 +307,6 @@
               <li><span>[最新购买]：</span>谭**（133****4096）在18分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li>
             </ul>
             <ul><li style="height: 24px;"><span>[最新购买]：</span>谭**（133****4096）在18分钟前订购了 蜜蜡手串20mm(12颗男款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>张**（130****3260）在1分钟前订购了 蜜蜡手串18mm(13颗男款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>李**（136****7163）在3分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>赵**（139****1955）在7分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>刘**（180****6999）在9分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>周**（151****2588）在4分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>王**（133****4096）在10分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>秦**（139****1955）在15分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>朱**（180****6999）在20分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>吴**（151****2588）在12分钟前订购了 蜜蜡手串18mm(13颗男款) <font color="#FF0000">√</font></li>
-
-
-
-
-
-
-
-
-
-
             </ul>
 
           </div>
@@ -328,6 +317,7 @@
           <p></p><center></center><p></p>
         </footer>
       </div><!--/page-->
+      <count-down></count-down>
 
       <nav>
         <ul class="Transverse">
@@ -343,6 +333,7 @@
 <script>
   import { getMerchandiseDetail } from '../../api/api'
   import { mapState } from 'vuex'
+  import CountDown from '../../components/CountDown.vue'
   export default {
     data () {
       return {
@@ -354,6 +345,9 @@
           mapType: 'BMAP_NORMAL_MAP'
         }
       }
+    },
+    components: {
+      CountDown
     },
     computed: {
       ...mapState({
