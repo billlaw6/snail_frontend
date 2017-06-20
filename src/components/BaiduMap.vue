@@ -6,7 +6,7 @@
 </template>
 
 <script>
-  import { MP } from '../common/map'
+  import { MP } from '../common/map.js'
   export default {
     data () {
       return {
