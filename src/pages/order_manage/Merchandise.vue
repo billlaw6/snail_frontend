@@ -15,7 +15,7 @@
     </head>
     <body>
       <div id="page">
-        <baidu-map class="baidu-map" :center="baiduMap.center"
+        <baidu-map id="baidu-map" class="baidu-map" :center="baiduMap.center"
           :zoom="baiduMap.zoom"
           :map-type="baiduMap.mapType"
           @ready="mapReady"></baidu-map>
