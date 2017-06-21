@@ -317,8 +317,9 @@
           <p></p><center></center><p></p>
         </footer>
       </div><!--/page-->
-      <count-down :endTime="endDatetime" :callback="countDownCallback">
+      <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束">
       </count-down>
+      <scroll-div></scroll-div>
 
       <nav>
         <ul class="Transverse">
@@ -334,7 +335,7 @@
 <script>
   import { getMerchandiseDetail } from '../../api/api'
   import { mapState } from 'vuex'
-  import CountDown from '../../components/CountDown'
+  // import CountDown from '../../components/CountDown.vue'
   export default {
     data () {
       return {
@@ -349,13 +350,15 @@
       }
     },
     components: {
-      CountDown
+      CountDown: resolve => { require(['../../components/CountDown.vue'], resolve) },
+      ScrollDiv: resolve => { require(['../../components/ScrollDiv.vue'], resolve) }
     },
     computed: {
       ...mapState({
         mediaRoot: state => state.mediaRoot
       }),
       endDatetime: function () {
+        console.log(this.merchandiseDetail.end_datetime)
         return this.merchandiseDetail.end_datetime
       }
     },
@@ -375,6 +378,7 @@
             this.$Message.error('获取商品信息失败!')
           } else {
             console.log(data)
+            // require(['../../components/CountDown.vue'], resolve)
             this.merchandiseDetail = data
           }
         }, (error) => {
@@ -421,6 +425,7 @@
     },
     mounted () {
       // console.log('mounted')
+      this.getMerchandise()
     }
   }
 </script>

@@ -14,7 +14,8 @@
       }
     },
     props: {
-      // 参数如果从后台异步取容易不能及时取到，拿到时间为空，暂未想到合适方法
+      // 参数如果从后台异步取容易不能及时取到，必须采用异步加载组件的方式
+      // CountDown: resolve => { require(['../../components/CountDown.vue'], resolve) }
       endTime: {
         type: String,
         default: ''
@@ -33,12 +34,12 @@
     },
     methods: {
       countdowm (timestamp) {
-        console.log(timestamp)
+        // console.log('countDown:' + timestamp)
         let self = this
         let timer = setInterval(function () {
           let nowTime = new Date()
           let endTime = new Date(timestamp)
-          console.log(endTime)
+          // console.log(endTime)
           let t = endTime.getTime() - nowTime.getTime()
           if (t > 0) {
             let day = Math.floor(t / 86400000)

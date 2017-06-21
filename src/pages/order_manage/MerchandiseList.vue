@@ -63,7 +63,7 @@
             console.log(statusText)
             this.$Message.error('获取商品列表失败!')
           } else {
-            // console.log(JSON.stringify(data.results))
+            console.log(data)
             this.merchandiseList = data.results
             this.$store.dispatch('setMerchandiseList', data.results)
           }
