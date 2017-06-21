@@ -40,7 +40,7 @@
       return {
         formLogin: {
           username: 'liubin',
-          password: 'woaini2006',
+          password: 'liubin123456',
           remember: []
         },
         formLoginRules: {

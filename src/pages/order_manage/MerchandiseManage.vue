@@ -45,6 +45,9 @@
         <Form-item prop="is_bestseller">
           <Checkbox v-model="addModel.is_bestseller">是否热销</Checkbox>
         </Form-item>
+        <Form-item prop="end_datetime">
+          <Date-picker v-model="addModel.end_datetime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placement="bottom-start" placeholder="促销结束时间"></Date-picker>
+        </Form-item>
         <Form-item label="描述" prop="description">
           <Input v-model="addModel.description" type="textarea" placeholder="商品描述"></Input>
         </Form-item>
@@ -79,6 +82,9 @@
         </Form-item>
         <Form-item prop="is_bestseller">
           <Checkbox v-model="editModel.is_bestseller">是否热销</Checkbox>
+        </Form-item>
+        <Form-item prop="end_datetime">
+          <Date-picker v-model="editModel.end_datetime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placement="bottom-start" placeholder="促销结束时间"></Date-picker>
         </Form-item>
         <Form-item label="描述" prop="description">
           <Input v-model="editModel.description" type="textarea" placeholder="商品描述"></Input>
@@ -153,6 +159,7 @@
           old_price: 0.0,
           is_active: false,
           is_bestseller: false,
+          end_datetime: '2017-06-18T03:02:20Z',
           description: '',
           meta_keywords: '',
           meta_description: ''
@@ -165,6 +172,7 @@
           old_price: 0.0,
           is_active: false,
           is_bestseller: false,
+          end_datetime: '',
           description: '',
           meta_keywords: '',
           meta_description: ''
@@ -236,9 +244,9 @@
             sortable: true
           },
           {
-            title: '是否畅销',
-            key: 'is_bestseller',
-            align: 'center',
+            title: '促销结束时间',
+            key: 'end_datetime',
+            align: 'left',
             sortable: true
           },
           {
@@ -271,6 +279,7 @@
       showEdit (index) {
         this.showEditModal = true
         this.editModel = this.tableData[index]
+        // console.log(this.editModel)
         this.editModel.old_price = Number(this.editModel.old_price)
         this.editModel.price = Number(this.editModel.price)
       },

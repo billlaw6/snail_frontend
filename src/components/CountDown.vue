@@ -1,53 +1,76 @@
 <template>
-  <p>{{time}}</p>
+  <span :endTime="endTime" :callback="callback" :endText="endText">
+    <slot>
+      {{content}}
+    </slot>
+  </span>
 </template>
 
 <script>
-  export default{
+  export default {
     data () {
       return {
-        time: '',
-        flag: false
+        content: ''
+      }
+    },
+    props: {
+      // 参数如果从后台异步取容易不能及时取到，拿到时间为空，暂未想到合适方法
+      endTime: {
+        type: String,
+        default: ''
+      },
+      endText: {
+        type: String,
+        default: '已结束'
+      },
+      callback: {
+        type: Function,
+        default: ''
       }
     },
     mounted () {
-      let time = setInterval(() => {
-        if (this.flag === true) {
-          clearInterval(time)
-        }
-        this.timeDown()
-      }, 500)
-    },
-    props: {
-      endTime: {
-        type: String
-      }
+      this.countdowm(this.endTime)
     },
     methods: {
-      timeDown () {
-        const endTime = new Date(this.endTime)
-        const nowTime = new Date()
-        let leftTime = parseInt((endTime.getTime() - nowTime.getTime()) / 1000)
-        let d = parseInt(leftTime / (24 * 60 * 60))
-        let h = this.formate(parseInt(leftTime / (60 * 60) % 24))
-        let m = this.formate(parseInt(leftTime / 60 % 60))
-        let s = this.formate(parseInt(leftTime % 60))
-        if (leftTime <= 0) {
-          this.flag = true
-          this.$emit('time-end')
-        }
-        this.time = `${d}天${h}小时${m}分${s}秒`
+      countdowm (timestamp) {
+        console.log(timestamp)
+        let self = this
+        let timer = setInterval(function () {
+          let nowTime = new Date()
+          let endTime = new Date(timestamp)
+          console.log(endTime)
+          let t = endTime.getTime() - nowTime.getTime()
+          if (t > 0) {
+            let day = Math.floor(t / 86400000)
+            let hour = Math.floor((t / 3600000) % 24)
+            let min = Math.floor((t / 60000) % 60)
+            let sec = Math.floor((t / 1000) % 60)
+            hour = hour < 10 ? '0' + hour : hour
+            min = min < 10 ? '0' + min : min
+            sec = sec < 10 ? '0' + sec : sec
+            let format = ''
+            if (day > 0) {
+              format = `${day}天${hour}小时${min}分${sec}秒`
+            }
+            if (day <= 0 && hour > 0) {
+              format = `${hour}小时${min}分${sec}秒`
+            }
+            if (day <= 0 && hour <= 0) {
+              format = `${min}分${sec}秒`
+            }
+            self.content = format
+          } else {
+            clearInterval(timer)
+            self.content = self.endText
+            self._callback()
+          }
+        }, 1000)
       },
-      formate (time) {
-        if (time >= 10) {
-          return time
-        } else {
-          return `0${time}`
+      _callback () {
+        if (this.callback && this.callback instanceof Function) {
+          this.callback(...this)
         }
       }
     }
   }
 </script>
-
-<style lang="stylus" scoped>
-</style>

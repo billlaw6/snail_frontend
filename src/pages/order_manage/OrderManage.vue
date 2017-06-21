@@ -277,7 +277,7 @@
             }
           ],
           city: [
-            { required: true, type: 'array', message: '请选择所在城市', len: 2, trigger: 'blur' }
+            { required: true, type: 'array', message: '请选择所在城市', min: 2, max: 4, trigger: 'blur' }
           ],
           address: [
             { required: true, message: '方便具体点么？', trigger: 'blur' }

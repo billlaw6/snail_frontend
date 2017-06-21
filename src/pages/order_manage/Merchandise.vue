@@ -317,7 +317,8 @@
           <p></p><center></center><p></p>
         </footer>
       </div><!--/page-->
-      <count-down></count-down>
+      <count-down :endTime="endDatetime" :callback="countDownCallback">
+      </count-down>
 
       <nav>
         <ul class="Transverse">
@@ -333,11 +334,12 @@
 <script>
   import { getMerchandiseDetail } from '../../api/api'
   import { mapState } from 'vuex'
-  import CountDown from '../../components/CountDown.vue'
+  import CountDown from '../../components/CountDown'
   export default {
     data () {
       return {
         merchandiseDetail: {},
+        showMap: true,
         baiduMap: {
           center: {lng: 116.404, lat: 39.915},
           zoom: 15,
@@ -352,7 +354,10 @@
     computed: {
       ...mapState({
         mediaRoot: state => state.mediaRoot
-      })
+      }),
+      endDatetime: function () {
+        return this.merchandiseDetail.end_datetime
+      }
     },
     created () {
       this.getMerchandise()
@@ -369,6 +374,7 @@
             console.log(statusText)
             this.$Message.error('获取商品信息失败!')
           } else {
+            console.log(data)
             this.merchandiseDetail = data
           }
         }, (error) => {
@@ -381,7 +387,7 @@
       },
       mapReady ({BMap, map}) {
         let that = this
-        console.log(BMap, map)
+        // console.log(BMap, map)
         let geolocation = new BMap.Geolocation()
         let geoCoder = new BMap.Geocoder()
         geolocation.getCurrentPosition(function (r) {
@@ -401,7 +407,6 @@
             that.$Message.warning('获取地理位置信息失败')
           }
         })
-
         map.addEventListener('click', function (e) {
           var pt = e.point
           geoCoder.getLocation(pt, function (rs) {
@@ -409,6 +414,9 @@
             alert(addComp.province + ', ' + addComp.city + ', ' + addComp.district + ', ' + addComp.street + ', ' + addComp.streetNumber)
           })
         })
+      },
+      countDownCallback () {
+        console.log('end of cound down')
       }
     },
     mounted () {
