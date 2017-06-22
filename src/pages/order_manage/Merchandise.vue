@@ -310,6 +310,9 @@
             </ul>
 
           </div>
+          <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束">
+          </count-down>
+          <scroll-div></scroll-div>
 
           <!--订单-->
         </article>  
@@ -317,9 +320,6 @@
           <p></p><center></center><p></p>
         </footer>
       </div><!--/page-->
-      <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束">
-      </count-down>
-      <scroll-div></scroll-div>
 
       <nav>
         <ul class="Transverse">

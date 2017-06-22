@@ -1,13 +1,16 @@
 <template>
-  <div id="scroll-div" :style="classScrollDiv">
-    <div id="messages-div" :style="classMessage">
-      <template v-for="(message, index) in messages">
-        <div :style="classMessageTitle" :id="'title' + index" :key="'t' + index">{{ message.title }}</div>
-        <div :style="classMessageContent" :id="'content' + index" :key="'c' + index">{{ message.content }}</div>
-      </template>
-    </div>
-    <div id="messages-copy-div"></div>
+  <div id="scroll_div" class="fl">
+  <div id="scroll_begin">
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
   </div>
+  <div id="scroll_end"></div>
+ </div>
 </template>
 
 <script>
@@ -44,13 +47,17 @@
         type: Number,
         default: 1000
       },
+      classWindowDiv: {
+        type: Object,
+        default: function () {
+          return {
+          }
+        }
+      },
       classScrollDiv: {
         type: Object,
         default: function () {
           return {
-            height: '100%',
-            width: '100%',
-            color: '#FFF'
           }
         }
       },
@@ -58,9 +65,6 @@
         type: Object,
         default: function () {
           return {
-            height: '100%',
-            width: '100%',
-            color: '#F00'
           }
         }
       },
@@ -68,9 +72,6 @@
         type: Object,
         default: function () {
           return {
-            height: '100%',
-            width: '100%',
-            color: '#F00'
           }
         }
       },
@@ -78,86 +79,38 @@
         type: Object,
         default: function () {
           return {
-            height: '100%',
-            width: '100%',
-            color: '#0F0'
           }
         }
       }
     },
     methods: {
       startScroll: function (direction) {
-        let scrollDiv = document.getElementById('scroll-div')
-        let messageDiv = document.getElementById('messages-div')
-        let messageCopyDiv = document.getElementById('messages-copy-div')
-
-        // 复制messageDiv的内容，当元素要显示messageCopyDiv的内容时，因内容一样实现滚动
-        messageCopyDiv.innerHTML = messageDiv.innerHTML
-        function upDownScroll (ud) {
-          // let oneHeight = Math.round(parseInt(scrollDiv) / messageDiv.length)
-          if (ud === 'up' || ud === 1) {
-            if (messageCopyDiv.offsetHeight - messageDiv.scrollTop <= 0) {
-              messageDiv.scrollTop -= messageCopyDiv.offsetHeight
-            } else {
-              messageDiv.scrollTop ++
-            }
-          } else if (ud === 'down' || ud === 2) {
-            if (messageCopyDiv.offsetHeight - messageDiv.scrollTop <= 0) {
-              messageDiv.scrollTop += messageCopyDiv.offsetHeight
-            } else {
-              messageDiv.scrollTop --
-            }
+        // 文字横向滚动
+        var speed = 50
+        var MyMar = null
+        var scrollBegin = document.getElementById('scroll_begin')
+        var scrollEnd = document.getElementById('scroll_end')
+        var scrollDiv = document.getElementById('scroll_div')
+        scrollEnd.innerHTML = scrollBegin.innerHTML
+        function Marquee () {
+          if (scrollEnd.offsetWidth - scrollDiv.scrollLeft <= 0) {
+            scrollDiv.scrollLeft -= scrollBegin.offsetWidth
+          } else {
+            scrollDiv.scrollLeft ++
           }
-          console.log('up down')
-          console.log(messageDiv.scrollTop)
         }
-
-        function leftRightScroll (lr) {
-          if (lr === 'left' || lr === 3) {
-            if (messageCopyDiv.offsetWidth - messageDiv.scrollLeft <= 0) {
-              messageDiv.scrollLeft -= messageCopyDiv.offsetWidth
-            } else {
-              messageDiv.scrollLeft ++
-            }
-          } else if (lr === 'right' || lr === 4) {
-            if (messageCopyDiv.offsetWidth - messageDiv.scrollLeft <= 0) {
-              messageDiv.scrollLeft += messageCopyDiv.offsetWidth
-            } else {
-              messageDiv.scrollLeft --
-            }
-          }
-          console.log('left right')
-          console.log(messageDiv.scrollLeft)
-        }
-
-        // 启动滚动
-        let scroll = null
-        if (['up', 'down', 1, 2].indexOf(direction) >= 0) {
-          scroll = setInterval(upDownScroll(direction, this.speed))
-        } else if (['right', 'left', 3, 4].indexOf(direction) >= 0) {
-          scroll = setInterval(leftRightScroll(direction, this.speed))
-        }
-
+        MyMar = setInterval(Marquee, speed)
         scrollDiv.onmouseover = function () {
-          console.log('mouseover')
-          clearInterval(scroll)
+          clearInterval(MyMar)
         }
-
         scrollDiv.onmouseout = function () {
-          if (['up', 'down', 1, 2].indexOf(direction) >= 0) {
-            scroll = setInterval(upDownScroll(direction, this.speed))
-          } else if (['right', 'left', 3, 4].indexOf(direction) >= 0) {
-            scroll = setInterval(leftRightScroll(direction, this.speed))
-          }
-          console.log('mouse out')
+          MyMar = setInterval(Marquee, speed)
         }
       }
     },
     mounted: function () {
-      this.$nextTick(function () {
-        console.log('scroll div mounted and $nextTick')
-        this.startScroll('up')
-      })
+      this.startScroll('left')
+      setInterval(console.log('tick'), 10)
     },
     destroyed: function () {
       console.log('destroyed')
@@ -167,7 +120,13 @@
 </script>
 
 <style lang="stylus" scoped>
-  .classScrollDiv
-    /* 设置了overflow为非visible值时, 元素的scrollLeft和scrollTop属性才有意义*/
+  .pad_right
+    padding-right: 2em
+  #scroll_div
+    height: 26px
     overflow: hidden
+    white-space: nowrap
+    width: 535px
+  #scroll_begin, #scroll_end
+    display: inline
 </style>
