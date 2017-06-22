@@ -26,7 +26,7 @@
       },
       callback: {
         type: Function,
-        default: ''
+        default: null
       }
     },
     mounted () {

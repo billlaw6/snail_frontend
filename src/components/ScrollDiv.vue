@@ -1,9 +1,12 @@
 <template>
-  <div id="scrollContent" class="notice-list-box">
-    <div v-for="message,index in messages" class="notice-list" id="notice_list" :style="{width:ulWidth}">
-      <h3>{{ message.title }}</h3>
-      <div>{{ message.content }}</div>
+  <div id="scroll-div" :style="classScrollDiv">
+    <div id="messages-div" :style="classMessage">
+      <template v-for="(message, index) in messages">
+        <div :style="classMessageTitle" :id="'title' + index" :key="'t' + index">{{ message.title }}</div>
+        <div :style="classMessageContent" :id="'content' + index" :key="'c' + index">{{ message.content }}</div>
+      </template>
     </div>
+    <div id="messages-copy-div"></div>
   </div>
 </template>
 
@@ -11,135 +14,160 @@
   export default {
     data () {
       return {
-        ulWidth: '0px',
-        messages: [{title: 'title1', content: 'content111111111111111111111'},
-          {title: 'title2', content: 'content222222222222222222222'},
-          {title: 'title3', content: 'content333333333333333333333'},
-          {title: 'title4', content: 'content444444444444444444444'}],
-        delay: 10,
-        amount: 1,
-        direction: 'up',
-        timeout: 1000,
-        autoScrollTimer: null,
-        scrollTimer: null,
-        scrollNum: 0
+        title: 'abcde'
+      }
+    },
+    props: {
+      messages: {
+        type: Array,
+        default: function () {
+          return [{title: 'title1', content: 'content111111111111111111111'},
+            {title: 'title2', content: 'content222222222222222222222'},
+            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title4', content: 'content444444444444444444444'}]
+        }
+      },
+      speed: {
+        type: Number,
+        default: 10
+      },
+      delay: {
+        type: Number,
+        default: 10
+      },
+      direction: {
+        // 支持用1234表示上下左右
+        type: [String, Number],
+        default: 'up'
+      },
+      timeout: {
+        type: Number,
+        default: 1000
+      },
+      classScrollDiv: {
+        type: Object,
+        default: function () {
+          return {
+            height: '100%',
+            width: '100%',
+            color: '#FFF'
+          }
+        }
+      },
+      classMessage: {
+        type: Object,
+        default: function () {
+          return {
+            height: '100%',
+            width: '100%',
+            color: '#F00'
+          }
+        }
+      },
+      classMessageTitle: {
+        type: Object,
+        default: function () {
+          return {
+            height: '100%',
+            width: '100%',
+            color: '#F00'
+          }
+        }
+      },
+      classMessageContent: {
+        type: Object,
+        default: function () {
+          return {
+            height: '100%',
+            width: '100%',
+            color: '#0F0'
+          }
+        }
       }
     },
     methods: {
-      createUlWidth: function () {
-        let allLi = document.getElementById('notice_list').getElementsByTagName('li').length + 1
-        this.ulWidth = allLi * 600 + 'px'
-      },
-      ulScroll: function () {
-        setTimeout(function () {
-          let ul = document.getElementById('notice_list')
-          let li = ul.getElementsByTagName('li')
-          let speed = -1
-          let timer = null
-          let newLi = li[0].cloneNode(true)
-          ul.appendChild(newLi)
+      startScroll: function (direction) {
+        let scrollDiv = document.getElementById('scroll-div')
+        let messageDiv = document.getElementById('messages-div')
+        let messageCopyDiv = document.getElementById('messages-copy-div')
 
-          timer = setInterval(function () {
-            ul.style.left = ul.offsetLeft + speed + 'px'
-            if (ul.offsetLeft === -ul.offsetWidth + 600) {
-              ul.style.left = '0'
+        // 复制messageDiv的内容，当元素要显示messageCopyDiv的内容时，因内容一样实现滚动
+        messageCopyDiv.innerHTML = messageDiv.innerHTML
+        function upDownScroll (ud) {
+          // let oneHeight = Math.round(parseInt(scrollDiv) / messageDiv.length)
+          if (ud === 'up' || ud === 1) {
+            if (messageCopyDiv.offsetHeight - messageDiv.scrollTop <= 0) {
+              messageDiv.scrollTop -= messageCopyDiv.offsetHeight
+            } else {
+              messageDiv.scrollTop ++
             }
-          }, 30)
-
-          ul.onmouseover = function () {
-            clearInterval(timer)
+          } else if (ud === 'down' || ud === 2) {
+            if (messageCopyDiv.offsetHeight - messageDiv.scrollTop <= 0) {
+              messageDiv.scrollTop += messageCopyDiv.offsetHeight
+            } else {
+              messageDiv.scrollTop --
+            }
           }
-
-          ul.onmouseout = function () {
-            timer = setInterval(function () {
-              ul.style.left = ul.offsetLeft + speed + 'px'
-              if (ul.offsetLeft === -ul.offsetWidth + 600) {
-                ul.style.left = '0'
-              }
-            }, 30)
-          }
-        }, 1000)
-      },
-
-      // 纵向滚动
-      scrollPlus: function () {
-        this.scrollContent.scrollTop += this.amount
-      },
-      start: function () {
-        clearTimeout(this.autoScrollTimer)
-        this.autoScrollTimer = setTimeout(this.GetFunction(this, 'autoScroll'), this.timeout)
-      },
-      autoScroll: function () {
-        let oneHeight = Math.round(parseInt(this.scrollContent.scrollHeight) / this.scrollNum)
-        let scrollTop = parseInt(this.scrollContent.scrollTop)
-        if (this.direction === 'up') {
-          if (scrollTop >= parseInt(this.scrollContent.scrollHeight - oneHeight)) {
-            this.scrollContent.scrollTop = 0
-            clearTimeout(this.autoScrollTimer)
-            this.autoScrollTimer = setTimeout(this.GetFunction(this, 'autoScroll'), this.timeout)
-            return
-          }
-          this.scrollContent.scrollTop += this.amount
-        } else {
-          if (parseInt(this.scrollContent.srollTop) <= 0) {
-            this.scrollContent.scrollTop = parseInt(this.scrollContent.scrollHeight) / 2
-          }
-          this.scrollContent.scrollTop -= this.amount
+          console.log('up down')
+          console.log(messageDiv.scrollTop)
         }
 
-        console.log(oneHeight)
-        if (parseInt(this.scrollContent.scrollTop) % oneHeight !== 0) {
-          this.scrollTimer = setTimeout(this.GetFunction(this, 'autoScroll'), this.delay)
-        } else {
-          this.autoScrollTimer = setTimeout(this.getFunction(this, 'autoScroll'), this.Timeout)
+        function leftRightScroll (lr) {
+          if (lr === 'left' || lr === 3) {
+            if (messageCopyDiv.offsetWidth - messageDiv.scrollLeft <= 0) {
+              messageDiv.scrollLeft -= messageCopyDiv.offsetWidth
+            } else {
+              messageDiv.scrollLeft ++
+            }
+          } else if (lr === 'right' || lr === 4) {
+            if (messageCopyDiv.offsetWidth - messageDiv.scrollLeft <= 0) {
+              messageDiv.scrollLeft += messageCopyDiv.offsetWidth
+            } else {
+              messageDiv.scrollLeft --
+            }
+          }
+          console.log('left right')
+          console.log(messageDiv.scrollLeft)
         }
-      },
-      getFunction: function (variable, method) {
-        return function () {
-          variable[method]()
+
+        // 启动滚动
+        let scroll = null
+        if (['up', 'down', 1, 2].indexOf(direction) >= 0) {
+          scroll = setInterval(upDownScroll(direction, this.speed))
+        } else if (['right', 'left', 3, 4].indexOf(direction) >= 0) {
+          scroll = setInterval(leftRightScroll(direction, this.speed))
         }
-      },
-      stop: function () {
-        clearTimeout(this.autoScrollTimer)
-        clearTimeout(this.scrollTimer)
+
+        scrollDiv.onmouseover = function () {
+          console.log('mouseover')
+          clearInterval(scroll)
+        }
+
+        scrollDiv.onmouseout = function () {
+          if (['up', 'down', 1, 2].indexOf(direction) >= 0) {
+            scroll = setInterval(upDownScroll(direction, this.speed))
+          } else if (['right', 'left', 3, 4].indexOf(direction) >= 0) {
+            scroll = setInterval(leftRightScroll(direction, this.speed))
+          }
+          console.log('mouse out')
+        }
       }
     },
     mounted: function () {
       this.$nextTick(function () {
-        this.createUlWidth()
-        this.ulScroll()
+        console.log('scroll div mounted and $nextTick')
+        this.startScroll('up')
       })
-      this.scrollContent = document.getElementById('scrollContent')
-      this.scrollNum = this.scrollContent.getElementsByTag('div').length
-      if (this.scrollNum > 1) {
-        this.start()
-      }
     },
     destroyed: function () {
-      this.stop()
+      console.log('destroyed')
     }
   }
 
 </script>
 
 <style lang="stylus" scoped>
-  .notice-text
-    height: 25px
-    display: block
-    float: left
-    img
-      float: left
-  .notice-list
-    position: relative
-    left: 0
-    li
-      color: #fff
-      float: left
-      width: 600px
-      cursor: pointer
-  .notice-list-box
-    position: relative
+  .classScrollDiv
+    /* 设置了overflow为非visible值时, 元素的scrollLeft和scrollTop属性才有意义*/
     overflow: hidden
-    margin-left: 40px
-    height: 100%
 </style>

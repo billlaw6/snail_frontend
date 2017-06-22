@@ -9,7 +9,7 @@
       <meta name="MobileOptimized" content="320">
       <meta name="format-detection" content="telephone=no">
       <link rel="icon" type="image/x-icon" href="http://wap.shick.cn/favicon.ico">
-      <title>蜜蜡手串特卖活动</title>
+      <title>滚动字幕测试</title>
       <meta content="蜜蜡手串特卖活动" name="keywords">
       <meta content="蜜蜡手串特卖活动" name="description">
     </head>
@@ -189,7 +189,7 @@
                 <div style="display:none" class="bdbox">
                   <label class="bdxx"><em>*</em>数量</label>
                   <div class="xltextbox scount">
-                    <a onclick="minnumber()" href="javascript:void(0)" class="addmin"><b>-</b></a><input type="text" onblur="inputnumber();" id="mun" name="mun" value="1" class="text numbertext"><a onclick="addnumber()" href="javascript:void(0)" class="addmin"><b>+</b></a>
+                    <a onclick="minnumber()" href="javascript:void(0)" class="addmin"></a><input type="text" onblur="inputnumber();" id="mun" name="mun" value="1" class="text numbertext"><a onclick="addnumber()" href="javascript:void(0)" class="addmin"></a>
                     <font color="#BD0000" class="STYLE17">*(点击增减或填写)</font>
                   </div>
                 </div>
