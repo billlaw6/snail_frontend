@@ -1,11 +1,12 @@
 <template>
-  <div id="scroll-div" :style="styleScrollDiv">
-  <ul id="messages-div">
+  <div id="scroll-div" :style="styleScroll">
+  <div id="messages-div" :style="styleMessage">
     <template v-for="(message, index) in messages">
-    <li><a href="#">{{ message.content }}</a></li>
+      <div :style="styleMessageTitle">{{ message.title }}</div>
+      <div :style="styleMessageContent">{{ message.content }}</div>
     </template>
-  </ul>
-  <ul id="messages-copy-div"></ul>
+  </div>
+  <div id="messages-copy-div" :style="styleMessage"></div>
   </div>
 </template>
 
@@ -30,18 +31,18 @@
       },
       speed: {
         type: Number,
-        default: 60
+        default: 30
       },
       delay: {
         type: Number,
-        default: 10
+        default: 1000
       },
       direction: {
-        // 支持用1234表示上下左右
+        // 支持用1, 2表示上和左
         type: [String, Number],
         default: 'up'
       },
-      styleScrollDiv: {
+      styleScroll: {
         type: Object,
         default: function () {
           return {
@@ -56,6 +57,7 @@
         type: Object,
         default: function () {
           return {
+            display: 'inline'
           }
         }
       },
@@ -63,6 +65,7 @@
         type: Object,
         default: function () {
           return {
+            // color: 'red'
           }
         }
       },
@@ -76,38 +79,49 @@
     },
     methods: {
       startScroll: function (direction) {
+        // 先取回函数内，避免作用域引出的坑
+        let speed = this.speed
         let scrollDiv = document.getElementById('scroll-div')
         let messagesDiv = document.getElementById('messages-div')
         let messagesCopyDiv = document.getElementById('messages-copy-div')
         messagesCopyDiv.innerHTML = messagesDiv.innerHTML
-        function Marquee () {
-          // console.log(messagesCopyDiv.offsetHeight + ' : ' + h.scrollTop)
-          if (messagesCopyDiv.offsetHeight - scrollDiv.scrollTop <= 0) {
-            scrollDiv.scrollTop -= messagesCopyDiv.offsetHeight
-          } else {
-            scrollDiv.scrollTop ++
+        function Marquee (direc) {
+          if (['up', 1].indexOf(direc) >= 0) {
+            if (messagesCopyDiv.offsetHeight - scrollDiv.scrollTop <= 0) {
+              scrollDiv.scrollTop -= messagesCopyDiv.offsetHeight
+            } else {
+              scrollDiv.scrollTop ++
+            }
+          } else if (['left', 2].indexOf(direc) >= 0) {
+            if (messagesCopyDiv.offsetWidth - scrollDiv.scrollLeft <= 0) {
+              scrollDiv.scrollLeft -= messagesCopyDiv.offsetWidth
+            } else {
+              scrollDiv.scrollLeft --
+            }
           }
         }
-        let MyMar = setInterval(Marquee, this.speed)
+        // 用函数封装解决setInterval调用函数不能带参数的问题
+        // let MyMar = setInterval(function () { Marquee('up') }, speed)
+        let MyMar = setInterval(function () { Marquee(direction) }, speed)
+
         scrollDiv.onmouseover = function () {
           clearInterval(MyMar)
         }
         scrollDiv.onmouseout = function () {
-          MyMar = setInterval(Marquee, this.speed)
+          // 用函数封装解决setInterval调用函数不能带参数的问题
+          MyMar = setInterval(function () { Marquee(direction) }, speed)
         }
       }
     },
     mounted: function () {
-      this.startScroll('left')
+      // setTimeout(function () { this.startScroll('up') }, this.delay)
+      setTimeout(this.startScroll('up'), this.delay)
     },
     destroyed: function () {
-      console.log('destroyed')
+      // console.log('destroyed')
     }
   }
-
 </script>
 
 <style lang="stylus" scoped>
-  .scroll
-    color: red
 </style>
