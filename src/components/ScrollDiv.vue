@@ -33,10 +33,6 @@
         type: Number,
         default: 30
       },
-      delay: {
-        type: Number,
-        default: 1000
-      },
       direction: {
         // 支持用1, 2表示上和左
         type: [String, Number],
@@ -57,7 +53,8 @@
         type: Object,
         default: function () {
           return {
-            display: 'inline'
+            display: 'inline',
+            float: 'left'
           }
         }
       },
@@ -114,11 +111,11 @@
       }
     },
     mounted: function () {
-      // setTimeout(function () { this.startScroll('up') }, this.delay)
-      setTimeout(this.startScroll('up'), this.delay)
+      // setTimeout(this.startScroll(this.direction), this.delay)
+      this.startScroll(this.direction)
     },
     destroyed: function () {
-      // console.log('destroyed')
+      console.log('destroyed')
     }
   }
 </script>
