@@ -1,24 +1,14 @@
 <template>
-  <div class="dggd_r" id="h" style="height:60px;overflow:hidden;display:inline;float:left;">
-  <ul id="h1">
-  <li><a href="#">SD卡雷锋精神的路口附近1？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近2？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近3？真爱吗？ </a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近4？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近5？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近6？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近7？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近8？？ </a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近9？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近10？细节决定成败 </a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近11？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近12？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近13？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近14？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近15？</a></li>
-  </ul>
-  <ul id="h2"></ul>
+  <div id="scroll_div" class="fl">
+  <div id="scroll_begin">
+   恭喜793765***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793766***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793767***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793768***获得 <span class="pad_right">50元巨人点卡奖励</span>
+   恭喜793769***获得 <span class="pad_right">50元巨人点卡奖励</span>
   </div>
+  <div id="scroll_end"></div>
+ </div>
 </template>
 
 <script>
@@ -93,30 +83,32 @@
     },
     methods: {
       startScroll: function (direction) {
-        let speed = 40
-        let h2 = document.getElementById('h2')
-        let h1 = document.getElementById('h1')
-        let h = document.getElementById('h')
-        h2.innerHTML = h1.innerHTML
+        // 文字横向滚动
+        var speed = 50
+        var MyMar = null
+        var scrollBegin = document.getElementById('scroll_begin')
+        var scrollEnd = document.getElementById('scroll_end')
+        var scrollDiv = document.getElementById('scroll_div')
+        scrollEnd.innerHTML = scrollBegin.innerHTML
         function Marquee () {
-          if (h2.offsetHeight - h.scrollTop <= 0) {
-            h.scrollTop -= h2.offsetHeight
+          if (scrollEnd.offsetWidth - scrollDiv.scrollLeft <= 0) {
+            scrollDiv.scrollLeft -= scrollBegin.offsetWidth
           } else {
-            h.scrollTop ++
-            console.log(h.scrollTop)
+            scrollDiv.scrollLeft ++
           }
         }
-        let MyMar = setInterval(Marquee, speed)
-        h.onmouseover = function () {
+        MyMar = setInterval(Marquee, speed)
+        scrollDiv.onmouseover = function () {
           clearInterval(MyMar)
         }
-        h.onmouseout = function () {
+        scrollDiv.onmouseout = function () {
           MyMar = setInterval(Marquee, speed)
         }
       }
     },
     mounted: function () {
       this.startScroll('left')
+      setInterval(console.log('tick'), 10)
     },
     destroyed: function () {
       console.log('destroyed')
@@ -126,12 +118,13 @@
 </script>
 
 <style lang="stylus" scoped>
-  #window-div
-    /* 设置了overflow为非visible值时, 元素的scrollLeft和scrollTop属性才有意义*/
+  .pad_right
+    padding-right: 2em
+  #scroll_div
+    height: 26px
     overflow: hidden
-  #scroll-div
-    color: white
-  #messages-div, #messages-copy-div
-    float: left
+    white-space: nowrap
+    width: 535px
+  #scroll_begin, #scroll_end
     display: inline
 </style>
