@@ -1,33 +1,16 @@
 <template>
-  <div class="dggd_r" id="h" style="height:60px;overflow:hidden;display:inline;float:left;">
-  <ul id="h1">
-  <li><a href="#">SD卡雷锋精神的路口附近1？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近2？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近3？真爱吗？ </a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近4？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近5？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近6？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近7？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近8？？ </a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近9？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近10？细节决定成败 </a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近11？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近12？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近13？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近14？？</a></li>
-  <li><a href="#">SD卡雷锋精神的路口附近15？</a></li>
+  <div id="scroll-div" :style="styleScrollDiv">
+  <ul id="messages-div">
+    <template v-for="(message, index) in messages">
+    <li><a href="#">{{ message.content }}</a></li>
+    </template>
   </ul>
-  <ul id="h2"></ul>
+  <ul id="messages-copy-div"></ul>
   </div>
 </template>
 
 <script>
   export default {
-    data () {
-      return {
-        title: 'abcde'
-      }
-    },
     props: {
       messages: {
         type: Array,
@@ -35,12 +18,19 @@
           return [{title: 'title1', content: 'content111111111111111111111'},
             {title: 'title2', content: 'content222222222222222222222'},
             {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'content333333333333333333333'},
             {title: 'title4', content: 'content444444444444444444444'}]
         }
       },
       speed: {
         type: Number,
-        default: 10
+        default: 60
       },
       delay: {
         type: Number,
@@ -51,39 +41,32 @@
         type: [String, Number],
         default: 'up'
       },
-      timeout: {
-        type: Number,
-        default: 1000
+      styleScrollDiv: {
+        type: Object,
+        default: function () {
+          return {
+            overflow: 'hidden',
+            display: 'inline',
+            float: 'left',
+            height: '40px'
+          }
+        }
       },
-      classWindowDiv: {
+      styleMessage: {
         type: Object,
         default: function () {
           return {
           }
         }
       },
-      classScrollDiv: {
+      styleMessageTitle: {
         type: Object,
         default: function () {
           return {
           }
         }
       },
-      classMessage: {
-        type: Object,
-        default: function () {
-          return {
-          }
-        }
-      },
-      classMessageTitle: {
-        type: Object,
-        default: function () {
-          return {
-          }
-        }
-      },
-      classMessageContent: {
+      styleMessageContent: {
         type: Object,
         default: function () {
           return {
@@ -93,25 +76,24 @@
     },
     methods: {
       startScroll: function (direction) {
-        let speed = 40
-        let h2 = document.getElementById('h2')
-        let h1 = document.getElementById('h1')
-        let h = document.getElementById('h')
-        h2.innerHTML = h1.innerHTML
+        let scrollDiv = document.getElementById('scroll-div')
+        let messagesDiv = document.getElementById('messages-div')
+        let messagesCopyDiv = document.getElementById('messages-copy-div')
+        messagesCopyDiv.innerHTML = messagesDiv.innerHTML
         function Marquee () {
-          if (h2.offsetHeight - h.scrollTop <= 0) {
-            h.scrollTop -= h2.offsetHeight
+          // console.log(messagesCopyDiv.offsetHeight + ' : ' + h.scrollTop)
+          if (messagesCopyDiv.offsetHeight - scrollDiv.scrollTop <= 0) {
+            scrollDiv.scrollTop -= messagesCopyDiv.offsetHeight
           } else {
-            h.scrollTop ++
-            console.log(h.scrollTop)
+            scrollDiv.scrollTop ++
           }
         }
-        let MyMar = setInterval(Marquee, speed)
-        h.onmouseover = function () {
+        let MyMar = setInterval(Marquee, this.speed)
+        scrollDiv.onmouseover = function () {
           clearInterval(MyMar)
         }
-        h.onmouseout = function () {
-          MyMar = setInterval(Marquee, speed)
+        scrollDiv.onmouseout = function () {
+          MyMar = setInterval(Marquee, this.speed)
         }
       }
     },
@@ -126,12 +108,6 @@
 </script>
 
 <style lang="stylus" scoped>
-  #window-div
-    /* 设置了overflow为非visible值时, 元素的scrollLeft和scrollTop属性才有意义*/
-    overflow: hidden
-  #scroll-div
-    color: white
-  #messages-div, #messages-copy-div
-    float: left
-    display: inline
+  .scroll
+    color: red
 </style>
