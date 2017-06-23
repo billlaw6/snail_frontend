@@ -16,7 +16,7 @@
       messages: {
         type: Array,
         default: function () {
-          return [{title: 'title1', content: 'content111111111111111111111'},
+          return [{title: 'title1', content: 'content88888888888888888888888888888881111111111113333333333333333333333333333333333333333333333333333333333111111111'},
             {title: 'title2', content: 'content222222222222222222222'},
             {title: 'title3', content: 'content333333333333333333333'},
             {title: 'title3', content: 'content333333333333333333333'},
@@ -24,28 +24,32 @@
             {title: 'title3', content: 'content333333333333333333333'},
             {title: 'title3', content: 'content333333333333333333333'},
             {title: 'title3', content: 'content333333333333333333333'},
-            {title: 'title3', content: 'content333333333333333333333'},
+            {title: 'title3', content: 'conten                                   t333333333333333333333'},
             {title: 'title3', content: 'content333333333333333333333'},
             {title: 'title4', content: 'content444444444444444444444'}]
         }
       },
-      speed: {
+      interval: {
         type: Number,
         default: 30
       },
       direction: {
         // 支持用1, 2表示上和左
         type: [String, Number],
-        default: 'up'
+        default: 'left'
       },
       styleScroll: {
         type: Object,
         default: function () {
           return {
             overflow: 'hidden',
+            'white-space': 'nowrap',
             display: 'inline',
             float: 'left',
-            height: '40px'
+            // 必须要小于message-div的高度
+            height: '40px',
+            // 必须要小于单行message的宽度
+            width: '300px'
           }
         }
       },
@@ -53,8 +57,7 @@
         type: Object,
         default: function () {
           return {
-            display: 'inline',
-            float: 'left'
+            display: 'inline'
           }
         }
       },
@@ -77,36 +80,42 @@
     methods: {
       startScroll: function (direction) {
         // 先取回函数内，避免作用域引出的坑
-        let speed = this.speed
+        let interval = this.interval
         let scrollDiv = document.getElementById('scroll-div')
         let messagesDiv = document.getElementById('messages-div')
         let messagesCopyDiv = document.getElementById('messages-copy-div')
         messagesCopyDiv.innerHTML = messagesDiv.innerHTML
         function Marquee (direc) {
+          // console.log('in:' + direction)
           if (['up', 1].indexOf(direc) >= 0) {
+            // console.log('up')
+            console.log(messagesCopyDiv.offsetHeight + ' ： ' + scrollDiv.scrollTop)
             if (messagesCopyDiv.offsetHeight - scrollDiv.scrollTop <= 0) {
               scrollDiv.scrollTop -= messagesCopyDiv.offsetHeight
             } else {
               scrollDiv.scrollTop ++
             }
           } else if (['left', 2].indexOf(direc) >= 0) {
+            // console.log('left')
+            console.log(messagesCopyDiv.offsetWidth + ' ： ' + scrollDiv.scrollLeft)
             if (messagesCopyDiv.offsetWidth - scrollDiv.scrollLeft <= 0) {
+              console.log('<=')
               scrollDiv.scrollLeft -= messagesCopyDiv.offsetWidth
             } else {
-              scrollDiv.scrollLeft --
+              scrollDiv.scrollLeft ++
             }
           }
         }
         // 用函数封装解决setInterval调用函数不能带参数的问题
-        // let MyMar = setInterval(function () { Marquee('up') }, speed)
-        let MyMar = setInterval(function () { Marquee(direction) }, speed)
+        // let MyMar = setInterval(function () { Marquee('up') }, interval)
+        let MyMar = setInterval(function () { Marquee(direction) }, interval)
 
         scrollDiv.onmouseover = function () {
           clearInterval(MyMar)
         }
         scrollDiv.onmouseout = function () {
           // 用函数封装解决setInterval调用函数不能带参数的问题
-          MyMar = setInterval(function () { Marquee(direction) }, speed)
+          MyMar = setInterval(function () { Marquee(direction) }, interval)
         }
       }
     },
