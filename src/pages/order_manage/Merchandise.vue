@@ -30,17 +30,14 @@
 
           <div class="row2">
             <strong>10365人已购买</strong>
-            <div class="timecount">
-              <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束"></count-down>
-          </div>             
+            <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束"></count-down>
           </div>
 
-          <article class="des"></article>
           <a href="#buy" class="btn">立即购买</a>
         </section>  
 
         <article class="showcontent">    
-          <h2>抢购描述</h2>
+          <h2><Icon type="arrow-down-b" :size="middle"></Icon>抢购描述</h2>
           <div class="btn">
             <p></p><p>珍藏级天然蜜蜡，全国顺丰包邮，货到付款，支持七天无理由退换货！</p><p><br></p><p><strong><span style="color:rgb(250,0,0)">特别提醒：由于抢购太过火爆，电话爆线，接通较慢，请您选择在线下单。下单后我们客服人员会在24小时内给您致电核实订单，请您一定要高抬贵手接听下电话 谢谢！</span></strong></p><p></p>
           </div>
@@ -394,14 +391,17 @@
 </script>
 
 <style lang="stylus" scoped>
+  margin-left = 6px
+  margin-right = 6px
+  icon-margin-left = 6px
+  icon-margin-right = 6px
+
   body
     background: #856D35 none
     margin: 0
-
   .baidu-map
     width: 100%
     height: 300px
-    
   #page
     background-color: #f9f9f9 none repeat scroll 0 0
     height: auto
@@ -474,41 +474,38 @@
       height: 30px
       line-height: 30px
       width: 35%
-    .row2 .timecount
+    .row2
       color: #d0740a
       height: 30px
       line-height: 30px
       overflow: hidden
       padding: 0
-      width: 65%
       margin: 0
       text-align: center
       span
+        width: 65%
         font-size: 26px
-    section.buy a.button, section.buy button
-      background: rgba(0, 0, 0, 0) -moz-linear-gradient(center top , #f9a58b 0%, #f9a58b 3%, #f1714a 6%, #f37751 49%, #ec3b07 51%, #ea3001 100%) repeat scroll 0 0
-      border: 1px solid #ee3b1a
-      border-radius: 4px
-      color: #fff
-      display: block
-      font-size: 26px
-      height: 46px
-      line-height: 42px
-      margin: 0 auto
-      text-shadow: 0 1px 0 #000
-      width: 96%
-    section.buy a.btn
-      background-color: #ff5600
-      border-radius: 6px
-      color: #fff
-      display: block
-      margin: 5px auto
-      padding: 10px 0
-      text-align: center
-      text-shadow: 1px 1px 1px #333
-      width: 96%
-    section.Glist
-      background: #f0f0f0 none repeat scroll 0 0;
+  section.buy a.btn
+    background-color: #ff5600
+    border-radius: 6px
+    color: #fff
+    display: block
+    margin: margin-left auto
+    padding: 10px 0
+    text-align: center
+    text-shadow: 1px 1px 1px #333
+    height: 48px
+    width: 96%
+    font-size: 18px
+  article.showcontent
+    background-color: #fff
+    margin-left: margin-left auto
+    h2
+      font-size: 23px
+      .ivu-icon
+        margin-left: icon-margin-left
+        margin-right: icon-margin-right
+  
 
   #comment-window
     overflow: hidden
