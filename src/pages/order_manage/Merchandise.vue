@@ -30,11 +30,9 @@
 
           <div class="row2">
             <strong>10365人已购买</strong>
-            <div class="djs">
-              <div class="time-count">
-                <div class="jltimer" id="remainTime_1"><span>01</span>天<span>12</span>小时<span>28</span>分<span>23</span>秒</div>
-              </div>
-            </div>             
+            <div class="timecount">
+              <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束"></count-down>
+          </div>             
           </div>
 
           <article class="des"></article>
@@ -63,13 +61,12 @@
             <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1941907304&amp;site=qq&amp;menu=yes" class="btn qq">QQ咨询：1941907304</a><a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" class="btn wei">微信咨询：13202029800</a> 
           </div>
         </article>  
+
         <article>  
           <h2>客户评价</h2>
-
           <div class="pingjia" id="pingjia">
-
-            <div class="comment">
-              <div class="comment-inner">
+            <div id="comment-window" class="comment">
+              <div id="comments" class="comment-inner">
                 <div class="comment-content">159****2381 蔡小姐发表评论</div>
                 <div class="comment-name">很给力，找懂行的朋友看了，是正品，一说价格他觉得挺值，呵呵，很真诚的店家，我也是做生意的，比较信佛……盘了一下午了，很帅是吧，哈，打算在请两条送爸爸妈妈</div>
                 <div class="comment-content">130****2553 陆小姐发表评论 </div>
@@ -94,87 +91,10 @@
                 <div class="comment-name">不错，很漂亮！</div>
                 <div class="comment-content">150****9633 罗小姐发表评论</div>
                 <div class="comment-name">整体不错，去鉴定过了，是真的蜜蜡，性价比较高！就是送货速度有点慢，掌柜说快递可能比较忙。</div>
-
               </div>
-              <div class="comment-inner">
-                <div class="comment-content">159****2381 蔡小姐发表评论</div>
-                <div class="comment-name">很给力，找懂行的朋友看了，是正品，一说价格他觉得挺值，呵呵，很真诚的店家，我也是做生意的，比较信佛……盘了一下午了，很帅是吧，哈，打算在请两条送爸爸妈妈</div>
-                <div class="comment-content">130****2553 陆小姐发表评论 </div>
-                <div class="comment-name">发货很快，卖家包装精美，收到很高兴，应该是真品，纹理面看起来很圆润光滑，第一次购买试试看，没想到还真的很满意哦！真是不错的卖家！还会再来！</div>
-                <div class="comment-content">135****0933 田小姐发表评论</div>
-                <div class="comment-name">经大师鉴定确实是正宗蜜蜡，宝贝总得来讲比想象中的好，完全出乎我的意料之外，很给力！东西包装精美，有种爱不释手的感觉，才把玩2天就被朋友抢走，呜，只能重新拍了一串</div>
-                <div class="comment-content">189****1820 陈小姐发表评论</div>
-                <div class="comment-name">在灯下，静观，浅色的犹如金珠一般，深色的似墨，似山。每颗都是一世界，盘玩中，或许还有新感觉、新感受。慢慢品味、用心领悟中……</div>
-                <div class="comment-content">139****7525 丁小姐发表评论 </div>
-                <div class="comment-name">送给老爸的，东西很棒，非常喜欢，比在店里看到的又便宜又好，客服服务态度非常好，发货快，物流也很给力，总之非常好。</div>
-                <div class="comment-content">138****8622 刘小姐发表评论</div>
-                <div class="comment-name">买到的宝贝非常喜欢，比想象中要好，虽然和图片上差点效果，非常光滑漂亮，珠子纹路清晰圆润周正，沉甸甸的，手感很好，这个价位买到这样的珠子非常超值，尤其是服务态度，让人很满意，店家很有诚</div>
-                <div class="comment-content">信，非常实在的卖家，还会光顾。!189****9477 文小姐发表评论</div>
-                <div class="comment-name">很好的宝贝，这个价格能买到这样的宝贝很值，油性很足花纹也很漂亮包括包装也都是很不错的我喜欢。我已把店铺收藏了，以后还会买的。</div>
-                <div class="comment-content">134****7300 贝小姐发表评论 </div>
-                <div class="comment-name">宝贝到手真是太喜欢了，爱不释手，花色自然纯正，比在实体店买的还要好的多。包装也非常精美豪华，极有信誉的卖家。</div>
-                <div class="comment-content">137****5782 梁小姐发表评论</div>
-                <div class="comment-name">宝贝非常好，服务态度非常好，质量有保证，发货够快，买到手如获至宝，爱不释手，可惜朋友看到后，给抢走了，我还得买一串。</div>
-                <div class="comment-content">180****9903 黎小姐发表评论</div>
-                <div class="comment-name">很不错的东西,是正品,带着也很舒服,香味也很独特,还送了一大堆东西,希望买家生意月来越好。</div>
-                <div class="comment-content">137****3345 李小姐发表评论</div>
-                <div class="comment-name">不错，很漂亮！</div>
-                <div class="comment-content">150****9633 罗小姐发表评论</div>
-                <div class="comment-name">整体不错，去鉴定过了，是真的蜜蜡，性价比较高！就是送货速度有点慢，掌柜说快递可能比较忙。</div>
-
-              </div><div class="comment-inner">
-                <div class="comment-content">159****2381 蔡小姐发表评论</div>
-                <div class="comment-name">很给力，找懂行的朋友看了，是正品，一说价格他觉得挺值，呵呵，很真诚的店家，我也是做生意的，比较信佛……盘了一下午了，很帅是吧，哈，打算在请两条送爸爸妈妈</div>
-                <div class="comment-content">130****2553 陆小姐发表评论 </div>
-                <div class="comment-name">发货很快，卖家包装精美，收到很高兴，应该是真品，纹理面看起来很圆润光滑，第一次购买试试看，没想到还真的很满意哦！真是不错的卖家！还会再来！</div>
-                <div class="comment-content">135****0933 田小姐发表评论</div>
-                <div class="comment-name">经大师鉴定确实是正宗蜜蜡，宝贝总得来讲比想象中的好，完全出乎我的意料之外，很给力！东西包装精美，有种爱不释手的感觉，才把玩2天就被朋友抢走，呜，只能重新拍了一串</div>
-                <div class="comment-content">189****1820 陈小姐发表评论</div>
-                <div class="comment-name">在灯下，静观，浅色的犹如金珠一般，深色的似墨，似山。每颗都是一世界，盘玩中，或许还有新感觉、新感受。慢慢品味、用心领悟中……</div>
-                <div class="comment-content">139****7525 丁小姐发表评论 </div>
-                <div class="comment-name">送给老爸的，东西很棒，非常喜欢，比在店里看到的又便宜又好，客服服务态度非常好，发货快，物流也很给力，总之非常好。</div>
-                <div class="comment-content">138****8622 刘小姐发表评论</div>
-                <div class="comment-name">买到的宝贝非常喜欢，比想象中要好，虽然和图片上差点效果，非常光滑漂亮，珠子纹路清晰圆润周正，沉甸甸的，手感很好，这个价位买到这样的珠子非常超值，尤其是服务态度，让人很满意，店家很有诚</div>
-                <div class="comment-content">信，非常实在的卖家，还会光顾。!189****9477 文小姐发表评论</div>
-                <div class="comment-name">很好的宝贝，这个价格能买到这样的宝贝很值，油性很足花纹也很漂亮包括包装也都是很不错的我喜欢。我已把店铺收藏了，以后还会买的。</div>
-                <div class="comment-content">134****7300 贝小姐发表评论 </div>
-                <div class="comment-name">宝贝到手真是太喜欢了，爱不释手，花色自然纯正，比在实体店买的还要好的多。包装也非常精美豪华，极有信誉的卖家。</div>
-                <div class="comment-content">137****5782 梁小姐发表评论</div>
-                <div class="comment-name">宝贝非常好，服务态度非常好，质量有保证，发货够快，买到手如获至宝，爱不释手，可惜朋友看到后，给抢走了，我还得买一串。</div>
-                <div class="comment-content">180****9903 黎小姐发表评论</div>
-                <div class="comment-name">很不错的东西,是正品,带着也很舒服,香味也很独特,还送了一大堆东西,希望买家生意月来越好。</div>
-                <div class="comment-content">137****3345 李小姐发表评论</div>
-                <div class="comment-name">不错，很漂亮！</div>
-                <div class="comment-content">150****9633 罗小姐发表评论</div>
-                <div class="comment-name">整体不错，去鉴定过了，是真的蜜蜡，性价比较高！就是送货速度有点慢，掌柜说快递可能比较忙。</div>
-
-              </div><div class="comment-inner">
-                <div class="comment-content">159****2381 蔡小姐发表评论</div>
-                <div class="comment-name">很给力，找懂行的朋友看了，是正品，一说价格他觉得挺值，呵呵，很真诚的店家，我也是做生意的，比较信佛……盘了一下午了，很帅是吧，哈，打算在请两条送爸爸妈妈</div>
-                <div class="comment-content">130****2553 陆小姐发表评论 </div>
-                <div class="comment-name">发货很快，卖家包装精美，收到很高兴，应该是真品，纹理面看起来很圆润光滑，第一次购买试试看，没想到还真的很满意哦！真是不错的卖家！还会再来！</div>
-                <div class="comment-content">135****0933 田小姐发表评论</div>
-                <div class="comment-name">经大师鉴定确实是正宗蜜蜡，宝贝总得来讲比想象中的好，完全出乎我的意料之外，很给力！东西包装精美，有种爱不释手的感觉，才把玩2天就被朋友抢走，呜，只能重新拍了一串</div>
-                <div class="comment-content">189****1820 陈小姐发表评论</div>
-                <div class="comment-name">在灯下，静观，浅色的犹如金珠一般，深色的似墨，似山。每颗都是一世界，盘玩中，或许还有新感觉、新感受。慢慢品味、用心领悟中……</div>
-                <div class="comment-content">139****7525 丁小姐发表评论 </div>
-                <div class="comment-name">送给老爸的，东西很棒，非常喜欢，比在店里看到的又便宜又好，客服服务态度非常好，发货快，物流也很给力，总之非常好。</div>
-                <div class="comment-content">138****8622 刘小姐发表评论</div>
-                <div class="comment-name">买到的宝贝非常喜欢，比想象中要好，虽然和图片上差点效果，非常光滑漂亮，珠子纹路清晰圆润周正，沉甸甸的，手感很好，这个价位买到这样的珠子非常超值，尤其是服务态度，让人很满意，店家很有诚</div>
-                <div class="comment-content">信，非常实在的卖家，还会光顾。!189****9477 文小姐发表评论</div>
-                <div class="comment-name">很好的宝贝，这个价格能买到这样的宝贝很值，油性很足花纹也很漂亮包括包装也都是很不错的我喜欢。我已把店铺收藏了，以后还会买的。</div>
-                <div class="comment-content">134****7300 贝小姐发表评论 </div>
-                <div class="comment-name">宝贝到手真是太喜欢了，爱不释手，花色自然纯正，比在实体店买的还要好的多。包装也非常精美豪华，极有信誉的卖家。</div>
-                <div class="comment-content">137****5782 梁小姐发表评论</div>
-                <div class="comment-name">宝贝非常好，服务态度非常好，质量有保证，发货够快，买到手如获至宝，爱不释手，可惜朋友看到后，给抢走了，我还得买一串。</div>
-                <div class="comment-content">180****9903 黎小姐发表评论</div>
-                <div class="comment-name">很不错的东西,是正品,带着也很舒服,香味也很独特,还送了一大堆东西,希望买家生意月来越好。</div>
-                <div class="comment-content">137****3345 李小姐发表评论</div>
-                <div class="comment-name">不错，很漂亮！</div>
-                <div class="comment-content">150****9633 罗小姐发表评论</div>
-                <div class="comment-name">整体不错，去鉴定过了，是真的蜜蜡，性价比较高！就是送货速度有点慢，掌柜说快递可能比较忙。</div>
-
-              </div></div>
+              <div id="comments-copy" class="comment-inner">
+              </div>
+            </div>
           </div>
         </article>
         <article id="buy">
@@ -189,7 +109,7 @@
                 <div style="display:none" class="bdbox">
                   <label class="bdxx"><em>*</em>数量</label>
                   <div class="xltextbox scount">
-                    <a onclick="minnumber()" href="javascript:void(0)" class="addmin"></a><input type="text" onblur="inputnumber();" id="mun" name="mun" value="1" class="text numbertext"><a onclick="addnumber()" href="javascript:void(0)" class="addmin"></a>
+                    <a class="addmin"></a><input type="text" onblur="inputnumber();" id="mun" name="mun" value="1" class="text numbertext"><a class="addmin"></a>
                     <font color="#BD0000" class="STYLE17">*(点击增减或填写)</font>
                   </div>
                 </div>
@@ -293,8 +213,14 @@
             </div>
           </div>
 
-          <div id="fahuo">
-            <ul><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>谭**（133****4096）在18分钟前订购了 蜜蜡手串20mm(12颗男款) <font color="#FF0000">√</font></li><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>张**（130****3260）在1分钟前订购了 蜜蜡手串18mm(13颗男款) <font color="#FF0000">√</font></li><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>李**（136****7163）在3分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>赵**（139****1955）在7分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>刘**（180****6999）在9分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>周**（151****2588）在4分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li>
+          <div id="new-order-window">
+            <ul id="orders">
+              <li><span>[最新购买]：</span>谭**（133****4096）在18分钟前订购了 蜜蜡手串20mm(12颗男款) <font color="#FF0000">√</font></li>
+              <li><span>[最新购买]：</span>张**（130****3260）在1分钟前订购了 蜜蜡手串18mm(13颗男款) <font color="#FF0000">√</font></li>
+              <li><span>[最新购买]：</span>李**（136****7163）在3分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li>
+              <li><span>[最新购买]：</span>赵**（139****1955）在7分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li>
+              <li><span>[最新购买]：</span>刘**（180****6999）在9分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li>
+              <li><span>[最新购买]：</span>周**（151****2588）在4分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li>
               <li><span>[最新购买]：</span>张**（130****3260）在1分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li>
               <li><span>[最新购买]：</span>李**（136****7163）在3分钟前订购了 蜜蜡手串18mm(13颗男款) <font color="#FF0000">√</font></li>
               <li><span>[最新购买]：</span>赵**（139****1955）在7分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li>
@@ -306,13 +232,8 @@
               <li><span>[最新购买]：</span>吴**（151****2588）在12分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li>
               <li><span>[最新购买]：</span>谭**（133****4096）在18分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li>
             </ul>
-            <ul><li style="height: 24px;"><span>[最新购买]：</span>谭**（133****4096）在18分钟前订购了 蜜蜡手串20mm(12颗男款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>张**（130****3260）在1分钟前订购了 蜜蜡手串18mm(13颗男款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>李**（136****7163）在3分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>赵**（139****1955）在7分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>刘**（180****6999）在9分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>周**（151****2588）在4分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="overflow: hidden; height: 0px;"><span>[最新购买]：</span>王**（133****4096）在10分钟前订购了 蜜蜡手串8mm(108颗长款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>秦**（139****1955）在15分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>朱**（180****6999）在20分钟前订购了 蜜蜡手串12mm(16颗女款) <font color="#FF0000">√</font></li><li style="height: 24px;"><span>[最新购买]：</span>吴**（151****2588）在12分钟前订购了 蜜蜡手串18mm(13颗男款) <font color="#FF0000">√</font></li>
-            </ul>
-
+            <ul id="orders-copy"></ul>
           </div>
-          <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束">
-          </count-down>
-          <scroll-div></scroll-div>
 
           <!--订单-->
         </article>  
@@ -421,11 +342,53 @@
       },
       countDownCallback () {
         console.log('end of cound down')
+      },
+      commentsScroll () {
+        let commentWindow = document.getElementById('comment-window')
+        let comments = document.getElementById('comments')
+        let commentsCopy = document.getElementById('comments-copy')
+        commentsCopy.innerHTML = comments.innerHTML
+        function Marquee () {
+          if (commentsCopy.offsetHeight - commentWindow.scrollTop <= 0) {
+            commentWindow.scrollTop -= commentsCopy.offsetHeight
+          } else {
+            commentWindow.scrollTop ++
+          }
+        }
+        let MyMar = setInterval(Marquee, 40)
+        commentWindow.onmouseover = function () {
+          clearInterval(MyMar)
+        }
+        commentWindow.onmouseout = function () {
+          MyMar = setInterval(Marquee, 40)
+        }
+      },
+      ordersScroll () {
+        let orderWindow = document.getElementById('new-order-window')
+        let orders = document.getElementById('orders')
+        let ordersCopy = document.getElementById('orders-copy')
+        ordersCopy.innerHTML = orders.innerHTML
+        function Marquee () {
+          if (ordersCopy.offsetHeight - orderWindow.scrollTop <= 0) {
+            orderWindow.scrollTop -= ordersCopy.offsetHeight
+          } else {
+            orderWindow.scrollTop ++
+          }
+        }
+        let MyMar = setInterval(Marquee, 40)
+        orderWindow.onmouseover = function () {
+          clearInterval(MyMar)
+        }
+        orderWindow.onmouseout = function () {
+          MyMar = setInterval(Marquee, 40)
+        }
       }
     },
     mounted () {
       // console.log('mounted')
       this.getMerchandise()
+      this.commentsScroll()
+      this.ordersScroll()
     }
   }
 </script>
@@ -475,12 +438,6 @@
       margin: 0 auto
       padding: 0
       clear: both 
-    .row2
-      border-top: 1px dotted #524524
-      padding: 10px 0
-      line-height: 30px
-      height: 50px
-      overflow: hidden
     .row1 strong
       display: block
       width: 35%
@@ -500,7 +457,68 @@
       float: left
       color: #886536
       line-height: 30px
+      font-size: 16px
       p
         color: #9a9874
+    .row2
+      border-top: 1px dotted #524524
+      padding: 10px 0
+      line-height: 30px
+      height: 50px
+      overflow: hidden
+    .row2 strong
+      color: #9a7c48
+      display: block
+      float: left
+      font-size: 20px
+      height: 30px
+      line-height: 30px
+      width: 35%
+    .row2 .timecount
+      color: #d0740a
+      height: 30px
+      line-height: 30px
+      overflow: hidden
+      padding: 0
+      width: 65%
+      margin: 0
+      text-align: center
+      span
+        font-size: 26px
+    section.buy a.button, section.buy button
+      background: rgba(0, 0, 0, 0) -moz-linear-gradient(center top , #f9a58b 0%, #f9a58b 3%, #f1714a 6%, #f37751 49%, #ec3b07 51%, #ea3001 100%) repeat scroll 0 0
+      border: 1px solid #ee3b1a
+      border-radius: 4px
+      color: #fff
+      display: block
+      font-size: 26px
+      height: 46px
+      line-height: 42px
+      margin: 0 auto
+      text-shadow: 0 1px 0 #000
+      width: 96%
+    section.buy a.btn
+      background-color: #ff5600
+      border-radius: 6px
+      color: #fff
+      display: block
+      margin: 5px auto
+      padding: 10px 0
+      text-align: center
+      text-shadow: 1px 1px 1px #333
+      width: 96%
+    section.Glist
+      background: #f0f0f0 none repeat scroll 0 0;
 
+  #comment-window
+    overflow: hidden
+    white-space: nowrap
+    height: 100px
+    width: 100%
+
+  #new-order-window
+    overflow: hidden
+    white-space: nowrap
+    height: 100px
+    width: 100%
 </style>
