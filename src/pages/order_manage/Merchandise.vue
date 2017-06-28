@@ -37,179 +37,104 @@
         </section>  
 
         <article class="showcontent">    
-          <h2><Icon type="arrow-down-b" :size="middle"></Icon>抢购描述</h2>
-          <div class="btn">
-            <p></p><p>珍藏级天然蜜蜡，全国顺丰包邮，货到付款，支持七天无理由退换货！</p><p><br></p><p><strong><span style="color:rgb(250,0,0)">特别提醒：由于抢购太过火爆，电话爆线，接通较慢，请您选择在线下单。下单后我们客服人员会在24小时内给您致电核实订单，请您一定要高抬贵手接听下电话 谢谢！</span></strong></p><p></p>
+          <h2><Icon type="arrow-down-b"></Icon>抢购描述</h2>
+          <div class="buy-description">
+            <p>珍藏级天然蜜蜡，全国顺丰包邮，货到付款，支持七天无理由退换货！</p>
+            <p><br></p>
+            <p>
+              <strong>
+                特别提醒：由于抢购太过火爆，电话爆线，接通较慢，请您选择在线下单。
+                下单后我们客服人员会在24小时内给您致电核实订单，请您一定要高抬贵手接听下电话 谢谢！
+              </strong>
+            </p>
           </div>
 
-          <h2>购买流程</h2>
+          <h2><Icon type="arrow-down-b"></Icon>购买流程</h2>
           <p><img alt=" 20.jpg" src="../../assets/2.gif"></p>
-          <h2>产品简介</h2>
+          <h2><Icon type="arrow-down-b"></Icon>产品简介</h2>
           <template v-for="value, index in merchandiseDetail.pictures">
             <p>
               <img :src="mediaRoot + value.image">
             </p>
           </template>
-          <h2>【重要提醒】</h2>
+          <h2><Icon type="arrow-down-b"></Icon>【重要提醒】</h2>
           <div class="btn">
-            <p><span></span></p><p>1.活动期间，咨询人数众多，请尽可能自助下单！</p><p style="white-space: normal;">2.下单之后24小时内安排发货，大概3-5天到货！快递默认顺丰，顺丰到不了发圆通或EMS！</p><p style="white-space: normal;">3.珍藏级纯天然蜜蜡【促销价 仅需298元】全国包邮，货到付款，先验货后签收！发现非正品，商家承担来回运费！</p><p><br></p><p style="white-space: normal;"><span style="color:#f00;">特别提醒：因部分客户所提交订单信息不全 所以我们会在24小时内给尊贵你的致电核实订单 请亲一定要高抬贵手接听下电话，谢谢！！！</span></p><p></p>
+            <ol>
+              <li>活动期间，咨询人数众多，请尽可能自助下单！</li>
+              <li>下单之后24小时内安排发货，大概3-5天到货！快递默认顺丰，顺丰到不了发圆通或EMS！</li>
+              <li>珍藏级纯天然蜜蜡【促销价 仅需298元】全国包邮，货到付款，先验货后签收！发现非正品，商家承担来回运费！</li>
+            </ol>
+            <div class="remind">特别提醒：因部分客户所提交订单信息不全 所以我们会在24小时内给尊贵你的致电核实订单 请亲一定要高抬贵手接听下电话，谢谢！！！</div>
             <a href="tel:13202029800" class="btn">热线咨询：13202029800</a>
             <a href="sms:13202029800" class="btn">短信订购 ：13202029800</a> 
-            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1941907304&amp;site=qq&amp;menu=yes" class="btn qq">QQ咨询：1941907304</a><a style="background-position: 10% 50%;background-size: 24px 24px;background-repeat: no-repeat;background-color: #ff5600;display: block;width: 100%;margin: 5px 0;text-align: center;color: #fff;text-shadow: 1px 1px 1px #333;border-radius: 6px;" class="btn wei">微信咨询：13202029800</a> 
+            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1941907304&amp;site=qq&amp;menu=yes" class="btn qq">QQ咨询：1941907304</a>
+            <a class="btn">微信咨询：13202029800</a> 
           </div>
         </article>  
 
-        <article>  
-          <h2>客户评价</h2>
+        <article class="comments">  
+          <h2><Icon type="arrow-down-b"></Icon>客户评价</h2>
           <div class="pingjia" id="pingjia">
             <div id="comment-window" class="comment">
               <div id="comments" class="comment-inner">
-                <div class="comment-content">159****2381 蔡小姐发表评论</div>
-                <div class="comment-name">很给力，找懂行的朋友看了，是正品，一说价格他觉得挺值，呵呵，很真诚的店家，我也是做生意的，比较信佛……盘了一下午了，很帅是吧，哈，打算在请两条送爸爸妈妈</div>
-                <div class="comment-content">130****2553 陆小姐发表评论 </div>
-                <div class="comment-name">发货很快，卖家包装精美，收到很高兴，应该是真品，纹理面看起来很圆润光滑，第一次购买试试看，没想到还真的很满意哦！真是不错的卖家！还会再来！</div>
-                <div class="comment-content">135****0933 田小姐发表评论</div>
-                <div class="comment-name">经大师鉴定确实是正宗蜜蜡，宝贝总得来讲比想象中的好，完全出乎我的意料之外，很给力！东西包装精美，有种爱不释手的感觉，才把玩2天就被朋友抢走，呜，只能重新拍了一串</div>
-                <div class="comment-content">189****1820 陈小姐发表评论</div>
-                <div class="comment-name">在灯下，静观，浅色的犹如金珠一般，深色的似墨，似山。每颗都是一世界，盘玩中，或许还有新感觉、新感受。慢慢品味、用心领悟中……</div>
-                <div class="comment-content">139****7525 丁小姐发表评论 </div>
-                <div class="comment-name">送给老爸的，东西很棒，非常喜欢，比在店里看到的又便宜又好，客服服务态度非常好，发货快，物流也很给力，总之非常好。</div>
-                <div class="comment-content">138****8622 刘小姐发表评论</div>
-                <div class="comment-name">买到的宝贝非常喜欢，比想象中要好，虽然和图片上差点效果，非常光滑漂亮，珠子纹路清晰圆润周正，沉甸甸的，手感很好，这个价位买到这样的珠子非常超值，尤其是服务态度，让人很满意，店家很有诚</div>
-                <div class="comment-content">信，非常实在的卖家，还会光顾。!189****9477 文小姐发表评论</div>
-                <div class="comment-name">很好的宝贝，这个价格能买到这样的宝贝很值，油性很足花纹也很漂亮包括包装也都是很不错的我喜欢。我已把店铺收藏了，以后还会买的。</div>
-                <div class="comment-content">134****7300 贝小姐发表评论 </div>
-                <div class="comment-name">宝贝到手真是太喜欢了，爱不释手，花色自然纯正，比在实体店买的还要好的多。包装也非常精美豪华，极有信誉的卖家。</div>
-                <div class="comment-content">137****5782 梁小姐发表评论</div>
-                <div class="comment-name">宝贝非常好，服务态度非常好，质量有保证，发货够快，买到手如获至宝，爱不释手，可惜朋友看到后，给抢走了，我还得买一串。</div>
-                <div class="comment-content">180****9903 黎小姐发表评论</div>
-                <div class="comment-name">很不错的东西,是正品,带着也很舒服,香味也很独特,还送了一大堆东西,希望买家生意月来越好。</div>
-                <div class="comment-content">137****3345 李小姐发表评论</div>
-                <div class="comment-name">不错，很漂亮！</div>
-                <div class="comment-content">150****9633 罗小姐发表评论</div>
-                <div class="comment-name">整体不错，去鉴定过了，是真的蜜蜡，性价比较高！就是送货速度有点慢，掌柜说快递可能比较忙。</div>
+                {{ merchandiseDetail.comments }}
+                <template v-for="comment in merchandiseDetail.comments">
+                  <div class="comment-content">{{ comment.title }}</div>
+                  <div class="comment-name">{{ comment.content }}</div>
+                </template>
               </div>
               <div id="comments-copy" class="comment-inner">
               </div>
             </div>
           </div>
         </article>
+
         <article id="buy">
-          <h2>订单信息</h2>
+          <h2><Icon type="arrow-down-b"></Icon>订单信息</h2>
           <!--订单-->
           <div id="order">
-            <div class="warp">
-              <form onsubmit="return postcheck()" method="post" action="notorder.asp" name="form" id="form">
-                <input type="hidden" value="no.2017615112324988" id="orderid" name="orderid">
-
-                <!--附加属性e-->
-                <div style="display:none" class="bdbox">
-                  <label class="bdxx"><em>*</em>数量</label>
-                  <div class="xltextbox scount">
-                    <a class="addmin"></a><input type="text" onblur="inputnumber();" id="mun" name="mun" value="1" class="text numbertext"><a class="addmin"></a>
-                    <font color="#BD0000" class="STYLE17">*(点击增减或填写)</font>
-                  </div>
-                </div>
-
-                <div class="bdbox">
-                  <label class="bdxx"><em>*</em>姓名</label>
-                  <div class="textbox">
-                    <input type="text" name="name">
-                  </div>
-                </div>
-                <div class="bdbox">
-                  <label class="bdxx"><em>*</em>手机</label>
-                  <div class="textbox">
-                    <input type="text" name="mob">
-                  </div>
-                </div>
-
-
-
-                <div class="bdbox">
-                  <label class="bdxx"><em>*</em>款式</label>
-                  <div class="dxbox red">
-                    <ul class="ordul">
-
-                      <li>  <label><input type="checkbox" onclick="pricea()" checked="checked" alt="298 " value="蜜蜡手串20mm(12颗男款)298 元" id="a0" name="product">
-                          <img src="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/TB2hfvIvHlmpuFjSZFlXXbdQXXa_767173256.jpg">
-                          蜜蜡手串20mm(12颗男款)<br>结缘价：<span>298 </span>
-                        </label>
-                      </li>
-
-                      <li>  <label><input type="checkbox" onclick="pricea()" alt="298 " value="蜜蜡手串18mm(13颗男款)298 元" id="a1" name="product">
-                          <img src="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/TB2Uhv_vH4npuFjSZFmXXXl4FXa_767173256.jpg">
-                          蜜蜡手串18mm(13颗男款)<br>结缘价：<span>298 </span>
-                        </label>
-                      </li>
-
-                      <li>  <label><input type="checkbox" onclick="pricea()" alt="298 " value="蜜蜡手串12mm(16颗女款)298 元" id="a2" name="product">
-                          <img src="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/TB2sq2yvORnpuFjSZFCXXX2DXXa_767173256.jpg">
-                          蜜蜡手串12mm(16颗女款)<br>结缘价：<span>298 </span>
-                        </label>
-                      </li>
-
-                      <li>  <label><input type="checkbox" onclick="pricea()" alt="298" value="蜜蜡手串8mm(108颗长款)298元" id="a3" name="product">
-                          <img src="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/TB2Ah_DvUhnpuFjSZFEXXX0PFXa_767173256.jpg">
-                          蜜蜡手串8mm(108颗长款)<br>结缘价：<span>298</span>
-                        </label>
-                      </li>
-
-                    </ul>
-              </div>
+            <Form ref="orderForm" :model="orderModel" :rules="ruleValidate" :label-width="100">
+              <Form-item label="接收人" prop="buyer">
+                <Input v-model="orderModel.buyer" placeholder="接收人"></Input>
+              </Form-item>
+              <Form-item label="手机号" prop="cell_phone">
+                <Input v-model="orderModel.cell_phone" placeholder="手机号"></Input>
+              </Form-item>
+              <Form-item label="商品" prop="merchandise">
+                <Select v-model="orderModel.merchandise">
+                  <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
+                </Select>
+              </Form-item>
+              <Form-item label="地区" prop="city">
+                <Cascader :data="chinaCities" v-model="orderModel.city" :filterable=true trigger="hover" placeholder="请选择所在地区"></Cascader>
+              </Form-item>
+              <Form-item label="地址" prop="address">
+                <Input v-model="orderModel.address" placeholder="地址"></Input>
+              </Form-item>
+              <Form-item label="留言" prop="comment">
+                <Input v-model="orderModel.comment" type="textarea" placeholder="留言"></Input>
+              </Form-item>
+              <Form-item label="标题" prop="title">
+                <Input v-model="orderModel.title" placeholder="标题"></Input>
+              </Form-item>
+              <Form-item label="商品" prop="merchandise">
+                <Select v-model="orderModel.merchandise">
+                  <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
+                </Select>
+              </Form-item>
+              <Form-item label="数量" prop="amount">
+                <Input-number :max="1000" :min="1" :step="1" v-model="orderModel.amount"></Input-number>
+              </Form-item>
+              <Form-item label="单价" prop="price">
+                <Input-number :max="10000" :min="1" :step="1" v-model="orderModel.price"></Input-number>
+              </Form-item>
+              <Form-item label="付款方式" prop="payment">
+                <Select v-model="orderModel.payment">
+                  <Option v-for="item in paymentList" :value="item.code" :key="item">{{ item.name }}</Option>
+                </Select>
+              </Form-item>
+            </Form>
           </div>
-
-
-          <!--附加属性b-->
-
-          <div class="bdbox">
-            <label class="bdxx"><em>*</em>金额</label>
-            <div class="text3box">
-              <input type="hidden" value="298 " name="zfbprice">
-              <input style="width:80px;" readonly="readonly" value="298 " name="price"> 元 <span id="zfbyh"></span>
-            </div>
-          </div>
-          <div class="bdbox">
-            <label class="bdxx"><em>*</em>地区</label>
-            <div class="xlbox">
-            </div>
-          </div>
-          <baidu-map id="baidu-map" v-if="showMap" class="baidu-map" :center="baiduMap.center"
-            :zoom="baiduMap.zoom"
-            :map-type="baiduMap.mapType"
-            @ready="mapReady"></baidu-map>
-          <div class="bdbox">
-            <label class="bdxx"><em>*</em>地址</label>
-            <div class="textbox">
-              <input type="text" name="address">
-            </div>
-          </div>
-
-          <div class="bdbox">
-            <label class="bdxx"><em>*</em>付款</label>
-            <div class="dxbox">
-              <input type="radio" onclick="return changeItem(0);" value="cod" id="b1" name="pay" checked="checked"><label for="b1"><img src="%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8_files/hdfk.gif"></label>
-
-
-            </div>
-          </div>
-
-          <div class="bdbox">
-            <label class="bdxx">留言</label>
-            <div class="text2box">
-              <textarea name="guest"></textarea>
-            </div>
-          </div>
-
-          <input type="hidden" value="" name="fromurl"><input type="hidden" value="file:///root/Desktop/%E8%9C%9C%E8%9C%A1%E6%89%8B%E4%B8%B2%E7%89%B9%E5%8D%96%E6%B4%BB%E5%8A%A8.html" name="nowurl"><input type="hidden" value="" name="keyword"><input type="hidden" value="" name="gzid"><input type="hidden" value="" name="fromurl"><input type="hidden" value="http://wap.shick.cn/" name="nowurl"><input type="hidden" value="" name="keyword"><input type="hidden" value="" name="gzid">
-          <div class="subbox">
-            <input type="submit" value="立即提交订单" name="submit">
-          </div>
-              </form>
-              <div style="clear:both;"></div>
-            </div>
-          </div>
-
           <div id="new-order-window">
             <ul id="orders">
               <li><span>[最新购买]：</span>谭**（133****4096）在18分钟前订购了 蜜蜡手串20mm(12颗男款) <font color="#FF0000">√</font></li>
@@ -258,6 +183,7 @@
     data () {
       return {
         merchandiseDetail: {},
+        orderModel: {},
         showMap: true,
         baiduMap: {
           center: {lng: 116.404, lat: 39.915},
@@ -295,8 +221,7 @@
             console.log(statusText)
             this.$Message.error('获取商品信息失败!')
           } else {
-            console.log(data)
-            // require(['../../components/CountDown.vue'], resolve)
+            // console.log(data)
             this.merchandiseDetail = data
           }
         }, (error) => {
@@ -391,17 +316,25 @@
 </script>
 
 <style lang="stylus" scoped>
-  margin-left = 6px
-  margin-right = 6px
-  icon-margin-left = 6px
-  icon-margin-right = 6px
+  // vars
+  body-background = #856D35
+  margin-left = 10px
+  margin-right = 10px
+  icon-margin-left = 10px
+  icon-margin-right = 10px
+  // padding marign: top right bottom left
+  padding-top = 6px
+  padding-right = 6px
+  padding-bottom = 6px
+  padding-left = 6px
+  title-font-size = 20px
+  content-font-size = 16px
+  max-width = 750px
 
+  // page setting
   body
-    background: #856D35 none
+    background: body-background none
     margin: 0
-  .baidu-map
-    width: 100%
-    height: 300px
   #page
     background-color: #f9f9f9 none repeat scroll 0 0
     height: auto
@@ -409,10 +342,10 @@
     * margin: 0 auto
     * max-width:750px */
     margin: 0 auto
-    max-width:750px
+    max-width: max-width
+    width: 100%
     min-height: 100%
     padding: 0 0 50px
-    width: 100%
   header
     background: 0
   ul 
@@ -486,9 +419,9 @@
         width: 65%
         font-size: 26px
   section.buy a.btn
-    background-color: #ff5600
+    background-color: #FF5600
     border-radius: 6px
-    color: #fff
+    color: #FFF
     display: block
     margin: margin-left auto
     padding: 10px 0
@@ -497,15 +430,47 @@
     height: 48px
     width: 96%
     font-size: 18px
+
   article.showcontent
-    background-color: #fff
-    margin-left: margin-left auto
+    background-color: #FFF
     h2
-      font-size: 23px
+      background-color: #E0E0E0
+      padding-left: padding-left
+      font-size: title-font-size
       .ivu-icon
-        margin-left: icon-margin-left
         margin-right: icon-margin-right
+    ol li
+      // list-style保证序号显示
+      list-style: decimal inside
+      margin-left: margin-left
+      font-size: content-font-size
+    .remind
+      color: red
+      font-size: content-font-size
+      margin-left: margin-left
+    div.buy-description p
+      padding-left: padding-left
+      margin-left: margin-left
+      font-size: content-font-size
+      strong
+        color: red
+    div.btn 
+      padding-bottom: padding-bottom
+      a.btn
+        background-color: #ff5600
+        border-radius: 6px
+        color: #fff
+        display: block
+        margin: 5px auto
+        padding: 10px 0
+        text-align: center
+        text-shadow: 1px 1px 1px #333
+        width: 96%
+
   
+  .baidu-map
+    width: 100%
+    height: 300px
 
   #comment-window
     overflow: hidden

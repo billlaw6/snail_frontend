@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 // let base = ''
-let base = 'http://localhost:8000'
+let base = `http://localhost:8000`
 
 export const authLogin = params => { return axios.post(`${base}/get-token/login/`, params).then(res => res) }
 
