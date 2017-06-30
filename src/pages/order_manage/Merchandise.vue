@@ -29,7 +29,7 @@
           </div>
 
           <div class="row2">
-            <strong>10365人已购买</strong>
+            <strong>{{ merchandiseDetail.sold_amount }}人已购买</strong>
             <count-down :endTime="merchandiseDetail.end_datetime" :callback="countDownCallback" endText="促销已结束"></count-down>
           </div>
 
@@ -89,21 +89,23 @@
           </div>
         </article>
 
-        <article id="buy">
+        <article class="buy">
           <h2><Icon type="arrow-down-b"></Icon>订单信息</h2>
           <!--订单-->
           <div id="order">
             <Form ref="orderForm" :model="orderModel" :rules="ruleValidate" :label-width="100">
+              <Form-item label="款式" prop="orderDetail">
+                <template v-for="item in merchandiseDetail.submerchandises">
+                  <img :src="mediaRoot + item.image">
+                  <Input-number :max="item.max_amount" :min="item.min_amount" :step="1" v-model="orderDetailModel.amount" :key="item"></Input-number>
+                  {{ item.name }}
+                </template>
+              </Form-item>
               <Form-item label="接收人" prop="buyer">
                 <Input v-model="orderModel.buyer" placeholder="接收人"></Input>
               </Form-item>
               <Form-item label="手机号" prop="cell_phone">
                 <Input v-model="orderModel.cell_phone" placeholder="手机号"></Input>
-              </Form-item>
-              <Form-item label="商品" prop="merchandise">
-                <Select v-model="orderModel.merchandise">
-                  <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
-                </Select>
               </Form-item>
               <Form-item label="地区" prop="city">
                 <Cascader :data="chinaCities" v-model="orderModel.city" :filterable=true trigger="hover" placeholder="请选择所在地区"></Cascader>
@@ -114,24 +116,14 @@
               <Form-item label="留言" prop="comment">
                 <Input v-model="orderModel.comment" type="textarea" placeholder="留言"></Input>
               </Form-item>
-              <Form-item label="标题" prop="title">
-                <Input v-model="orderModel.title" placeholder="标题"></Input>
-              </Form-item>
-              <Form-item label="商品" prop="merchandise">
-                <Select v-model="orderModel.merchandise">
-                  <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
-                </Select>
-              </Form-item>
-              <Form-item label="数量" prop="amount">
-                <Input-number :max="1000" :min="1" :step="1" v-model="orderModel.amount"></Input-number>
+              <Form-item label="标题" prop="order_no">
+                <Input v-model="orderModel.order_no" placeholder=""></Input>
               </Form-item>
               <Form-item label="单价" prop="price">
                 <Input-number :max="10000" :min="1" :step="1" v-model="orderModel.price"></Input-number>
               </Form-item>
               <Form-item label="付款方式" prop="payment">
-                <Select v-model="orderModel.payment">
-                  <Option v-for="item in paymentList" :value="item.code" :key="item">{{ item.name }}</Option>
-                </Select>
+                <Input v-model="orderModel.payment" value="hdfk"></Input>
               </Form-item>
             </Form>
           </div>
@@ -176,14 +168,61 @@
 </template>
 
 <script>
-  import { getMerchandiseDetail } from '../../api/api'
+  import { getMerchandiseDetail, getChinaCities } from '../../api/api'
   import { mapState } from 'vuex'
   // import CountDown from '../../components/CountDown.vue'
   export default {
     data () {
       return {
         merchandiseDetail: {},
+        orderDetailModel: {},
         orderModel: {},
+        chinaCities: [],
+        ruleValidate: {
+          title: [
+            { required: true, message: '做个标记才好找哦', trigger: 'blur' },
+            { type: 'string', min: 4, message: '多赐几个字嘛', trigger: 'blur' }
+          ],
+          merchandise: [
+            { required: true, type: 'number', message: '侬需要啥？', trigger: 'blur' }
+          ],
+          amount: [
+            { required: true, type: 'number', min: 1, max: 1000, message: '小滴数不清了，改个数？', trigger: 'blur' }
+          ],
+          price: [
+            { required: true, type: 'number', min: 0, max: 10000, message: '介是几个钱？', trigger: 'blur' }
+          ],
+          payment: [
+            { required: true, type: 'string', message: '咱们咋算？', trigger: 'blur' }
+          ],
+          buyer: [
+            { required: true, message: '怎么称呼昵？', trigger: 'blur' }
+          ],
+          cell_phone: [
+            { required: true, message: '留个电话才好约哦', trigger: 'blur' },
+            {
+              validator (rule, value, callback, source, options) {
+                let errors = []
+                if (!/^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/.test(value)) {
+                  errors.push(new Error('介个手机号打不通哦'))
+                }
+                callback(errors)
+              }
+            }
+          ],
+          city: [
+            { required: true, type: 'array', message: '请选择所在城市', min: 2, max: 4, trigger: 'blur' }
+          ],
+          address: [
+            { required: true, message: '方便具体点么？', trigger: 'blur' }
+          ],
+          express: [
+            { required: true, type: 'string', message: '亲要自己送吗？', trigger: 'blur' }
+          ],
+          express_no: [
+            { required: true, message: '单号拿来验证一下？', trigger: 'blur' }
+          ]
+        },
         showMap: true,
         baiduMap: {
           center: {lng: 116.404, lat: 39.915},
@@ -304,6 +343,23 @@
         orderWindow.onmouseout = function () {
           MyMar = setInterval(Marquee, 40)
         }
+      },
+      // 获取城市列表
+      getChinaCities: function () {
+        getChinaCities().then((res) => {
+          let { data, status, statusText } = res
+          if (status !== 200) {
+            this.loginMessage = statusText
+          } else {
+            // console.log(data)
+            this.chinaCities = JSON.parse(data)
+            // console.log(this.chinaCities[2].children)
+          }
+        }, (error) => {
+          this.$Message.error('获取城市列表失败!' + error)
+        }).catch((error) => {
+          this.$Message.error('获取城市列表失败!' + error)
+        })
       }
     },
     mounted () {
@@ -311,6 +367,7 @@
       this.getMerchandise()
       this.commentsScroll()
       this.ordersScroll()
+      this.getChinaCities()
     }
   }
 </script>
@@ -466,6 +523,8 @@
         text-align: center
         text-shadow: 1px 1px 1px #333
         width: 96%
+  article.buy
+    background-color: #FFF
 
   
   .baidu-map

@@ -634,7 +634,7 @@
           }
         })
       },
-      // 修改订单
+      // 获取城市列表
       getChinaCities: function () {
         getChinaCities().then((res) => {
           let { data, status, statusText } = res
