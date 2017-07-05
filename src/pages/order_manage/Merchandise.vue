@@ -94,12 +94,15 @@
           <!--订单-->
           <div id="order">
             <Form ref="orderForm" :model="orderModel" :rules="ruleValidate" :label-width="100">
-              <Form-item label="款式" prop="orderDetail">
+              <Form-item label="款式" prop="sum_amount">
                 <template v-for="item in merchandiseDetail.submerchandises">
                   <img :src="mediaRoot + item.image">
-                  <Input-number :max="item.max_amount" :min="item.min_amount" :step="1" v-model="orderDetailModel.amount" :key="item"></Input-number>
-                  {{ item.name }}
+                  <!--用数组的序号表示orderDetail的ID-->
+                  <Input-number size="small" :max="10" :min="0" v-model="orderModel.orderDetail[item.id]"></Input-number>
+                  {{ item.name | capitalize }}
                 </template>
+              {{ orderModel.orderDetail }}
+              sum_amount: {{ sum_amount }}
               </Form-item>
               <Form-item label="接收人" prop="buyer">
                 <Input v-model="orderModel.buyer" placeholder="接收人"></Input>
@@ -108,22 +111,31 @@
                 <Input v-model="orderModel.cell_phone" placeholder="手机号"></Input>
               </Form-item>
               <Form-item label="地区" prop="city">
-                <Cascader :data="chinaCities" v-model="orderModel.city" :filterable=true trigger="hover" placeholder="请选择所在地区"></Cascader>
+                <Cascader :data="chinaCities" v-model="orderModel.city" :filterable=true trigger="hover" placeholder="请选择所在地区" @on-change="handleCityChange()"></Cascader>
               </Form-item>
-              <Form-item label="地址" prop="address">
+              {{ orderModel.city }}
+              <Form-item label="详细地址" prop="address">
                 <Input v-model="orderModel.address" placeholder="地址"></Input>
               </Form-item>
+              <Form-item label="为朕掌图">
+                <Checkbox v-model="showMap">
+                  <span v-if="showMap">请点击地图位置指定快递地点</span>
+                  <span v-if="!showMap">打开地图可在地图上点击指定快递地点</span>
+                </Checkbox>
+              </Form-item>
+              <baidu-map class="baidu-map" v-if="showMap" :center="baiduMap.center" @ready="mapReady"></baidu-map>
               <Form-item label="留言" prop="comment">
                 <Input v-model="orderModel.comment" type="textarea" placeholder="留言"></Input>
               </Form-item>
-              <Form-item label="标题" prop="order_no">
-                <Input v-model="orderModel.order_no" placeholder=""></Input>
-              </Form-item>
-              <Form-item label="单价" prop="price">
-                <Input-number :max="10000" :min="1" :step="1" v-model="orderModel.price"></Input-number>
-              </Form-item>
               <Form-item label="付款方式" prop="payment">
-                <Input v-model="orderModel.payment" value="hdfk"></Input>
+                <Radio-group v-model="orderModel.payment" label="hdfk">
+                  <Radio label="hdfk">
+                    <Icon type="ios-cart" size="18"></Icon><span>货到付款</span>
+                  </Radio>
+                </Radio-group>
+              </Form-item>
+              <Form-item>
+                <Button type="primary" @click="submitOrder('orderForm')">立即提交订单</Button>
               </Form-item>
             </Form>
           </div>
@@ -176,27 +188,26 @@
       return {
         merchandiseDetail: {},
         orderDetailModel: {},
-        orderModel: {},
+        orderModel: {
+          // orderDetail: new Array(100)
+          city: [],
+          address: '',
+          payment: 'hdfk',
+          orderDetail: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        },
         chinaCities: [],
         ruleValidate: {
-          title: [
-            { required: true, message: '做个标记才好找哦', trigger: 'blur' },
-            { type: 'string', min: 4, message: '多赐几个字嘛', trigger: 'blur' }
+          sum_amount: [
+            { required: true, type: 'number', min: 1, max: 1000, message: '请选择相中的商品', trigger: 'blur' }
           ],
-          merchandise: [
-            { required: true, type: 'number', message: '侬需要啥？', trigger: 'blur' }
-          ],
-          amount: [
-            { required: true, type: 'number', min: 1, max: 1000, message: '小滴数不清了，改个数？', trigger: 'blur' }
-          ],
-          price: [
+          sum_price: [
             { required: true, type: 'number', min: 0, max: 10000, message: '介是几个钱？', trigger: 'blur' }
           ],
           payment: [
             { required: true, type: 'string', message: '咱们咋算？', trigger: 'blur' }
           ],
           buyer: [
-            { required: true, message: '怎么称呼昵？', trigger: 'blur' }
+            { required: true, message: '怎么称呼您昵？亲', trigger: 'blur' }
           ],
           cell_phone: [
             { required: true, message: '留个电话才好约哦', trigger: 'blur' },
@@ -215,12 +226,6 @@
           ],
           address: [
             { required: true, message: '方便具体点么？', trigger: 'blur' }
-          ],
-          express: [
-            { required: true, type: 'string', message: '亲要自己送吗？', trigger: 'blur' }
-          ],
-          express_no: [
-            { required: true, message: '单号拿来验证一下？', trigger: 'blur' }
           ]
         },
         showMap: true,
@@ -243,6 +248,13 @@
       endDatetime: function () {
         console.log(this.merchandiseDetail.end_datetime)
         return this.merchandiseDetail.end_datetime
+      },
+      sum_amount: function () {
+        let sum = 0
+        for (let i = 0; i < this.orderModel.orderDetail.length; i++) {
+          sum += this.orderModel.orderDetail[i]
+        }
+        return sum
       }
     },
     created () {
@@ -272,32 +284,41 @@
         })
       },
       mapReady ({BMap, map}) {
-        let that = this
+        let _this = this
+        console.log(_this.orderModel.sum_amount)
         // console.log(BMap, map)
         let geolocation = new BMap.Geolocation()
         let geoCoder = new BMap.Geocoder()
         geolocation.getCurrentPosition(function (r) {
           if (this.getStatus() === 0) {
+            map.centerAndZoom(r.point, 15)
             // that.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
             geoCoder.getLocation(r.point, function (result) {
               if (result) {
                 console.log(result)
-                // that.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
-                that.$Message.success('您所在的位置为:' + result.address)
-                // let addComp = result.addressComponents
+                // _this.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
+                _this.orderModel.address = result.address
+                _this.$Message.success('您所在的位置为:' + result.address)
               } else {
-                that.$Message.warning('获取地理位置失败！')
+                _this.$Message.warning('获取地理位置失败！')
               }
             })
           } else {
-            that.$Message.warning('获取地理位置信息失败')
+            _this.$Message.warning('获取地理位置信息失败')
           }
         })
         map.addEventListener('click', function (e) {
-          var pt = e.point
+          let pt = e.point
           geoCoder.getLocation(pt, function (rs) {
-            var addComp = rs.addressComponents
-            alert(addComp.province + ', ' + addComp.city + ', ' + addComp.district + ', ' + addComp.street + ', ' + addComp.streetNumber)
+            let addComp = rs.addressComponents
+            _this.orderModel.address = addComp.province + ', ' + addComp.city + ', ' + addComp.district + ', ' + addComp.street + ', ' + addComp.streetNumber
+            // alert(addComp.province + ', ' + addComp.city + ', ' + addComp.district + ', ' + addComp.street + ', ' + addComp.streetNumber)
+            let city = [addComp.province.replace('省', '').replace('市', '').replace('自治区', ''), addComp.city.replace('市', ''), addComp.district]
+            if (city[0] === city[1]) {
+              city.shift()
+              city[1] = city[1].substring(0, city[1].substring.length)
+            }
+            _this.orderModel.city = city
           })
         })
       },
@@ -360,6 +381,23 @@
         }).catch((error) => {
           this.$Message.error('获取城市列表失败!' + error)
         })
+      },
+      submitOrder: function (name) {
+        this.orderModel.sum_amount = this.sum_amount
+        console.log(this.orderModel)
+        this.$refs[name].validate((valid) => {
+          if (valid) {
+            if (this.sum_amount <= 0) {
+              console.log('amount error')
+              return 0
+            }
+          } else {
+            this.$Message.error('订单信息校验失败!')
+          }
+        })
+      },
+      handleCityChange: function () {
+        console.log('city changed')
       }
     },
     mounted () {
