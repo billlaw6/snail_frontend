@@ -110,20 +110,22 @@
               <Form-item label="手机号" prop="cell_phone">
                 <Input v-model="orderModel.cell_phone" placeholder="手机号"></Input>
               </Form-item>
+              <Form-item label="为朕掌图">
+                <Checkbox v-model="showMap">
+                  <span v-if="showMap">请点击地图位置指定快递地点（取消勾选收起地图）</span>
+                  <span v-if="!showMap">打开地图可在地图上点击指定快递地点（共享地理位置更快)</span>
+                </Checkbox>
+              </Form-item>
               <Form-item label="地区" prop="city">
                 <Cascader :data="chinaCities" v-model="orderModel.city" :filterable=true trigger="hover" placeholder="请选择所在地区" @on-change="handleCityChange()"></Cascader>
               </Form-item>
-              {{ orderModel.city }}
               <Form-item label="详细地址" prop="address">
                 <Input v-model="orderModel.address" placeholder="地址"></Input>
               </Form-item>
-              <Form-item label="为朕掌图">
-                <Checkbox v-model="showMap">
-                  <span v-if="showMap">请点击地图位置指定快递地点</span>
-                  <span v-if="!showMap">打开地图可在地图上点击指定快递地点</span>
-                </Checkbox>
-              </Form-item>
-              <baidu-map class="baidu-map" v-if="showMap" :center="baiduMap.center" @ready="mapReady"></baidu-map>
+              <baidu-map class="baidu-map" v-if="showMap" :center="baiduMap.center" @ready="mapReady">
+                <bm-navigation anchor="BMAP_ANCHOR_TOP_RIGHT"></bm-navigation>
+                <bm-geolocation anchor="BMAP_ANCHOR_BOTTOM_RIGHT" :showAddressBar="true" :autoLocation="true"></bm-geolocation>
+              </baidu-map>
               <Form-item label="留言" prop="comment">
                 <Input v-model="orderModel.comment" type="textarea" placeholder="留言"></Input>
               </Form-item>
@@ -180,7 +182,7 @@
 </template>
 
 <script>
-  import { getMerchandiseDetail, getChinaCities } from '../../api/api'
+  import { getMerchandiseDetail, getChinaCities, addOrder } from '../../api/api'
   import { mapState } from 'vuex'
   // import CountDown from '../../components/CountDown.vue'
   export default {
@@ -228,7 +230,9 @@
             { required: true, message: '方便具体点么？', trigger: 'blur' }
           ]
         },
-        showMap: true,
+        showMap: false,
+        map: null,
+        BMap: null,
         baiduMap: {
           center: {lng: 116.404, lat: 39.915},
           zoom: 15,
@@ -284,26 +288,36 @@
         })
       },
       mapReady ({BMap, map}) {
+        this.map = map
+        this.BMap = BMap
         let _this = this
-        console.log(_this.orderModel.sum_amount)
+        // console.log(_this.orderModel.sum_amount)
+        map.centerAndZoom(_this.baiduMap.center, _this.baiduMap.zoom)
         // console.log(BMap, map)
         let geolocation = new BMap.Geolocation()
         let geoCoder = new BMap.Geocoder()
         geolocation.getCurrentPosition(function (r) {
           if (this.getStatus() === 0) {
-            map.centerAndZoom(r.point, 15)
+            map.centerAndZoom(r.point, _this.baiduMap.zoom)
             // that.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
             geoCoder.getLocation(r.point, function (result) {
               if (result) {
-                console.log(result)
                 // _this.$Message.success('您所在的经纬度为:' + r.point.lng + r.point.lat)
+                // _this.$Message.success('您所在的位置为:' + result.address)
                 _this.orderModel.address = result.address
-                _this.$Message.success('您所在的位置为:' + result.address)
+                let addComp = result.addressComponents
+                let city = [addComp.province.replace('省', '').replace('市', '').replace('自治区', ''), addComp.city.replace('市', ''), addComp.district]
+                if (city[0] === city[1]) {
+                  city.shift()
+                  city[1] = city[1].substring(0, city[1].substring.length)
+                }
+                _this.orderModel.city = city
               } else {
-                _this.$Message.warning('获取地理位置失败！')
+                // _this.$Message.warning('获取地理位置失败！')
               }
             })
           } else {
+            map.centerAndZoom(_this.baiduMap.center, _this.baiduMap.zoom)
             _this.$Message.warning('获取地理位置信息失败')
           }
         })
@@ -311,8 +325,7 @@
           let pt = e.point
           geoCoder.getLocation(pt, function (rs) {
             let addComp = rs.addressComponents
-            _this.orderModel.address = addComp.province + ', ' + addComp.city + ', ' + addComp.district + ', ' + addComp.street + ', ' + addComp.streetNumber
-            // alert(addComp.province + ', ' + addComp.city + ', ' + addComp.district + ', ' + addComp.street + ', ' + addComp.streetNumber)
+            _this.orderModel.address = rs.address
             let city = [addComp.province.replace('省', '').replace('市', '').replace('自治区', ''), addComp.city.replace('市', ''), addComp.district]
             if (city[0] === city[1]) {
               city.shift()
@@ -387,10 +400,23 @@
         console.log(this.orderModel)
         this.$refs[name].validate((valid) => {
           if (valid) {
-            if (this.sum_amount <= 0) {
-              console.log('amount error')
-              return 0
-            }
+            let orderModelSubmit = JSON.stringify(this.orderModel)
+            orderModelSubmit = JSON.parse(orderModelSubmit)
+            orderModelSubmit.city = orderModelSubmit.city.join(',')
+            addOrder(orderModelSubmit).then((res) => {
+              let { data, status, statusText } = res
+              if (status !== 200) {
+                this.loginMessage = statusText
+              } else {
+                // console.log(data)
+                this.chinaCities = JSON.parse(data)
+                // console.log(this.chinaCities[2].children)
+              }
+            }, (error) => {
+              this.$Message.error('获取城市列表失败!' + error)
+            }).catch((error) => {
+              this.$Message.error('获取城市列表失败!' + error)
+            })
           } else {
             this.$Message.error('订单信息校验失败!')
           }
