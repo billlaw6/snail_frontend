@@ -113,7 +113,7 @@
               <Form-item label="为朕掌图">
                 <Checkbox v-model="showMap">
                   <span v-if="showMap">请点击地图位置指定快递地点（取消勾选收起地图）</span>
-                  <span v-if="!showMap">打开地图可在地图上点击指定快递地点（共享地理位置更快)</span>
+                  <span v-if="!showMap">打开地图可在地图上点击指定快递地点（共享地理位置选择更快)</span>
                 </Checkbox>
               </Form-item>
               <Form-item label="地区" prop="city">
@@ -405,17 +405,19 @@
             orderModelSubmit.city = orderModelSubmit.city.join(',')
             addOrder(orderModelSubmit).then((res) => {
               let { data, status, statusText } = res
-              if (status !== 200) {
-                this.loginMessage = statusText
+              if (status === 201) {
+                this.$Message.success('订单提交成功!')
+              } else if (status === 200) {
+                console.log(data)
+                this.$Message.warning('请勿重复提交订单!')
               } else {
-                // console.log(data)
-                this.chinaCities = JSON.parse(data)
-                // console.log(this.chinaCities[2].children)
+                console.log(statusText)
+                this.$Message.warning('请勿重复提交订单!')
               }
             }, (error) => {
-              this.$Message.error('获取城市列表失败!' + error)
+              this.$Message.error('保存订单失败!' + error)
             }).catch((error) => {
-              this.$Message.error('获取城市列表失败!' + error)
+              this.$Message.error('保存订单失败!' + error)
             })
           } else {
             this.$Message.error('订单信息校验失败!')
