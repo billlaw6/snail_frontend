@@ -40,14 +40,6 @@ export default new Router({
       hidden: true
     }
   },
-  // {
-  //   path: '/map',
-  //   component: BaiduMap,
-  //   name: 'map',
-  //   meta: {
-  //     hidden: false
-  //   }
-  // },
   {
     path: '/404',
     component: NotFound,

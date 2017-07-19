@@ -24,19 +24,19 @@
 
     <Modal v-model="showAddModal" title="添加订单" @on-ok="confirmAdd('addModelForm')" @on-cancel="cancelAdd('addModelForm')" >
       <Form ref="addModelForm" :model="addModel" :rules="ruleValidate" :label-width="100">
-        <Form-item label="标题" prop="title">
-          <Input v-model="addModel.title" placeholder="标题"></Input>
+        <Form-item label="款式" prop="sum_amount">
+          <template v-for="item in subMerchandiseList">
+            {{ item.name | capitalize }}
+            <!--用数组的序号表示orderDetail的ID-->
+            <Input-number size="small" :max="10" :min="0" v-model="addModel.orderDetail[item.id]"></Input-number><br/>
+          </template>
+        {{ addModel.orderDetail }}
         </Form-item>
-        <Form-item label="商品" prop="merchandise">
-          <Select v-model="addModel.merchandise">
-            <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
-          </Select>
+        <Form-item label="数量" prop="sum_amount">
+          <Input-number :max="1000" :min="1" :step="1" v-model="addModel.sum_amount"></Input-number>
         </Form-item>
-        <Form-item label="数量" prop="amount">
-          <Input-number :max="1000" :min="1" :step="1" v-model="addModel.amount"></Input-number>
-        </Form-item>
-        <Form-item label="单价" prop="price">
-          <Input-number :max="10000" :min="1" :step="0.1" v-model="addModel.price"></Input-number>
+        <Form-item label="单价" prop="sum_price">
+          <Input-number :max="10000" :min="1" :step="0.1" v-model="addModel.sum_price"></Input-number>
         </Form-item>
         <Form-item label="付款方式" prop="payment">
           <Select v-model="addModel.payment">
@@ -76,14 +76,6 @@
 
     <Modal v-model="showEditModal" title="修改订单" @on-ok="confirmEdit('editModelForm')" @on-cancel="cancelEdit('editModelForm')" >
       <Form ref="editModelForm" :model="editModel" :rules="ruleValidate" :label-width="100">
-        <Form-item label="标题" prop="title">
-          <Input v-model="editModel.title" placeholder="标题"></Input>
-        </Form-item>
-        <Form-item label="商品" prop="merchandise">
-          <Select v-model="editModel.merchandise">
-            <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
-          </Select>
-        </Form-item>
         <Form-item label="数量" prop="amount">
           <Input-number :max="1000" :min="1" :step="1" v-model="editModel.amount"></Input-number>
         </Form-item>
@@ -142,14 +134,6 @@
     <Modal v-model="showDeleteModal" title="删除订单" @on-ok="confirmDelete('deleteModelForm')" @on-cancel="cancelDelete('deleteModelForm')" >
       <h3 class="warning-title">确认删除下面订单？</h3>
       <Form ref="deleteModelForm" :model="deleteModel" :label-width="100">
-        <Form-item label="标题" prop="title">
-          <Input v-model="deleteModel.title" placeholder="标题" :readonly=true></Input>
-        </Form-item>
-        <Form-item label="商品" prop="merchandise">
-          <Select v-model="deleteModel.merchandise" :disabled=true>
-            <Option v-for="item in merchandiseList" :value="item.id" :key="item">{{ item.name }}</Option>
-          </Select>
-        </Form-item>
         <Form-item label="接收人" prop="buyer">
           <Input v-model="deleteModel.buyer" placeholder="接收人" :readonly=true></Input>
         </Form-item>
@@ -162,12 +146,12 @@
 </template>
 
 <script>
-  import { getOrderList, addOrder, putOrder, getMerchandiseList, getExpressList, getPaymentList, getExpressInfo, getOrderStatusList, getChinaCities } from '../../api/api'
+  import { getOrderList, addOrder, putOrder, getSubMerchandiseList, getExpressList, getPaymentList, getExpressInfo, getOrderStatusList, getChinaCities } from '../../api/api'
   export default {
     data: function () {
       return {
         chinaCities: [],
-        merchandiseList: [],
+        subMerchandiseList: [],
         expresseList: [],
         paymentList: [],
         orderStatusList: [],
@@ -208,10 +192,9 @@
         showEditModal: false,
         showDeleteModal: false,
         addModel: {
-          title: '',
-          merchandise: 1,
-          amount: 1,
-          price: 1,
+          order_no: '',
+          sum_amount: 0,
+          sum_price: 0,
           payment: 'hdfk',
           buyer: '',
           cell_phone: '',
@@ -220,13 +203,13 @@
           comment: '',
           status: 1,
           express: 'shunfeng',
-          express_no: ''
+          express_no: '',
+          orderDetail: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         },
         editModel: {
-          title: '',
-          merchandise: 0,
-          amount: 0,
-          price: 0,
+          order_no: '',
+          sum_amount: 0,
+          sum_price: 0,
           payment: '',
           buyer: '',
           cell_phone: '',
@@ -235,12 +218,13 @@
           comment: '',
           status: 1,
           express: '',
-          express_no: ''
+          express_no: '',
+          orderDetail: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         },
         deleteModel: {
-          title: '',
-          merchandise: null,
-          amount: null,
+          order_no: '',
+          subMerchandise: null,
+          sum_amount: null,
           buyer: '',
           cell_phone: ''
         },
@@ -300,8 +284,8 @@
             align: 'center'
           },
           {
-            title: '标题',
-            key: 'title',
+            title: '单号',
+            key: 'order_no',
             align: 'center',
             sortable: true
           },
@@ -351,6 +335,13 @@
           return JSON.parse(this.editModel.express_info)
         }
         return {}
+      },
+      sum_amount: function () {
+        let sum = 0
+        for (let i = 0; i < this.addModel.orderDetail.length; i++) {
+          sum += this.addModel.orderDetail[i]
+        }
+        return sum
       }
     },
     methods: {
@@ -372,21 +363,21 @@
         this.$Message.info('点击了取消')
       },
       // 获取商品列表
-      getMerchandise: function () {
-        getMerchandiseList().then((res) => {
+      getSubMerchandise: function () {
+        getSubMerchandiseList().then((res) => {
           let { data, status, statusText } = res
           if (status !== 200) {
             console.log(statusText)
             this.$Message.error('获取商品列表失败!')
           } else {
             // console.log(JSON.stringify(data.results))
-            this.merchandiseList = data.results
+            this.subMerchandiseList = data.results
           }
         }, (error) => {
-          console.log('Error in getMerchandiseList: ' + error)
+          console.log('Error in getSubMerchandiseList: ' + error)
           this.$Message.error('获取商品列表失败!')
         }).catch((error) => {
-          console.log('catched in getMerchandiseList:' + error)
+          console.log('catched in getSubMerchandiseList:' + error)
           this.$Message.error('获取商品列表失败!')
         })
       },
@@ -463,6 +454,7 @@
         getOrderList(para).then((res) => {
           let { data, status, statusText } = res
           if (status !== 200) {
+            console.error(data)
             this.loginMessage = statusText
           } else {
             this.$Loading.finish()
@@ -494,7 +486,7 @@
         this.$refs[name].validate((valid) => {
           if (valid) {
             // console.log(this.addModel.city)
-            // 坑，注意javascript的浅复制，使用JSON实现深复制
+            // 坑！注意javascript的浅复制，使用JSON实现深复制
             let addModelSubmit = JSON.stringify(this.addModel)
             addModelSubmit = JSON.parse(addModelSubmit)
             addModelSubmit.city = addModelSubmit.city.join(',')
@@ -657,7 +649,7 @@
     },
     mounted () {
       this.getOrder()
-      this.getMerchandise()
+      this.getSubMerchandise()
       this.getExpress()
       this.getOrderStatus()
       this.getPayment()
