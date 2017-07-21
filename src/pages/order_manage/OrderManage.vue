@@ -33,10 +33,10 @@
         {{ addModel.orderDetail }}
         </Form-item>
         <Form-item label="数量" prop="sum_amount">
-          <Input-number :max="1000" :min="1" :step="1" v-model="addModel.sum_amount"></Input-number>
+          <Input-number :max="1000" :min="1" :step="1" v-model="sum_amount"></Input-number>
         </Form-item>
         <Form-item label="单价" prop="sum_price">
-          <Input-number :max="10000" :min="1" :step="0.1" v-model="addModel.sum_price"></Input-number>
+          <Input-number :max="10000" :min="1" :step="0.1" v-model="sum_price"></Input-number>
         </Form-item>
         <Form-item label="付款方式" prop="payment">
           <Select v-model="addModel.payment">
@@ -223,23 +223,15 @@
         },
         deleteModel: {
           order_no: '',
-          subMerchandise: null,
-          sum_amount: null,
+          sum_amount: 0,
           buyer: '',
           cell_phone: ''
         },
         ruleValidate: {
-          title: [
-            { required: true, message: '做个标记才好找哦', trigger: 'blur' },
-            { type: 'string', min: 4, message: '多赐几个字嘛', trigger: 'blur' }
+          sum_amount: [
+            { required: true, type: 'number', min: 1, max: 1000, message: '请选择相中的商品', trigger: 'blur' }
           ],
-          merchandise: [
-            { required: true, type: 'number', message: '侬需要啥？', trigger: 'blur' }
-          ],
-          amount: [
-            { required: true, type: 'number', min: 1, max: 1000, message: '小滴数不清了，改个数？', trigger: 'blur' }
-          ],
-          price: [
+          sum_price: [
             { required: true, type: 'number', min: 0, max: 10000, message: '介是几个钱？', trigger: 'blur' }
           ],
           payment: [
@@ -267,10 +259,10 @@
             { required: true, message: '方便具体点么？', trigger: 'blur' }
           ],
           express: [
-            { required: true, type: 'string', message: '亲要自己送吗？', trigger: 'blur' }
+            { required: false, type: 'string', message: '亲要自己送吗？', trigger: 'blur' }
           ],
           express_no: [
-            { required: true, message: '单号拿来验证一下？', trigger: 'blur' }
+            { required: false, message: '单号拿来验证一下？', trigger: 'blur' }
           ]
         },
         self: this,
@@ -337,6 +329,13 @@
         return {}
       },
       sum_amount: function () {
+        let sum = 0
+        for (let i = 0; i < this.addModel.orderDetail.length; i++) {
+          sum += this.addModel.orderDetail[i]
+        }
+        return sum
+      },
+      sum_price: function () {
         let sum = 0
         for (let i = 0; i < this.addModel.orderDetail.length; i++) {
           sum += this.addModel.orderDetail[i]
@@ -490,7 +489,9 @@
             let addModelSubmit = JSON.stringify(this.addModel)
             addModelSubmit = JSON.parse(addModelSubmit)
             addModelSubmit.city = addModelSubmit.city.join(',')
-            // console.log(addModelSubmit)
+            addModelSubmit.sum_amount = this.sum_amount
+            addModelSubmit.sum_price = this.sum_price
+            console.log(addModelSubmit)
             addOrder(addModelSubmit).then((res) => {
               let { data, status, statusText } = res
               if (status !== 201) {
