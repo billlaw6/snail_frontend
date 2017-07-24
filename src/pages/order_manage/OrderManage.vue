@@ -30,7 +30,6 @@
             <!--用数组的序号表示orderDetail的ID-->
             <Input-number size="small" :max="10" :min="0" v-model="addModel.orderDetail[item.id]"></Input-number><br/>
           </template>
-        {{ addModel.orderDetail }}
         </Form-item>
         <Form-item label="数量" prop="sum_amount">
           <Input-number :max="1000" :min="1" :step="1" v-model="sum_amount"></Input-number>
@@ -76,11 +75,11 @@
 
     <Modal v-model="showEditModal" title="修改订单" @on-ok="confirmEdit('editModelForm')" @on-cancel="cancelEdit('editModelForm')" >
       <Form ref="editModelForm" :model="editModel" :rules="ruleValidate" :label-width="100">
-        <Form-item label="数量" prop="amount">
-          <Input-number :max="1000" :min="1" :step="1" v-model="editModel.amount"></Input-number>
-        </Form-item>
-        <Form-item label="单价" prop="price">
-          <Input-number :max="10000" :min="1" :step="0.1" v-model="editModel.price"></Input-number>
+        <Form-item label="款式" prop="sum_amount">
+          <template v-for="item in subMerchandiseList">
+            {{ item.name | capitalize }}
+            <!--用数组的序号表示orderDetail的ID-->
+          </template>
         </Form-item>
         <Form-item label="付款方式" prop="payment">
           <Select v-model="editModel.payment">
@@ -350,8 +349,8 @@
         // console.log('before:' + this.editModel.city)
         this.editModel.city = Array.isArray(this.editModel.city) ? this.editModel.city : this.editModel.city.split(',')
         // console.log('after:' + this.editModel.city)
-        this.editModel.amount = Number(this.editModel.amount)
-        this.editModel.price = Number(this.editModel.price)
+        this.editModel.sum_amount = Number(this.editModel.sum_amount)
+        this.editModel.sum_price = Number(this.editModel.sum_price)
       },
       showDelete (index) {
         this.showDeleteModal = true
@@ -482,6 +481,8 @@
 
       // 增加订单
       confirmAdd: function (name) {
+        this.addModel.sum_amount = this.sum_amount
+        this.addModel.sum_price = this.sum_price
         this.$refs[name].validate((valid) => {
           if (valid) {
             // console.log(this.addModel.city)
@@ -489,8 +490,6 @@
             let addModelSubmit = JSON.stringify(this.addModel)
             addModelSubmit = JSON.parse(addModelSubmit)
             addModelSubmit.city = addModelSubmit.city.join(',')
-            addModelSubmit.sum_amount = this.sum_amount
-            addModelSubmit.sum_price = this.sum_price
             console.log(addModelSubmit)
             addOrder(addModelSubmit).then((res) => {
               let { data, status, statusText } = res
