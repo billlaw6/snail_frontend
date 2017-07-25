@@ -75,11 +75,8 @@
 
     <Modal v-model="showEditModal" title="修改订单" @on-ok="confirmEdit('editModelForm')" @on-cancel="cancelEdit('editModelForm')" >
       <Form ref="editModelForm" :model="editModel" :rules="ruleValidate" :label-width="100">
-        <Form-item label="款式" prop="sum_amount">
-          <template v-for="item in subMerchandiseList">
-            {{ item.name | capitalize }}
-            <!--用数组的序号表示orderDetail的ID-->
-          </template>
+        <Form-item label="款式" prop="">
+          <Table :context="self" :data="editModel.order_detail" :columns="detailColumns" stripe border></Table>
         </Form-item>
         <Form-item label="付款方式" prop="payment">
           <Select v-model="editModel.payment">
@@ -133,11 +130,19 @@
     <Modal v-model="showDeleteModal" title="删除订单" @on-ok="confirmDelete('deleteModelForm')" @on-cancel="cancelDelete('deleteModelForm')" >
       <h3 class="warning-title">确认删除下面订单？</h3>
       <Form ref="deleteModelForm" :model="deleteModel" :label-width="100">
+        <Form-item label="款式" prop="">
+          <Table :context="self" :data="editModel.order_detail" :columns="detailColumns" stripe border></Table>
+        </Form-item>
         <Form-item label="接收人" prop="buyer">
           <Input v-model="deleteModel.buyer" placeholder="接收人" :readonly=true></Input>
         </Form-item>
         <Form-item label="手机号" prop="cell_phone">
           <Input v-model="deleteModel.cell_phone" placeholder="手机号" :readonly=true></Input>
+        </Form-item>
+        <Form-item label="订单状态" prop="status">
+          <Select v-model="editModel.status">
+            <Option v-for="item in orderStatusList" :value="item.id" :key="item">{{ item.name }}</Option>
+          </Select>
         </Form-item>
       </Form>
     </Modal>
@@ -275,8 +280,14 @@
             align: 'center'
           },
           {
-            title: '单号',
-            key: 'order_no',
+            title: '总数',
+            key: 'sum_amount',
+            align: 'center',
+            sortable: true
+          },
+          {
+            title: '总价',
+            key: 'sum_price',
             align: 'center',
             sortable: true
           },
@@ -317,6 +328,26 @@
               return `<i-button type="primary" size="small" @click="showEdit (${index})">查看</i-button> <i-button type="error" size="small" @click="showDelete (${index})">删除</i-button>`
             }
           }
+        ],
+        detailColumns: [
+          {
+            title: '商品名',
+            key: 'name',
+            align: 'center',
+            sortable: true
+          },
+          {
+            title: '单价',
+            key: 'price',
+            align: 'center',
+            sortable: true
+          },
+          {
+            title: '数量',
+            key: 'amount',
+            align: 'center',
+            sortable: true
+          }
         ]
       }
     },
@@ -347,6 +378,7 @@
         this.showEditModal = true
         this.editModel = this.tableData[index]
         // console.log('before:' + this.editModel.city)
+        console.log(this.editModel)
         this.editModel.city = Array.isArray(this.editModel.city) ? this.editModel.city : this.editModel.city.split(',')
         // console.log('after:' + this.editModel.city)
         this.editModel.sum_amount = Number(this.editModel.sum_amount)

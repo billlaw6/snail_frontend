@@ -172,9 +172,9 @@
 
       <nav>
         <ul class="Transverse">
-          <li><a href="#buy"><strong>在线下单</strong></a></li> 
-          <li><a href="tel:13202029800"><strong>电话咨询</strong></a></li>  
-          <li><a href="sms:13202029800"><strong>短信订购</strong></a></li>
+          <li><a href="#buy" class="btn"><strong>在线下单</strong></a></li> 
+          <li><a href="tel:13202029800" class="btn"><strong>电话咨询</strong></a></li>  
+          <li><a href="sms:13202029800" class="btn"><strong>短信订购</strong></a></li>
         </ul>
       </nav>
     </body>
@@ -608,4 +608,55 @@
     white-space: nowrap
     height: 100px
     width: 100%
+    background: #F0F0F0
+    ul
+      padding-left: padding-left
+      margin-left: margin-left
+      span
+        color: #7CFC00
+
+  nav
+    width: 100%
+    bottom: 0
+    left: 0
+    margin: 0 auto
+    padding: 0
+    position: fixed
+    ul li a
+      color: #FFF
+      display: block
+      font-size: 0.8em
+      line-height: 45px
+      width: 100%
+      strong
+        font-weight: normal
+        left: 0
+        postion: relative
+        top: 10px
+  nav ul.Transverse
+    position: relative
+    li
+      background-color: #FF5600
+    li:last-child
+      border-right: 0 none
+    li a
+      border-right: 1px dotted
+      strong
+        display: inline
+        font-size: 14px
+        font-weight: normal
+        padding-left: 32px
+      
+
+  
+    font-size: 18px
+    position: relative
+    float: left
+    color: #FFF
+    display: block
+    margin: margin-left auto
+    padding: 10px 0
+    text-align: center
+    text-shadow: 1px 1px 1px #333
+    height: 48px
 </style>
